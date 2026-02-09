@@ -384,10 +384,11 @@
             align-items: center;
             text-align: center;
             overflow: visible;
+            justify-content: center;
         }
         .profile-photo {
-            width: 150px;
-            height: 150px;
+            width: clamp(160px, 18vw, 190px);
+            height: clamp(160px, 18vw, 190px);
             border-radius: 999px;
             overflow: hidden;
             border: 6px solid rgba(255,255,255,0.9);
