@@ -1983,16 +1983,12 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 document.querySelectorAll('.reveal, .timeline-item').forEach(el => observer.observe(el));
 
-// Nav auto-hide
-let lastScroll = 0;
+// Nav: keep always visible (no auto-hide)
+// Ensure we preserve the centered transform used by the rounded nav bar.
 window.addEventListener('scroll', () => {
-    if (document.body.classList.contains('menu-open')) return;
     const nav = document.querySelector('nav');
-    const cur = window.pageYOffset;
-    nav.style.transform = cur > lastScroll && cur > 100
-        ? 'translateX(-50%) translateY(-120%)'
-        : 'translateX(-50%) translateY(0)';
-    lastScroll = cur;
+    if (!nav) return;
+    nav.style.transform = 'translateX(-50%) translateY(0)';
 });
 
 // Back to top
