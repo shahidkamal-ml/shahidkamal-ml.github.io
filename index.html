@@ -181,6 +181,118 @@
             align-items: center;
             gap: 0.55rem;
         }
+
+        /* ===== SEARCH MODAL ===== */
+        .search-modal {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 6.5rem 1.25rem 1.5rem;
+            background: rgba(2, 6, 23, 0.35);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 20000;
+        }
+        .search-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .search-dialog {
+            width: min(760px, 100%);
+            padding: 1.1rem 1.1rem 0.9rem;
+        }
+        .search-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .search-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--display);
+            font-weight: 750;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+            font-size: 1.05rem;
+        }
+        .search-title svg { width: 18px; height: 18px; color: var(--accent); }
+        .search-close {
+            border: 1px solid var(--border-light);
+            background: rgba(255,255,255,0.55);
+            color: var(--text-secondary);
+            border-radius: 12px;
+            padding: 0.35rem 0.6rem;
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.85rem 0.95rem;
+            border-radius: 14px;
+            border: 1px solid rgba(226, 229, 238, 0.9);
+            background: rgba(255,255,255,0.7);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            box-shadow: var(--shadow-sm);
+        }
+        .search-input:focus {
+            border-color: rgba(37, 99, 235, 0.35);
+            box-shadow: var(--shadow-sm), 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+        .search-hint {
+            margin-top: 0.6rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .search-results {
+            margin-top: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            max-height: min(56vh, 520px);
+            overflow: auto;
+            padding-right: 0.2rem;
+        }
+        .search-result {
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(226, 229, 238, 0.85);
+            background: rgba(255,255,255,0.62);
+            border-radius: 16px;
+            padding: 0.8rem 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .search-result:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+            border-color: rgba(37, 99, 235, 0.22);
+        }
+        .search-result-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.35;
+        }
+        .search-result-meta {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        :root[data-theme="dark"] .search-close,
+        :root[data-theme="dark"] .search-input,
+        :root[data-theme="dark"] .search-result {
+            background: rgba(15, 23, 42, 0.58);
+            border-color: rgba(148, 163, 184, 0.14);
+        }
         .icon-btn {
             width: 36px;
             height: 36px;
@@ -1520,7 +1632,7 @@
             <li><a href="#contact">Contact</a></li>
         </ul>
         <div class="nav-actions">
-            <button class="icon-btn" type="button" aria-label="Search">
+            <button class="icon-btn" type="button" aria-label="Search" id="searchBtn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
             </button>
             <button class="icon-btn" type="button" aria-label="Toggle theme" id="themeToggle">
@@ -1913,6 +2025,22 @@
     <div class="footer-right"><a href="https://github.com/shahidkamal-ml" target="_blank">github.com/shahidkamal-ml</a></div>
 </footer>
 
+<!-- Search -->
+<div class="search-modal" id="searchModal" aria-hidden="true">
+    <div class="glass-card search-dialog" role="dialog" aria-modal="true" aria-labelledby="searchTitle">
+        <div class="search-top">
+            <div class="search-title" id="searchTitle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+                Search
+            </div>
+            <button class="search-close" type="button" id="searchCloseBtn" aria-label="Close search">Esc</button>
+        </div>
+        <input class="search-input" id="searchInput" type="search" placeholder="Search sections, projects, posts…" autocomplete="off" />
+        <div class="search-hint">Tip: press <strong>Ctrl</strong> + <strong>K</strong> (or <strong>⌘K</strong>) to open search.</div>
+        <div class="search-results" id="searchResults" aria-live="polite"></div>
+    </div>
+</div>
+
 <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 19V5"></path>
@@ -2017,6 +2145,139 @@ if (themeToggle) {
         const cur = document.documentElement.dataset.theme || 'light';
         applyTheme(cur === 'dark' ? 'light' : 'dark');
     });
+}
+
+// Search modal (client-side)
+const searchBtn = document.getElementById('searchBtn');
+const searchModal = document.getElementById('searchModal');
+const searchCloseBtn = document.getElementById('searchCloseBtn');
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+
+let searchIndex = [];
+function buildSearchIndex() {
+    const items = [];
+
+    // Index sections by id + header title
+    document.querySelectorAll('section[id]').forEach((section) => {
+        const id = section.id;
+        const titleEl =
+            section.querySelector('.section-title') ||
+            section.querySelector('h2') ||
+            section.querySelector('h1');
+        const title = (titleEl?.textContent || id).trim();
+        const text = (section.innerText || '').replace(/\s+/g, ' ').trim();
+        items.push({ title, href: `#${id}`, meta: 'Section', text });
+    });
+
+    // Index key cards/links (blog posts, certifications, publications)
+    const cardSelectors = [
+        'a.blog-card',
+        'a.pub-card',
+        'a.cert-card',
+    ];
+    cardSelectors.forEach((sel) => {
+        document.querySelectorAll(sel).forEach((a) => {
+            const href = a.getAttribute('href') || '';
+            const titleEl = a.querySelector('h3') || a.querySelector('.blog-card-title') || a.querySelector('.pub-title') || a.querySelector('.cert-title');
+            const title = (titleEl?.textContent || a.textContent || '').replace(/\s+/g, ' ').trim();
+            if (!href || !title) return;
+            const meta = sel.includes('blog') ? 'Blog' : sel.includes('pub') ? 'Publication' : 'Certificate';
+            const text = (a.innerText || '').replace(/\s+/g, ' ').trim();
+            items.push({ title, href, meta, text });
+        });
+    });
+
+    // De-dupe by href + title
+    const seen = new Set();
+    searchIndex = items.filter((it) => {
+        const key = `${it.href}::${it.title}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+}
+
+function openSearch() {
+    if (!searchModal) return;
+    searchModal.classList.add('open');
+    searchModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('menu-open'); // reuse scroll lock
+    if (searchInput) {
+        searchInput.value = '';
+        setTimeout(() => searchInput.focus(), 50);
+    }
+    if (searchResults) searchResults.innerHTML = '';
+}
+function closeSearch() {
+    if (!searchModal) return;
+    searchModal.classList.remove('open');
+    searchModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('menu-open');
+}
+
+function renderSearchResults(q) {
+    if (!searchResults) return;
+    const query = (q || '').trim().toLowerCase();
+    if (!query) {
+        searchResults.innerHTML = '';
+        return;
+    }
+    const results = searchIndex
+        .filter((it) => it.title.toLowerCase().includes(query) || it.text.toLowerCase().includes(query))
+        .slice(0, 10);
+
+    if (results.length === 0) {
+        searchResults.innerHTML = `<div class="search-hint">No results for <strong>${q.replace(/</g,'&lt;')}</strong>.</div>`;
+        return;
+    }
+
+    searchResults.innerHTML = results.map((it) => {
+        const safeTitle = it.title.replace(/</g, '&lt;');
+        const safeMeta = (it.meta || '').replace(/</g, '&lt;');
+        return `
+            <a class="search-result" href="${it.href}">
+                <div class="search-result-title">${safeTitle}</div>
+                <div class="search-result-meta">${safeMeta}</div>
+            </a>
+        `.trim();
+    }).join('');
+
+    // Intercept section links for smooth scrolling with nav offset
+    searchResults.querySelectorAll('a.search-result').forEach((a) => {
+        a.addEventListener('click', (e) => {
+            const href = a.getAttribute('href') || '';
+            if (!href.startsWith('#')) {
+                closeSearch();
+                return;
+            }
+            const id = href.slice(1);
+            const target = document.getElementById(id);
+            if (!target) return;
+            e.preventDefault();
+            closeSearch();
+            const top = target.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET_PX;
+            window.scrollTo({ top, behavior: 'smooth' });
+            history.pushState(null, '', href);
+        });
+    });
+}
+
+if (searchBtn && searchModal && searchInput) {
+    buildSearchIndex();
+    searchBtn.addEventListener('click', openSearch);
+    searchCloseBtn?.addEventListener('click', closeSearch);
+    searchModal.addEventListener('click', (e) => {
+        if (e.target === searchModal) closeSearch();
+    });
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            openSearch();
+        }
+        if (e.key === 'Escape') closeSearch();
+    });
+    searchInput.addEventListener('input', () => renderSearchResults(searchInput.value));
 }
 
 // Neural network canvas animation
