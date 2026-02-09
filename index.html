@@ -70,7 +70,7 @@
         nav {
             position: fixed;
             top: 0; left: 0; right: 0;
-            z-index: 100;
+            z-index: 10000;
             padding: 1rem 3rem;
             display: flex;
             justify-content: space-between;
@@ -1001,7 +1001,7 @@
                 opacity: 0;
                 pointer-events: none;
                 transition: opacity 0.25s ease;
-                z-index: 9998;
+                z-index: 9990;
             }
             .nav-backdrop.open{
                 opacity: 1;
@@ -1036,7 +1036,12 @@
                 opacity: 1;
                 pointer-events: auto;
             }
-            .nav-links a { font-size: 1.1rem; color: var(--text-primary); }
+            .nav-links a {
+                font-size: 1.1rem;
+                color: var(--text-primary);
+                pointer-events: auto;
+                touch-action: manipulation;
+            }
             .hamburger { display: flex; z-index: 10001; }
             .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
             .hamburger.open span:nth-child(2) { opacity: 0; }
