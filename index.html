@@ -1677,7 +1677,7 @@
             </div>
 
             <a href="Shahid%20Resume.pdf" target="_blank" rel="noopener" class="btn-primary" style="width: 100%; justify-content: center;">
-                Download CV
+                Download Resume
                 <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
             </a>
         </aside>
@@ -2206,6 +2206,14 @@ function buildSearchIndex() {
         });
     });
 
+    // Add Resume as a first-class search result
+    items.push({
+        title: 'Resume (PDF)',
+        href: 'Shahid%20Resume.pdf',
+        meta: 'Resume',
+        text: 'Download resume CV Shahid Resume PDF',
+    });
+
     // De-dupe by href + title
     const seen = new Set();
     searchIndex = items.filter((it) => {
@@ -2253,8 +2261,10 @@ function renderSearchResults(q) {
     searchResults.innerHTML = results.map((it) => {
         const safeTitle = it.title.replace(/</g, '&lt;');
         const safeMeta = (it.meta || '').replace(/</g, '&lt;');
+        const isPdf = /\.pdf(\?|#|$)/i.test(it.href);
+        const extraAttrs = isPdf ? ' target="_blank" rel="noopener"' : '';
         return `
-            <a class="search-result" href="${it.href}">
+            <a class="search-result" href="${it.href}"${extraAttrs}>
                 <div class="search-result-title">${safeTitle}</div>
                 <div class="search-result-meta">${safeMeta}</div>
             </a>
