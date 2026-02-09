@@ -731,13 +731,14 @@
             font-weight: 600;
         }
         .cert-title {
-            font-family: var(--sans);
-            font-size: 1.06rem;
-            font-weight: 700;
-            letter-spacing: -0.01em;
+            /* Use a very readable system font stack (avoid heavy display styling here) */
+            font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: -0.005em;
             color: var(--text-primary);
             margin-bottom: 0.55rem;
-            line-height: 1.35;
+            line-height: 1.38;
         }
         .cert-desc {
             font-size: 0.92rem;
