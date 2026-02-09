@@ -157,7 +157,7 @@
             position: absolute;
             inset: 0;
             z-index: 1;
-            opacity: 0.78;
+            opacity: 0.9;
         }
 
         .hero-glow-1 {
@@ -1596,21 +1596,21 @@ function resize() {
 function initNodes() {
     nodes = [];
     // Slightly denser for better visibility, still performant on mobile
-    const count = Math.floor((canvas.width * canvas.height) / 14000);
+    const count = Math.floor((canvas.width * canvas.height) / 11500);
     for (let i = 0; i < count; i++) {
         nodes.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
             vx: (Math.random() - 0.5) * 0.45,
             vy: (Math.random() - 0.5) * 0.45,
-            r: Math.random() * 2.2 + 1.1
+            r: Math.random() * 2.6 + 1.2
         });
     }
 }
 
 function drawNetwork() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const maxDist = 175;
+    const maxDist = 210;
 
     for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
@@ -1622,7 +1622,7 @@ function drawNetwork() {
         ctx.beginPath();
         ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
         // Slightly brighter nodes
-        ctx.fillStyle = 'rgba(37, 99, 235, 0.42)';
+        ctx.fillStyle = 'rgba(37, 99, 235, 0.58)';
         ctx.fill();
 
         // Draw connections
@@ -1636,8 +1636,8 @@ function drawNetwork() {
                 ctx.moveTo(a.x, a.y);
                 ctx.lineTo(b.x, b.y);
                 // Brighter connections (stronger near nodes)
-                ctx.strokeStyle = `rgba(37, 99, 235, ${0.18 * (1 - dist / maxDist)})`;
-                ctx.lineWidth = 1.2;
+                ctx.strokeStyle = `rgba(37, 99, 235, ${0.28 * (1 - dist / maxDist)})`;
+                ctx.lineWidth = 1.6;
                 ctx.stroke();
             }
         }
