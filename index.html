@@ -1001,11 +1001,14 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                gap: 2rem; z-index: 99;
+                gap: 2rem;
+                z-index: 9999;
+                overflow-y: auto;
+                padding: 4rem 1.5rem;
             }
             .nav-links.open { display: flex; }
-            .nav-links a { font-size: 1.1rem; }
-            .hamburger { display: flex; z-index: 101; }
+            .nav-links a { font-size: 1.2rem; color: var(--text-primary); }
+            .hamburger { display: flex; z-index: 10000; }
             .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
             .hamburger.open span:nth-child(2) { opacity: 0; }
             .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
