@@ -955,6 +955,41 @@
             text-decoration: none;
         }
 
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            right: 1.25rem;
+            bottom: calc(1.25rem + env(safe-area-inset-bottom));
+            width: 46px;
+            height: 46px;
+            border-radius: 999px;
+            border: 1px solid var(--border-light);
+            background: rgba(247, 248, 252, 0.86);
+            -webkit-backdrop-filter: blur(16px) saturate(1.2);
+            backdrop-filter: blur(16px) saturate(1.2);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-md);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+            z-index: 5000;
+        }
+        .back-to-top svg { width: 18px; height: 18px; }
+        .back-to-top.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .back-to-top:hover {
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+        body.menu-open .back-to-top { opacity: 0; pointer-events: none; }
+
         /* ===== ANIMATIONS ===== */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -1455,6 +1490,13 @@
     <div class="footer-right"><a href="https://github.com/shahidkamal-ml" target="_blank">github.com/shahidkamal-ml</a></div>
 </footer>
 
+<button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 19V5"></path>
+        <path d="M5 12l7-7 7 7"></path>
+    </svg>
+</button>
+
 <script>
 // Mobile menu
 function toggleMenu() {
@@ -1526,6 +1568,17 @@ window.addEventListener('scroll', () => {
     const cur = window.pageYOffset;
     nav.style.transform = cur > lastScroll && cur > 100 ? 'translateY(-100%)' : 'translateY(0)';
     lastScroll = cur;
+});
+
+// Back to top
+const backToTopBtn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+    if (!backToTopBtn) return;
+    const show = window.pageYOffset > 600 && !document.body.classList.contains('menu-open');
+    backToTopBtn.classList.toggle('show', show);
+});
+backToTopBtn?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 // Neural network canvas animation
