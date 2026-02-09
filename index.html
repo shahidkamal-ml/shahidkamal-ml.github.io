@@ -2111,13 +2111,31 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 document.querySelectorAll('.reveal, .timeline-item').forEach(el => observer.observe(el));
 
-// Nav: keep always visible (no auto-hide)
-// Ensure we preserve the centered transform used by the rounded nav bar.
+// Nav auto-hide (common UX pattern; saves vertical space while scrolling down)
+// Behavior:
+// - Hide on scroll down after a threshold
+// - Show on scroll up or near the top
+// - Never hide while the mobile menu or search modal is open
+let lastScrollY = window.pageYOffset;
 window.addEventListener('scroll', () => {
     const nav = document.querySelector('nav');
     if (!nav) return;
-    nav.style.transform = 'translateX(-50%) translateY(0)';
-});
+
+    const curY = window.pageYOffset;
+    const delta = curY - lastScrollY;
+    const nearTop = curY < 120;
+    const overlayOpen =
+        document.body.classList.contains('menu-open') ||
+        document.getElementById('searchModal')?.classList.contains('open');
+
+    if (overlayOpen || nearTop || delta < -8) {
+        nav.style.transform = 'translateX(-50%) translateY(0)';
+    } else if (delta > 10 && curY > 200) {
+        nav.style.transform = 'translateX(-50%) translateY(-120%)';
+    }
+
+    lastScrollY = curY;
+}, { passive: true });
 
 // Back to top
 const backToTopBtn = document.getElementById('backToTop');
