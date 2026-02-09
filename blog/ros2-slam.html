@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAM with ROS 2 — Shahid Kamal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f7f8fc;
+            --bg-alt: #eef0f7;
+            --bg-card: #ffffff;
+            --text-primary: #0f1729;
+            --text-body: #374151;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-glow: rgba(37, 99, 235, 0.12);
+            --cyan: #06b6d4;
+            --border: #e2e5ee;
+            --border-light: #eef0f5;
+            --shadow-sm: 0 1px 4px rgba(15, 23, 41, 0.04);
+            --shadow-md: 0 4px 24px rgba(15, 23, 41, 0.06);
+            --display: 'Syne', sans-serif;
+            --sans: 'Outfit', sans-serif;
+            --mono: 'Fira Code', monospace;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text-body);
+            font-family: var(--sans);
+            font-size: 17px;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--accent-glow); color: var(--accent-dark); }
+
+        .grid-bg {
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0; z-index: 100;
+            padding: 1rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(24px) saturate(1.4);
+            background: rgba(247, 248, 252, 0.82);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-logo {
+            font-family: var(--display);
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo-icon {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-logo-icon svg { width: 18px; height: 18px; }
+
+        .nav-back {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.3s;
+        }
+        .nav-back:hover { color: var(--accent); }
+
+        /* HERO */
+        .blog-hero {
+            padding: 8rem 3rem 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative; z-index: 2;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .blog-category {
+            padding: 0.3rem 0.85rem;
+            background: var(--accent-glow);
+            color: var(--accent);
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 6px;
+        }
+
+        .blog-date {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .blog-read-time {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .blog-hero h1 {
+            font-family: var(--display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 1.25rem;
+        }
+
+        .blog-hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 650px;
+        }
+
+        .blog-cover {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 0 3rem;
+            position: relative; z-index: 2;
+        }
+
+        .blog-cover img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ARTICLE BODY */
+        .blog-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 3rem 6rem;
+            position: relative; z-index: 2;
+        }
+
+        .blog-content h2 {
+            font-family: var(--display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2.5rem 0 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .blog-content h3 {
+            font-family: var(--display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2rem 0 0.75rem;
+        }
+
+        .blog-content p {
+            margin-bottom: 1.25rem;
+        }
+
+        .blog-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .blog-content strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .blog-content code {
+            font-family: var(--mono);
+            font-size: 0.88em;
+            background: var(--bg-alt);
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-light);
+            color: var(--accent-dark);
+        }
+
+        .blog-content pre {
+            background: var(--text-primary);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: var(--shadow-md);
+        }
+
+        .blog-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        .blog-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--accent-glow);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .blog-content ul, .blog-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .blog-content li { margin-bottom: 0.4rem; }
+
+        .blog-content img {
+            width: 100%;
+            border-radius: var(--radius-sm);
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        /* AUTHOR BOX */
+        .author-box {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 3rem 4rem;
+            position: relative; z-index: 2;
+        }
+
+        .author-card {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .author-avatar {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--display);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            font-family: var(--display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .author-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 2rem 3rem;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            position: relative; z-index: 2;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            nav { padding: 0.9rem 1.5rem; }
+            .blog-hero, .blog-cover, .blog-content, .author-box { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .blog-cover img { height: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<nav>
+    <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        Shahid Kamal
+    </a>
+    <a href="../index.html#blog" class="nav-back">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+        Back to Blog
+    </a>
+</nav>
+
+<header class="blog-hero">
+    <div class="blog-meta">
+        <span class="blog-category">Robotics</span>
+        <span class="blog-date">Dec 10, 2025</span>
+        <span class="blog-read-time">· 12 min read</span>
+    </div>
+    <h1>SLAM with ROS 2: Mapping the Unknown with LiDAR</h1>
+    <p class="blog-hero-subtitle">An end-to-end walkthrough of implementing SLAM on a mobile robot — from sensor fusion with Kalman filters to real-time map building with ROS 2 and LiDAR.</p>
+</header>
+
+<div class="blog-cover">
+    <img src="https://images.unsplash.com/photo-1561557944-6e7860d1a7eb?w=1200&q=80" alt="Robot arm in lab environment">
+</div>
+
+<article class="blog-content">
+
+    <!-- ============================================================
+         SLAM with ROS 2: Mapping the Unknown with LiDAR
+         ============================================================ -->
+
+    <p>If you've ever wondered how a robot "knows" where it is in a room it's never seen before — that's <strong>SLAM</strong>. Simultaneous Localization and Mapping is one of the foundational problems in robotics, and it's deceptively hard. The robot needs to build a map of an unknown environment while simultaneously figuring out its own position within that map. It's a chicken-and-egg problem: you need a map to localize, but you need to localize to build a map.</p>
+
+    <p>In this post, I'll walk through how I implemented a full SLAM pipeline on a mobile robot using <strong>ROS 2</strong>, a 2D LiDAR sensor, and wheel odometry — covering the theory, the code, and the real-world lessons learned.</p>
+
+    <h2>1. The SLAM Problem, Simply Explained</h2>
+
+    <p>Imagine you're blindfolded in a house you've never visited. You can reach out and feel nearby walls and furniture. As you walk around, you're doing two things at once: building a mental map of the house, and tracking where you are inside it. That's SLAM.</p>
+
+    <p>Formally, SLAM estimates two things simultaneously:</p>
+
+    <ul>
+        <li><strong>The robot's pose</strong> (position + orientation) over time</li>
+        <li><strong>A map</strong> of the environment (occupancy grid, landmarks, etc.)</li>
+    </ul>
+
+    <p>The challenge is that both are uncertain. Sensors are noisy, wheels slip, and LiDAR readings have measurement error. Everything is probabilistic — and that's where things get interesting.</p>
+
+    <h2>2. Hardware Setup</h2>
+
+    <p>For this project, I used a differential-drive mobile robot with the following sensor stack:</p>
+
+    <ul>
+        <li><strong>RPLiDAR A1</strong> — 360° 2D LiDAR, 8000 samples/sec, 12m range</li>
+        <li><strong>Wheel encoders</strong> — attached to both drive motors for odometry</li>
+        <li><strong>IMU (MPU-6050)</strong> — 6-axis inertial measurement for angular velocity and acceleration</li>
+        <li><strong>Jetson Nano</strong> — onboard compute running Ubuntu 22.04 + ROS 2 Humble</li>
+    </ul>
+
+    <p>The LiDAR gives us range measurements (how far away obstacles are), the wheel encoders give us a rough estimate of how far we've moved, and the IMU helps correct rotational drift. None of these alone is accurate enough — but fused together, they become powerful.</p>
+
+    <h2>3. Sensor Fusion with the Extended Kalman Filter</h2>
+
+    <p>Raw odometry from wheel encoders drifts badly over time. After a few meters of driving, the estimated position can be off by a significant margin — especially during turns where wheel slip is common. This is where <strong>sensor fusion</strong> comes in.</p>
+
+    <p>I used an <strong>Extended Kalman Filter (EKF)</strong> to fuse wheel odometry and IMU data into a more accurate pose estimate. The EKF operates in two steps:</p>
+
+    <blockquote>Predict where you think you are based on motion (odometry), then correct that prediction using independent measurements (IMU). Repeat forever.</blockquote>
+
+    <p>The state vector tracks the robot's x, y position, heading (θ), and their velocities. Here's the core prediction-update loop:</p>
+
+    <pre><code># EKF Prediction Step
+def predict(self, dt, v, omega):
+    """Predict next state from control inputs."""
+    theta = self.state[2]
+    
+    # State transition (motion model)
+    self.state[0] += v * np.cos(theta) * dt  # x
+    self.state[1] += v * np.sin(theta) * dt  # y
+    self.state[2] += omega * dt               # theta
+    
+    # Jacobian of the motion model
+    F = np.eye(3)
+    F[0, 2] = -v * np.sin(theta) * dt
+    F[1, 2] =  v * np.cos(theta) * dt
+    
+    # Update covariance
+    self.P = F @ self.P @ F.T + self.Q
+
+# EKF Update Step
+def update(self, z, H, R):
+    """Correct state with measurement z."""
+    y = z - H @ self.state          # Innovation
+    S = H @ self.P @ H.T + R        # Innovation covariance
+    K = self.P @ H.T @ np.linalg.inv(S)  # Kalman gain
+    
+    self.state = self.state + K @ y
+    self.P = (np.eye(3) - K @ H) @ self.P</code></pre>
+
+    <p>In ROS 2, the <code>robot_localization</code> package provides a production-ready EKF node that handles all of this. I configured it to subscribe to <code>/odom</code> (wheel encoders) and <code>/imu/data</code> (IMU), and it publishes a fused <code>/odometry/filtered</code> topic:</p>
+
+    <pre><code># ekf_config.yaml
+ekf_filter_node:
+  ros__parameters:
+    frequency: 30.0
+    odom0: /odom
+    odom0_config: [true, true, false,
+                   false, false, true,
+                   true, false, false,
+                   false, false, true,
+                   false, false, false]
+    imu0: /imu/data
+    imu0_config: [false, false, false,
+                  false, false, true,
+                  false, false, false,
+                  false, false, true,
+                  false, false, false]</code></pre>
+
+    <p>The boolean arrays tell the EKF which dimensions of each sensor to trust. For a 2D ground robot, we fuse x, y, yaw from odometry and yaw rate from the IMU. The result is dramatically smoother than raw odometry — especially during sharp turns.</p>
+
+    <h2>4. Running SLAM with Nav2 and slam_toolbox</h2>
+
+    <p>With reliable fused odometry, the next step is actual map building. I used <strong>slam_toolbox</strong>, which is the recommended SLAM package in the ROS 2 Nav2 stack. It implements an optimized pose-graph SLAM approach.</p>
+
+    <p>The core idea: as the robot moves and takes LiDAR scans, slam_toolbox builds a <strong>graph</strong> where each node is a pose (robot position + LiDAR scan) and edges represent the spatial relationship between poses. When the robot revisits a previously seen area — a <strong>loop closure</strong> — the entire graph is optimized to correct accumulated drift.</p>
+
+    <pre><code># Launch slam_toolbox in async mode
+ros2 launch slam_toolbox online_async_launch.py \
+    slam_params_file:=./mapper_params.yaml \
+    use_sim_time:=false</code></pre>
+
+    <p>Key parameters I tuned in <code>mapper_params.yaml</code>:</p>
+
+    <ul>
+        <li><strong><code>resolution: 0.05</code></strong> — 5cm grid cells. Smaller = more detail but more memory</li>
+        <li><strong><code>max_laser_range: 8.0</code></strong> — ignore readings beyond 8m (noise increases with distance)</li>
+        <li><strong><code>minimum_travel_distance: 0.3</code></strong> — only add a new scan after moving 30cm to avoid redundant data</li>
+        <li><strong><code>loop_search_maximum_distance: 3.0</code></strong> — search for loop closures within 3m of current position</li>
+    </ul>
+
+    <h2>5. The TF Tree: ROS 2's Coordinate Frame System</h2>
+
+    <p>One thing that tripped me up early on was the <strong>TF (transform) tree</strong>. In ROS 2, every sensor and component lives in its own coordinate frame, and the system needs to know how they relate to each other spatially.</p>
+
+    <p>For SLAM to work correctly, you need these transforms:</p>
+
+    <pre><code>map → odom → base_link → laser_frame
+ ↑        ↑          ↑
+slam    EKF     static TF</code></pre>
+
+    <ul>
+        <li><strong><code>base_link → laser_frame</code></strong>: A static transform describing where the LiDAR is mounted on the robot (e.g., 10cm above center). Published via <code>static_transform_publisher</code></li>
+        <li><strong><code>odom → base_link</code></strong>: Published by the EKF node based on fused sensor data. This is the robot's estimated pose relative to where it started</li>
+        <li><strong><code>map → odom</code></strong>: Published by slam_toolbox. This corrects the accumulated drift in odometry by anchoring it to the global map</li>
+    </ul>
+
+    <p>If any of these transforms are missing or stale, the entire pipeline breaks silently. My debugging tip: <strong>always</strong> run <code>ros2 run tf2_tools view_frames</code> to visualize your TF tree early in the process.</p>
+
+    <h2>6. Real-World Challenges</h2>
+
+    <p>Theory is clean. Reality isn't. Here are the problems I hit:</p>
+
+    <p><strong>Glass walls and mirrors.</strong> LiDAR uses infrared light, and glass surfaces either absorb or reflect the beams unpredictably. My lab had a glass partition that created phantom readings, causing the map to show a wall where there was only glass. The fix: I added a range filter node that discards readings at the exact distance of known glass surfaces, and tuned <code>max_laser_range</code> down to reduce long-range noise.</p>
+
+    <p><strong>Featureless hallways.</strong> Long corridors where both walls look identical from the LiDAR's perspective are a SLAM nightmare. The scan matcher can't distinguish one section from another, leading to incorrect loop closures that warp the entire map. I mitigated this by increasing <code>minimum_travel_distance</code> in corridors and relying more heavily on odometry in these areas.</p>
+
+    <p><strong>Dynamic obstacles.</strong> People walking through the environment create transient scan features. The map shouldn't include a person standing in a doorway, but if the robot scans that spot while they're there, it might. slam_toolbox handles this reasonably well because it averages multiple observations, but it's still an issue in high-traffic areas.</p>
+
+    <p><strong>Compute constraints.</strong> On the Jetson Nano, running the LiDAR driver, EKF, slam_toolbox, and visualization simultaneously pushed CPU usage to ~85%. I had to reduce the LiDAR scan rate from 10Hz to 5Hz and lower the slam_toolbox processing rate. On a Jetson Orin, this wouldn't be an issue — but for a resource-constrained setup, optimization matters.</p>
+
+    <h2>7. Results</h2>
+
+    <p>After tuning, the system reliably mapped our lab environment — roughly 15m × 10m with multiple rooms, a corridor, and open spaces. The occupancy grid was accurate to within ~3cm compared to hand measurements, and loop closures corrected cumulative drift to under 5cm over a full traversal.</p>
+
+    <p>The entire map-building run took about 4 minutes of manual teleoperation (driving the robot around via joystick). Once built, the map was saved and reused for autonomous navigation using Nav2's path planner and controller.</p>
+
+    <h2>Key Takeaways</h2>
+
+    <ul>
+        <li><strong>Sensor fusion is non-negotiable.</strong> Raw odometry alone will always drift. An EKF fusing wheel encoders + IMU is the minimum viable setup for reliable SLAM</li>
+        <li><strong>The TF tree is your best friend and worst enemy.</strong> Get it right before debugging anything else. Most "SLAM isn't working" problems are actually transform problems</li>
+        <li><strong>Tune for your environment.</strong> Default slam_toolbox parameters work for demo rooms but not for real spaces with glass, corridors, and dynamic objects</li>
+        <li><strong>Start with teleop, then automate.</strong> Build the map manually first. Once you trust the map, add autonomous exploration</li>
+    </ul>
+
+    <h2>What's Next</h2>
+
+    <p>In a follow-up post, I'll cover <strong>autonomous navigation with Nav2</strong> — using the SLAM-generated map for path planning, obstacle avoidance, and waypoint following. I'll also explore the jump from 2D to 3D SLAM using depth cameras and how that changes the pipeline.</p>
+
+    <p>If you're working on SLAM or ROS 2 projects, I'd love to hear about your setup. Reach out via <a href="mailto:kamal.sh@northeastern.edu">email</a> or find me on <a href="https://github.com/kamalshahidnu">GitHub</a>.</p>
+
+</article>
+
+<div class="author-box">
+    <div class="author-card">
+        <div class="author-avatar">SK</div>
+        <div class="author-info">
+            <h4>Shahid Kamal</h4>
+            <p>ML Engineer & Researcher · MS ECE @ Northeastern University</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2026 Shahid Kamal · <a href="../index.html">Back to Portfolio</a>
+</footer>
+
+</body>
+</html>
