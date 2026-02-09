@@ -1458,20 +1458,29 @@ function closeMenu() {
 }
 
 // Mobile nav link behavior (reliable on iOS Safari)
+// Use window.scrollTo() (more reliable than scrollIntoView with transformed overlays)
+const NAV_OFFSET_PX = 90; // keeps section titles from hiding under the fixed nav
 document.querySelectorAll('#navLinks a').forEach((a) => {
     a.addEventListener('click', (e) => {
         const href = a.getAttribute('href') || '';
-        if (href.startsWith('#')) {
-            const target = document.querySelector(href);
-            if (target) {
-                e.preventDefault();
-                closeMenu();
-                // wait a tick for the drawer to start closing, then scroll
-                setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-            }
-        } else {
+        if (!href.startsWith('#')) {
             closeMenu();
+            return;
         }
+
+        const id = href.slice(1);
+        const target = document.getElementById(id);
+        if (!target) return;
+
+        e.preventDefault();
+        closeMenu();
+
+        // Let the drawer begin closing, then scroll
+        setTimeout(() => {
+            const top = target.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET_PX;
+            window.scrollTo({ top, behavior: 'smooth' });
+            history.pushState(null, '', href);
+        }, 180);
     });
 });
 
