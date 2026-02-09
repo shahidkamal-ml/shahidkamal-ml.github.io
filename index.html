@@ -994,9 +994,12 @@
 
         @media (max-width: 768px) {
             nav { padding: 0.9rem 1.5rem; }
+            body.menu-open { overflow: hidden; }
             .nav-backdrop{
                 position: fixed;
                 inset: 0;
+                height: 100dvh;
+                width: 100vw;
                 background: rgba(2, 6, 23, 0.18);
                 opacity: 0;
                 pointer-events: none;
@@ -1012,7 +1015,8 @@
                 position: fixed;
                 top: 0;
                 right: 0;
-                height: 100vh;
+                height: 100dvh;
+                min-height: 100vh;
                 width: min(78vw, 340px);
                 background: rgba(247, 248, 252, 0.72);
                 -webkit-backdrop-filter: blur(14px);
@@ -1030,6 +1034,8 @@
                 opacity: 0;
                 pointer-events: none;
                 transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
             }
             .nav-links.open {
                 transform: translateX(0);
@@ -1452,14 +1458,26 @@
 <script>
 // Mobile menu
 function toggleMenu() {
-    document.getElementById('navLinks').classList.toggle('open');
-    document.getElementById('hamburger').classList.toggle('open');
-    document.getElementById('navBackdrop').classList.toggle('open');
+    const links = document.getElementById('navLinks');
+    const burger = document.getElementById('hamburger');
+    const backdrop = document.getElementById('navBackdrop');
+    const nav = document.querySelector('nav');
+
+    links.classList.toggle('open');
+    burger.classList.toggle('open');
+    backdrop.classList.toggle('open');
+
+    const isOpen = links.classList.contains('open');
+    document.body.classList.toggle('menu-open', isOpen);
+    if (isOpen && nav) nav.style.transform = 'translateY(0)';
 }
 function closeMenu() {
     document.getElementById('navLinks').classList.remove('open');
     document.getElementById('hamburger').classList.remove('open');
     document.getElementById('navBackdrop').classList.remove('open');
+    document.body.classList.remove('menu-open');
+    const nav = document.querySelector('nav');
+    if (nav) nav.style.transform = 'translateY(0)';
 }
 
 // Mobile nav link behavior (reliable on iOS Safari)
@@ -1503,6 +1521,7 @@ document.querySelectorAll('.reveal, .timeline-item').forEach(el => observer.obse
 // Nav auto-hide
 let lastScroll = 0;
 window.addEventListener('scroll', () => {
+    if (document.body.classList.contains('menu-open')) return;
     const nav = document.querySelector('nav');
     const cur = window.pageYOffset;
     nav.style.transform = cur > lastScroll && cur > 100 ? 'translateY(-100%)' : 'translateY(0)';
