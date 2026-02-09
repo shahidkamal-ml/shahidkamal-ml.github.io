@@ -26,6 +26,7 @@ Personal portfolio website showcasing my work in machine learning, large languag
 - [Building Production RAG Pipelines](https://kamalshahidnu.github.io/blog/rag-pipelines.html)
 - [Fine-Tuning Qwen3-4B: A Practical Guide to In-House LLMs](https://kamalshahidnu.github.io/blog/fine-tuning-llms.html)
 - [SLAM with ROS 2: Mapping the Unknown with LiDAR](https://kamalshahidnu.github.io/blog/ros2-slam.html)
+- [Detecting COVID-19 from Chest X-rays: Deep Learning for Edge Devices](https://kamalshahidnu.github.io/blog/covid-cxr-detection.html)
 
 ### Contact
 

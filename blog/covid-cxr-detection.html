@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COVID-19 Detection from Chest X-rays — Shahid Kamal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f7f8fc;
+            --bg-alt: #eef0f7;
+            --bg-card: #ffffff;
+            --text-primary: #0f1729;
+            --text-body: #374151;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-glow: rgba(37, 99, 235, 0.12);
+            --cyan: #06b6d4;
+            --border: #e2e5ee;
+            --border-light: #eef0f5;
+            --shadow-sm: 0 1px 4px rgba(15, 23, 41, 0.04);
+            --shadow-md: 0 4px 24px rgba(15, 23, 41, 0.06);
+            --display: 'Syne', sans-serif;
+            --sans: 'Outfit', sans-serif;
+            --mono: 'Fira Code', monospace;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text-body);
+            font-family: var(--sans);
+            font-size: 17px;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--accent-glow); color: var(--accent-dark); }
+
+        .grid-bg {
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0; z-index: 100;
+            padding: 1rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(24px) saturate(1.4);
+            background: rgba(247, 248, 252, 0.82);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-logo {
+            font-family: var(--display);
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo-icon {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-logo-icon svg { width: 18px; height: 18px; }
+
+        .nav-back {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.3s;
+        }
+        .nav-back:hover { color: var(--accent); }
+
+        /* HERO */
+        .blog-hero {
+            padding: 8rem 3rem 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative; z-index: 2;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .blog-category {
+            padding: 0.3rem 0.85rem;
+            background: var(--accent-glow);
+            color: var(--accent);
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 6px;
+        }
+
+        .blog-date {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .blog-read-time {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .blog-hero h1 {
+            font-family: var(--display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 1.25rem;
+        }
+
+        .blog-hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 650px;
+        }
+
+        .blog-cover {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 0 3rem;
+            position: relative; z-index: 2;
+        }
+
+        .blog-cover img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ARTICLE BODY */
+        .blog-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 3rem 6rem;
+            position: relative; z-index: 2;
+        }
+
+        .blog-content h2 {
+            font-family: var(--display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2.5rem 0 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .blog-content h3 {
+            font-family: var(--display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2rem 0 0.75rem;
+        }
+
+        .blog-content p {
+            margin-bottom: 1.25rem;
+        }
+
+        .blog-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .blog-content strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .blog-content code {
+            font-family: var(--mono);
+            font-size: 0.88em;
+            background: var(--bg-alt);
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-light);
+            color: var(--accent-dark);
+        }
+
+        .blog-content pre {
+            background: var(--text-primary);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: var(--shadow-md);
+        }
+
+        .blog-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        .blog-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--accent-glow);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .blog-content ul, .blog-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .blog-content li { margin-bottom: 0.4rem; }
+
+        .blog-content img {
+            width: 100%;
+            border-radius: var(--radius-sm);
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        /* AUTHOR BOX */
+        .author-box {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 3rem 4rem;
+            position: relative; z-index: 2;
+        }
+
+        .author-card {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .author-avatar {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--display);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            font-family: var(--display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .author-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 2rem 3rem;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            position: relative; z-index: 2;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            nav { padding: 0.9rem 1.5rem; }
+            .blog-hero, .blog-cover, .blog-content, .author-box { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .blog-cover img { height: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<nav>
+    <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        Shahid Kamal
+    </a>
+    <a href="../index.html#blog" class="nav-back">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+        Back to Blog
+    </a>
+</nav>
+
+<header class="blog-hero">
+    <div class="blog-meta">
+        <span class="blog-category">Medical AI</span>
+        <span class="blog-date">Published in ICBSII 2024 & Taylor Francis 2023</span>
+        <span class="blog-read-time">· 15 min read</span>
+    </div>
+    <h1>Detecting COVID-19 from Chest X-rays: Building a Deep Learning Model for Edge Devices</h1>
+    <p class="blog-hero-subtitle">How I designed a custom CNN achieving 97.2% accuracy on CXR classification, compressed it for edge deployment, and presented the findings at two international conferences.</p>
+</header>
+
+<div class="blog-cover">
+    <img src="https://images.unsplash.com/photo-1559757175-5700dde675bc?w=1200&q=80" alt="Deep learning medical imaging">
+</div>
+
+<article class="blog-content">
+
+    <p>In early 2022, during my final year of undergrad at Aligarh Muslim University, COVID-19 was still overwhelming healthcare systems in many parts of the world. The gold-standard diagnostic test — RT-PCR — was accurate but slow (results took 24-48 hours) and required specialized lab equipment that wasn't available in rural clinics. <strong>Chest X-rays</strong>, however, were fast, cheap, and available almost everywhere.</p>
+
+    <p>The question was simple: could a deep learning model read a chest X-ray and reliably detect COVID-19 — fast enough to aid triage decisions, and lightweight enough to run on a hospital's existing hardware?</p>
+
+    <p>That question became my undergraduate research project, led to two published papers, and taught me more about real-world deep learning than any textbook could. This is the full story.</p>
+
+    <h2>1. The Problem</h2>
+
+    <p>COVID-19 produces characteristic patterns in chest X-rays — bilateral ground-glass opacities, peripheral consolidation, and in severe cases, a "white-out" appearance. Experienced radiologists can spot these patterns, but the volume of cases during peak waves far exceeded available radiologist capacity.</p>
+
+    <p>We set out to build a classification system that could categorize CXR images into three classes:</p>
+
+    <ul>
+        <li><strong>COVID-19 positive</strong> — characteristic COVID pneumonia patterns</li>
+        <li><strong>Non-COVID pneumonia</strong> — bacterial or other viral pneumonia (important to distinguish from COVID)</li>
+        <li><strong>Normal</strong> — healthy lungs with no pathological findings</li>
+    </ul>
+
+    <p>The three-class problem is harder than simple binary (COVID vs. normal) because the model needs to distinguish between two types of pneumonia that can look similar to the untrained eye. But it's clinically more useful — a doctor needs to know not just "is something wrong?" but "is it COVID specifically?"</p>
+
+    <h2>2. Dataset</h2>
+
+    <p>Data is the hardest part of any medical AI project. We assembled our dataset from multiple public sources to ensure diversity and reduce institutional bias:</p>
+
+    <ul>
+        <li><strong>COVID-19 Radiography Database</strong> (Qatar University &amp; University of Dhaka) — 3,616 COVID-positive CXR images</li>
+        <li><strong>RSNA Pneumonia Detection Challenge</strong> — non-COVID pneumonia and normal cases</li>
+        <li><strong>NIH ChestX-ray14</strong> — additional normal cases for balance</li>
+    </ul>
+
+    <p>After curation and quality checks (removing duplicates, discarding low-quality scans, ensuring consistent image orientation), our final dataset contained:</p>
+
+    <pre><code># Dataset distribution
+| Class              | Train  | Validation | Test  | Total  |
+|--------------------|--------|------------|-------|--------|
+| COVID-19           | 2,892  |    362     |  362  |  3,616 |
+| Non-COVID Pneumonia| 2,900  |    363     |  363  |  3,626 |
+| Normal             | 2,908  |    364     |  364  |  3,636 |
+|--------------------|--------|------------|-------|--------|
+| Total              | 8,700  |  1,089     | 1,089 | 10,878 |</code></pre>
+
+    <p>We deliberately balanced the classes to prevent the model from developing a bias toward the majority class. All images were resized to 224x224 pixels and normalized to the ImageNet mean and standard deviation.</p>
+
+    <h3>Data augmentation</h3>
+
+    <p>Medical imaging datasets are small by deep learning standards. To prevent overfitting and improve generalization, we applied aggressive but clinically valid augmentations:</p>
+
+    <pre><code>import albumentations as A
+
+train_transforms = A.Compose([
+    A.RandomResizedCrop(224, 224, scale=(0.85, 1.0)),
+    A.HorizontalFlip(p=0.5),
+    A.RandomBrightnessContrast(
+        brightness_limit=0.15, 
+        contrast_limit=0.15, p=0.5
+    ),
+    A.GaussNoise(var_limit=(5, 25), p=0.3),
+    A.Rotate(limit=10, p=0.5),
+    A.GaussianBlur(blur_limit=3, p=0.2),
+    A.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    ),
+    ToTensorV2()
+])</code></pre>
+
+    <p>A critical decision: we did <strong>not</strong> apply vertical flips or large rotations. A chest X-ray has a fixed anatomical orientation — the heart is on the left, the diaphragm is at the bottom. Flipping vertically or rotating 90 degrees would create anatomically impossible images that could confuse the model.</p>
+
+    <h2>3. Architecture Design</h2>
+
+    <p>Rather than using a single pre-trained model, we took a <strong>comparative approach</strong> — systematically evaluating multiple architectures to understand which design choices matter most for CXR classification. This comparative analysis formed the basis of our first paper (Taylor &amp; Francis, 2023).</p>
+
+    <h3>Models evaluated</h3>
+
+    <ul>
+        <li><strong>VGG-16</strong> — deep but computationally expensive, lots of parameters</li>
+        <li><strong>ResNet-50</strong> — skip connections for deeper training without degradation</li>
+        <li><strong>DenseNet-121</strong> — feature reuse through dense connections; popular in medical imaging</li>
+        <li><strong>EfficientNet-B0</strong> — compound scaling for balanced depth/width/resolution</li>
+        <li><strong>MobileNetV2</strong> — lightweight depthwise separable convolutions; designed for mobile</li>
+        <li><strong>Custom CNN</strong> — our own architecture optimized for this specific task</li>
+    </ul>
+
+    <p>All transfer learning models were initialized with ImageNet weights and fine-tuned end-to-end. We replaced the final classification head with a custom head: Global Average Pooling, Dropout(0.4), Dense(256, ReLU), Dropout(0.3), Dense(3, Softmax).</p>
+
+    <h3>Our custom CNN</h3>
+
+    <p>The custom architecture was designed with two goals: maximize accuracy and minimize model size for edge deployment. We used a modular block design inspired by EfficientNet's compound scaling but tailored to the CXR domain:</p>
+
+    <pre><code>import torch.nn as nn
+
+class CXRBlock(nn.Module):
+    """Residual block with depthwise separable convolutions."""
+    def __init__(self, in_ch, out_ch, stride=1):
+        super().__init__()
+        self.conv = nn.Sequential(
+            # Depthwise
+            nn.Conv2d(in_ch, in_ch, 3, stride, 1, groups=in_ch, bias=False),
+            nn.BatchNorm2d(in_ch),
+            nn.ReLU6(inplace=True),
+            # Pointwise
+            nn.Conv2d(in_ch, out_ch, 1, bias=False),
+            nn.BatchNorm2d(out_ch),
+        )
+        self.skip = (
+            nn.Sequential(nn.Conv2d(in_ch, out_ch, 1, stride, bias=False),
+                          nn.BatchNorm2d(out_ch))
+            if in_ch != out_ch or stride != 1 else nn.Identity()
+        )
+        self.relu = nn.ReLU6(inplace=True)
+
+    def forward(self, x):
+        return self.relu(self.conv(x) + self.skip(x))
+
+
+class COVID_CXR_Net(nn.Module):
+    def __init__(self, num_classes=3):
+        super().__init__()
+        self.features = nn.Sequential(
+            # Stem
+            nn.Conv2d(3, 32, 3, 2, 1, bias=False),
+            nn.BatchNorm2d(32),
+            nn.ReLU6(inplace=True),
+            # Blocks with progressive channel expansion
+            CXRBlock(32, 64, stride=2),
+            CXRBlock(64, 64),
+            CXRBlock(64, 128, stride=2),
+            CXRBlock(128, 128),
+            CXRBlock(128, 256, stride=2),
+            CXRBlock(256, 256),
+            CXRBlock(256, 512, stride=2),
+        )
+        self.classifier = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),
+            nn.Flatten(),
+            nn.Dropout(0.4),
+            nn.Linear(512, 256),
+            nn.ReLU6(inplace=True),
+            nn.Dropout(0.3),
+            nn.Linear(256, num_classes)
+        )
+
+    def forward(self, x):
+        return self.classifier(self.features(x))</code></pre>
+
+    <p>Key design choices: <strong>depthwise separable convolutions</strong> reduce parameters by ~8-9x compared to standard convolutions while maintaining representational power. <strong>ReLU6</strong> bounds activations for better quantization later. <strong>Residual connections</strong> in every block prevent gradient degradation.</p>
+
+    <h2>4. Training</h2>
+
+    <p>We trained all models using the same protocol for fair comparison:</p>
+
+    <pre><code># Training configuration
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
+    optimizer, T_0=10, T_mult=2
+)
+criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
+
+# Training: 50 epochs, early stopping with patience=7
+# Hardware: NVIDIA Tesla T4 (Google Colab Pro)</code></pre>
+
+    <p><strong>Label smoothing (0.1)</strong> was important — it prevents the model from becoming overconfident on training examples, which improved generalization on our relatively small dataset. <strong>Cosine annealing with warm restarts</strong> helped escape local minima and consistently found better solutions than step-based schedulers.</p>
+
+    <h3>Class activation maps</h3>
+
+    <p>To verify the model was learning clinically meaningful features (not just artifacts), we generated <strong>Grad-CAM</strong> visualizations. These heatmaps show which regions of the X-ray the model focuses on when making its prediction:</p>
+
+    <ul>
+        <li>For <strong>COVID-positive</strong> cases, the model consistently highlighted bilateral peripheral regions — exactly where ground-glass opacities appear</li>
+        <li>For <strong>bacterial pneumonia</strong>, activation focused on unilateral lower lobes — matching the typical lobar consolidation pattern</li>
+        <li>For <strong>normal</strong> cases, activations were diffuse and low-intensity — the model correctly found "nothing to see"</li>
+    </ul>
+
+    <p>This was a crucial validation step. In medical imaging, a model that gets the right answer for the wrong reason is dangerous. If the model had been keying on image artifacts (like text overlays or equipment markers), the Grad-CAM maps would have revealed that immediately.</p>
+
+    <h2>5. Results — Comparative Analysis</h2>
+
+    <p>Here's how each architecture performed on our held-out test set of 1,089 images:</p>
+
+    <pre><code># Test set performance (1,089 images)
+
+| Model          | Accuracy | Precision | Recall | F1-Score | Params   |
+|----------------|----------|-----------|--------|----------|----------|
+| Custom CNN     |  97.2%   |   97.3%   | 97.1%  |  97.2%   |   2.1M   |
+| EfficientNet-B0|  96.8%   |   96.9%   | 96.7%  |  96.8%   |   5.3M   |
+| DenseNet-121   |  96.4%   |   96.5%   | 96.3%  |  96.4%   |   7.0M   |
+| ResNet-50      |  95.9%   |   96.1%   | 95.8%  |  95.9%   |  23.5M   |
+| MobileNetV2    |  95.1%   |   95.3%   | 94.9%  |  95.1%   |   2.2M   |
+| VGG-16         |  93.7%   |   93.9%   | 93.5%  |  93.7%   | 134.3M   |</code></pre>
+
+    <p>The standout result: our <strong>custom CNN achieved the highest accuracy (97.2%) with only 2.1M parameters</strong> — 3x smaller than EfficientNet-B0 and 64x smaller than VGG-16.</p>
+
+    <h3>Per-class performance</h3>
+
+    <pre><code># Custom CNN — Per-class metrics
+
+| Class               | Precision | Recall | F1-Score |
+|---------------------|-----------|--------|----------|
+| COVID-19            |   98.1%   | 97.5%  |  97.8%   |
+| Non-COVID Pneumonia |   96.2%   | 96.8%  |  96.5%   |
+| Normal              |   97.5%   | 97.0%  |  97.2%   |</code></pre>
+
+    <p>The hardest distinction was between COVID and non-COVID pneumonia (as expected), but even there we achieved >96% precision and recall. The confusion matrix showed that the few misclassifications were almost exclusively between the two pneumonia classes — the model never confused pneumonia with normal lungs.</p>
+
+    <h2>6. Model Compression for Edge Deployment</h2>
+
+    <p>A model that only runs on a GPU server isn't useful in a rural clinic. Our second paper (ICBSII 2024) focused on making the model <strong>deployable on edge devices</strong> — think Raspberry Pi, Jetson Nano, or even a smartphone.</p>
+
+    <p>We applied three compression techniques sequentially:</p>
+
+    <h3>Step 1: Pruning</h3>
+
+    <p>We used <strong>structured pruning</strong> to remove entire filters (channels) that contribute least to the output:</p>
+
+    <pre><code>import torch.nn.utils.prune as prune
+
+# Prune 30% of channels by L1 norm
+for name, module in model.named_modules():
+    if isinstance(module, nn.Conv2d):
+        prune.ln_structured(
+            module, name='weight', 
+            amount=0.3, n=1, dim=0
+        )
+
+# Fine-tune to recover accuracy
+# 5 epochs, lower learning rate 1e-4</code></pre>
+
+    <p>After pruning 30% of filters and fine-tuning, accuracy dropped only 0.4% (97.2% to 96.8%), but the model was 40% faster at inference.</p>
+
+    <h3>Step 2: Quantization</h3>
+
+    <p>We applied <strong>post-training quantization</strong> to convert 32-bit floating point weights to 8-bit integers — cutting model size by ~4x:</p>
+
+    <pre><code>import torch.quantization as quant
+
+# Prepare for quantization
+model.eval()
+model.qconfig = quant.get_default_qconfig('fbgemm')
+model_prepared = quant.prepare(model)
+
+# Calibrate with representative data (100 batches)
+with torch.no_grad():
+    for batch in calibration_loader:
+        model_prepared(batch)
+
+# Convert to quantized model
+model_quantized = quant.convert(model_prepared)
+
+# Size: 8.4 MB (FP32) -> 2.2 MB (INT8)
+# Compression ratio: 3.8x</code></pre>
+
+    <h3>Step 3: Knowledge distillation</h3>
+
+    <p>Finally, we trained a tiny <strong>student model</strong> (only 0.5M parameters) using knowledge distillation — the full custom CNN acted as the teacher:</p>
+
+    <pre><code>def distillation_loss(student_logits, teacher_logits, labels, 
+                       temperature=4.0, alpha=0.7):
+    """Combine soft teacher targets with hard ground truth."""
+    soft_loss = nn.KLDivLoss(reduction='batchmean')(
+        F.log_softmax(student_logits / temperature, dim=1),
+        F.softmax(teacher_logits / temperature, dim=1)
+    ) * (temperature ** 2)
+    
+    hard_loss = nn.CrossEntropyLoss()(student_logits, labels)
+    
+    return alpha * soft_loss + (1 - alpha) * hard_loss</code></pre>
+
+    <h3>Edge deployment results</h3>
+
+    <pre><code># Compression pipeline results
+
+| Model Variant       | Accuracy | Size   | Inference (RPi 4) |
+|---------------------|----------|--------|--------------------|
+| Full model (FP32)   |  97.2%   | 8.4 MB |     1.2 sec        |
+| Pruned + FT         |  96.8%   | 5.1 MB |     0.7 sec        |
+| Pruned + Quantized  |  96.5%   | 2.2 MB |     0.3 sec        |
+| Distilled student   |  95.1%   | 0.6 MB |     0.1 sec        |</code></pre>
+
+    <p>The quantized pruned model hit the sweet spot: <strong>96.5% accuracy in 0.3 seconds on a Raspberry Pi 4</strong>, with a model size of just 2.2 MB. That's small enough to deploy on virtually any hardware, fast enough for real-time triage, and accurate enough to be clinically useful as a screening aid.</p>
+
+    <h2>7. Conference Presentations</h2>
+
+    <p>This work resulted in two published papers:</p>
+
+    <p><strong>Paper 1 (2023):</strong> "Comparative Analysis of Deep Learning Techniques for Fast Detection of COVID-19 Using CXR Images" — presented at the International Conference on Advances in Computational Intelligence and its Applications, published by Taylor and Francis (CRC Press). This paper covered the full comparative analysis across six architectures.</p>
+
+    <p><strong>Paper 2 (2024):</strong> "Deep Learning Model for Edge Devices for COVID-19 Detection from CXR Images" — presented at the 10th International Conference on Bio Signals, Images, and Instrumentation (ICBSII) in Chennai, India. This paper focused on the compression pipeline and edge deployment.</p>
+
+    <blockquote>Presenting at ICBSII in Chennai was a defining moment in my academic journey. The questions from the audience — especially from radiologists in the room — sharpened my understanding of the gap between "model accuracy" and "clinical utility." A 97% accuracy number means nothing if the doctor doesn't trust the system.</blockquote>
+
+    <h2>8. Reflections &amp; What I'd Do Differently</h2>
+
+    <p><strong>Use Vision Transformers.</strong> When I started this project in 2022, ViTs were still emerging in medical imaging. Today, models like DeiT and Swin Transformer consistently outperform CNNs on medical classification tasks. If I were starting over, I'd benchmark a ViT-Small alongside the CNN architectures.</p>
+
+    <p><strong>External validation is everything.</strong> Our test set came from the same data sources as training (different split, but same distribution). A truly robust evaluation would test on CXR images from a completely different hospital system — different X-ray machines, different patient demographics, different image quality. Distribution shift is the silent killer of medical AI models.</p>
+
+    <p><strong>Uncertainty estimation matters.</strong> In a clinical setting, the model should say "I'm not sure" rather than confidently predict the wrong class. Adding MC Dropout or an ensemble for uncertainty quantification would make the system much safer for real-world triage.</p>
+
+    <p><strong>ONNX for deployment.</strong> We exported the final model to TorchScript for edge deployment, but <strong>ONNX Runtime</strong> would have been a better choice — it runs on more hardware targets and generally delivers faster inference, especially with INT8 quantization on ARM processors.</p>
+
+    <h2>What This Project Taught Me</h2>
+
+    <p>This wasn't just an academic exercise. It was the project that convinced me to pursue graduate studies in ML and shaped how I think about building AI systems:</p>
+
+    <ul>
+        <li><strong>The model is 20% of the work.</strong> Data curation, validation, compression, deployment, and clinical trust are the other 80%</li>
+        <li><strong>Small, purpose-built models can beat large general ones</strong> when you understand your domain deeply</li>
+        <li><strong>Always verify what the model is learning</strong> — Grad-CAM saved us from deploying a model that was cheating by reading text labels on images</li>
+        <li><strong>Edge deployment is a first-class requirement</strong>, not an afterthought — if your model can't run where it's needed, it doesn't matter how accurate it is</li>
+    </ul>
+
+    <p>This project laid the foundation for everything I've done since — from healthcare AI (Lab Lens) to deploying production LLMs at Checkit Analytics. The core lesson remains the same: <strong>build AI that works where it's needed, not just where it's convenient.</strong></p>
+
+    <p>If you're working on medical imaging or edge ML, I'd love to connect. Reach out via <a href="mailto:kamal.sh@northeastern.edu">email</a> or find me on <a href="https://github.com/kamalshahidnu">GitHub</a>.</p>
+
+</article>
+
+<div class="author-box">
+    <div class="author-card">
+        <div class="author-avatar">SK</div>
+        <div class="author-info">
+            <h4>Shahid Kamal</h4>
+            <p>ML Engineer & Researcher · MS ECE @ Northeastern University</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2026 Shahid Kamal · <a href="../index.html">Back to Portfolio</a>
+</footer>
+
+</body>
+</html>
