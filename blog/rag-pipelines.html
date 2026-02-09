@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Production RAG Pipelines — Shahid Kamal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f7f8fc;
+            --bg-alt: #eef0f7;
+            --bg-card: #ffffff;
+            --text-primary: #0f1729;
+            --text-body: #374151;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-glow: rgba(37, 99, 235, 0.12);
+            --cyan: #06b6d4;
+            --border: #e2e5ee;
+            --border-light: #eef0f5;
+            --shadow-sm: 0 1px 4px rgba(15, 23, 41, 0.04);
+            --shadow-md: 0 4px 24px rgba(15, 23, 41, 0.06);
+            --display: 'Syne', sans-serif;
+            --sans: 'Outfit', sans-serif;
+            --mono: 'Fira Code', monospace;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text-body);
+            font-family: var(--sans);
+            font-size: 17px;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--accent-glow); color: var(--accent-dark); }
+
+        .grid-bg {
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0; z-index: 100;
+            padding: 1rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(24px) saturate(1.4);
+            background: rgba(247, 248, 252, 0.82);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-logo {
+            font-family: var(--display);
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo-icon {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-logo-icon svg { width: 18px; height: 18px; }
+
+        .nav-back {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.3s;
+        }
+        .nav-back:hover { color: var(--accent); }
+
+        /* HERO */
+        .blog-hero {
+            padding: 8rem 3rem 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative; z-index: 2;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .blog-category {
+            padding: 0.3rem 0.85rem;
+            background: var(--accent-glow);
+            color: var(--accent);
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 6px;
+        }
+
+        .blog-date {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .blog-read-time {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .blog-hero h1 {
+            font-family: var(--display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 1.25rem;
+        }
+
+        .blog-hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 650px;
+        }
+
+        .blog-cover {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 0 3rem;
+            position: relative; z-index: 2;
+        }
+
+        .blog-cover img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ARTICLE BODY */
+        .blog-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 3rem 6rem;
+            position: relative; z-index: 2;
+        }
+
+        .blog-content h2 {
+            font-family: var(--display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2.5rem 0 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .blog-content h3 {
+            font-family: var(--display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2rem 0 0.75rem;
+        }
+
+        .blog-content p {
+            margin-bottom: 1.25rem;
+        }
+
+        .blog-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .blog-content strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .blog-content code {
+            font-family: var(--mono);
+            font-size: 0.88em;
+            background: var(--bg-alt);
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-light);
+            color: var(--accent-dark);
+        }
+
+        .blog-content pre {
+            background: var(--text-primary);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: var(--shadow-md);
+        }
+
+        .blog-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        .blog-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--accent-glow);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .blog-content ul, .blog-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .blog-content li { margin-bottom: 0.4rem; }
+
+        .blog-content img {
+            width: 100%;
+            border-radius: var(--radius-sm);
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        /* AUTHOR BOX */
+        .author-box {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 3rem 4rem;
+            position: relative; z-index: 2;
+        }
+
+        .author-card {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .author-avatar {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--display);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            font-family: var(--display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .author-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 2rem 3rem;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            position: relative; z-index: 2;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            nav { padding: 0.9rem 1.5rem; }
+            .blog-hero, .blog-cover, .blog-content, .author-box { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .blog-cover img { height: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<nav>
+    <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        Shahid Kamal
+    </a>
+    <a href="../index.html#blog" class="nav-back">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+        Back to Blog
+    </a>
+</nav>
+
+<header class="blog-hero">
+    <div class="blog-meta">
+        <span class="blog-category">LLMs</span>
+        <span class="blog-date">Feb 5, 2026</span>
+        <span class="blog-read-time">· 8 min read</span>
+    </div>
+    <h1>Building Production RAG Pipelines: Lessons from the Trenches</h1>
+    <p class="blog-hero-subtitle">What I learned deploying retrieval-augmented generation at scale — chunking strategies, embedding models, and the hard trade-offs nobody talks about.</p>
+</header>
+
+<div class="blog-cover">
+    <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&q=80" alt="AI brain visualization">
+</div>
+
+<article class="blog-content">
+
+    <!-- ============================================================
+         ✏️  WRITE YOUR BLOG POST BELOW
+         Replace the sample content with your own writing.
+         Use standard HTML tags: <h2>, <h3>, <p>, <code>, <pre>,
+         <blockquote>, <ul>, <ol>, <li>, <img>, <a>, <strong>, <em>
+         ============================================================ -->
+
+    <p>Retrieval-Augmented Generation (RAG) has become the go-to architecture for grounding LLM responses in real data. But the gap between a "works in a notebook" RAG demo and a <strong>production system</strong> that handles real queries reliably is enormous.</p>
+
+    <p>After building RAG pipelines at Checkit Analytics for financial question-answering, here's what I've learned about the decisions that actually matter.</p>
+
+    <h2>1. Chunking Is Everything</h2>
+
+    <p>The single most impactful decision in a RAG pipeline isn't the embedding model or the vector store — it's <strong>how you chunk your documents</strong>. Too small and you lose context. Too large and you dilute relevance with noise.</p>
+
+    <blockquote>The best chunk size depends entirely on your query patterns. There's no universal answer — only experimentation.</blockquote>
+
+    <p>We settled on a hybrid approach: semantic chunking for unstructured text, and table-aware parsing for financial reports. The key insight was treating tables as first-class citizens rather than forcing them through text splitters.</p>
+
+    <pre><code># Semantic chunking with overlap
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=512,
+    chunk_overlap=64,
+    separators=["\n\n", "\n", ". ", " "]
+)
+chunks = splitter.split_documents(docs)</code></pre>
+
+    <h2>2. Embedding Model Selection</h2>
+
+    <p>We benchmarked several embedding models on our financial corpus. The results surprised us — larger models didn't always win. Domain relevance and query-document alignment mattered more than raw MTEB scores.</p>
+
+    <h3>What worked for us</h3>
+
+    <ul>
+        <li><strong>BGE-base</strong> for general document search — fast and accurate enough</li>
+        <li><strong>Cohere embed v3</strong> when we needed multilingual support</li>
+        <li>Custom fine-tuned embeddings when we had labeled query-document pairs</li>
+    </ul>
+
+    <h2>3. The Retrieval-Generation Gap</h2>
+
+    <p>Even with perfect retrieval, generation quality depends heavily on <strong>how you format the context</strong> for the LLM. We found that structured prompts with clear document boundaries reduced hallucination by ~30% compared to naive concatenation.</p>
+
+    <p>This is an active area of iteration for us, and I'll share more findings as we scale the system to handle complex multi-step financial analysis queries.</p>
+
+    <h2>What's Next</h2>
+
+    <p>In the next post, I'll dive into our evaluation framework — how we measure RAG quality beyond simple accuracy, including faithfulness, relevance, and answer completeness metrics.</p>
+
+    <p>If you're working on similar problems, I'd love to connect. Reach out via <a href="mailto:kamal.sh@northeastern.edu">email</a> or find me on <a href="https://github.com/kamalshahidnu">GitHub</a>.</p>
+
+    <!-- ============================================================
+         ✏️  END OF BLOG POST CONTENT
+         ============================================================ -->
+
+</article>
+
+<div class="author-box">
+    <div class="author-card">
+        <div class="author-avatar">SK</div>
+        <div class="author-info">
+            <h4>Shahid Kamal</h4>
+            <p>ML Engineer & Researcher · MS ECE @ Northeastern University</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2026 Shahid Kamal · <a href="../index.html">Back to Portfolio</a>
+</footer>
+
+</body>
+</html>
