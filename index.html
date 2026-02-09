@@ -2211,7 +2211,7 @@ function buildSearchIndex() {
         title: 'Resume (PDF)',
         href: 'Shahid%20Resume.pdf',
         meta: 'Resume',
-        text: 'Download resume CV Shahid Resume PDF',
+        text: 'Download resume CV Shahid Kamal Resume PDF',
     });
 
     // De-dupe by href + title
@@ -2249,8 +2249,21 @@ function renderSearchResults(q) {
         searchResults.innerHTML = '';
         return;
     }
+    const tokens = query.split(/\s+/).filter(Boolean);
     const results = searchIndex
-        .filter((it) => it.title.toLowerCase().includes(query) || it.text.toLowerCase().includes(query))
+        .map((it) => {
+            const hay = `${it.title} ${it.meta || ''} ${it.text || ''}`.toLowerCase();
+            const matchesAllTokens = tokens.every((t) => hay.includes(t));
+            const phraseMatch = hay.includes(query);
+            let score = 0;
+            if (phraseMatch) score += 5;
+            score += tokens.reduce((acc, t) => acc + (hay.includes(t) ? 1 : 0), 0);
+            // Small boost for resume when user searches cv/resume
+            if ((it.meta || '').toLowerCase() === 'resume' && (hay.includes('resume') || hay.includes('cv'))) score += 3;
+            return { ...it, _hay: hay, _score: score, _match: matchesAllTokens || phraseMatch };
+        })
+        .filter((it) => it._match)
+        .sort((a, b) => b._score - a._score)
         .slice(0, 10);
 
     if (results.length === 0) {
