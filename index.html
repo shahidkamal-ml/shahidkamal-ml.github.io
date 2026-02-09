@@ -191,6 +191,13 @@
             z-index: 5;
         }
 
+        /* Wider top "About" layout (uses available horizontal space) */
+        .hero-content.hero-about {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
         .hero-badge {
             display: inline-flex;
             align-items: center;
@@ -406,10 +413,17 @@
         /* ===== ABOUT ===== */
         .about-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.15fr 0.85fr;
             gap: 3rem;
             max-width: 1100px;
             align-items: start;
+        }
+
+        /* When About is used inside the hero, let it breathe */
+        .hero .about-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .about-text p {
