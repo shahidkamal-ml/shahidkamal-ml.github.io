@@ -698,6 +698,63 @@
             background: var(--accent-glow);
         }
 
+        /* ===== CERTIFICATIONS ===== */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.25rem;
+            max-width: 1150px;
+        }
+        .cert-card {
+            padding: 1.65rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.35s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+        .cert-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+        .cert-meta {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 0.55rem;
+            font-weight: 600;
+        }
+        .cert-title {
+            font-family: var(--display);
+            font-size: 1.08rem;
+            font-weight: 750;
+            color: var(--text-primary);
+            margin-bottom: 0.55rem;
+            line-height: 1.4;
+        }
+        .cert-desc {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            flex: 1;
+            margin-bottom: 0.9rem;
+        }
+        .cert-verify {
+            font-family: var(--sans);
+            font-size: 0.86rem;
+            font-weight: 650;
+            color: var(--accent);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
         /* ===== PUBLICATIONS ===== */
         .publications-list {
             max-width: 900px;
@@ -1096,7 +1153,7 @@
                 margin: 0 auto 1.5rem;
             }
             .about-grid { grid-template-columns: 1fr; }
-            .projects-grid, .education-cards, .skills-mosaic, .blog-grid { grid-template-columns: 1fr; }
+            .projects-grid, .education-cards, .skills-mosaic, .blog-grid, .cert-grid { grid-template-columns: 1fr; }
             .contact-section { padding: 5rem 1.5rem; }
             .contact-links { flex-direction: column; align-items: center; }
             footer { flex-direction: column; gap: 0.5rem; text-align: center; }
@@ -1120,6 +1177,7 @@
         <li><a href="#experience">Experience</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#skills">Skills</a></li>
+        <li><a href="#certifications">Certifications</a></li>
         <li><a href="#publications">Publications</a></li>
         <li><a href="#blog">Blog</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -1353,6 +1411,43 @@
                 <span class="skill-tag">Microcontrollers</span><span class="skill-tag">Sensor Integration</span><span class="skill-tag">Embedded Systems</span>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- Publications -->
+<section id="certifications">
+    <div class="section-header reveal">
+        <div class="section-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2l2.2 4.5L19 7l-3.5 3.4.8 4.8L12 13.8 7.7 15.2l.8-4.8L5 7l4.8-.5L12 2z"></path>
+                <path d="M8 14v8l4-2 4 2v-8"></path>
+            </svg>
+        </div>
+        <h2 class="section-title">Licenses & Certifications</h2>
+        <div class="section-line"></div>
+    </div>
+
+    <div class="cert-grid">
+        <a class="cert-card reveal" href="https://www.coursera.org/account/accomplishments/verify/EDVJNRNVFJN4" target="_blank" rel="noopener">
+            <div class="cert-meta">Coursera · Credential</div>
+            <h3 class="cert-title">Coursera Certificate (Verification)</h3>
+            <p class="cert-desc">Verification link for a Coursera-issued certificate.</p>
+            <span class="cert-verify">Verify <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></span>
+        </a>
+
+        <a class="cert-card reveal" href="https://www.coursera.org/account/accomplishments/specialization/YCLYRQ7VR69Z" target="_blank" rel="noopener">
+            <div class="cert-meta">Coursera · Specialization</div>
+            <h3 class="cert-title">Coursera Specialization (Verification)</h3>
+            <p class="cert-desc">Verification link for a Coursera specialization credential.</p>
+            <span class="cert-verify">Verify <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></span>
+        </a>
+
+        <a class="cert-card reveal" href="https://www.citiprogram.org/verify/?w98bce6aa-fc03-465f-9d85-a83a6c030f91-73159787" target="_blank" rel="noopener">
+            <div class="cert-meta">CITI Program · Completion</div>
+            <h3 class="cert-title">CITI Program Public Completion Certificate (Verification)</h3>
+            <p class="cert-desc">Verification link for a CITI Program completion certificate.</p>
+            <span class="cert-verify">Verify <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></span>
+        </a>
     </div>
 </section>
 
