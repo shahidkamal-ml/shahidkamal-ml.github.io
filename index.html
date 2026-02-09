@@ -1533,7 +1533,9 @@
                 width: calc(100% - 2rem);
                 padding: 0.85rem 1rem;
             }
-            .nav-actions { display: none; }
+            /* Keep search available on mobile; hide theme toggle to avoid crowding */
+            .nav-actions { display: flex; }
+            #themeToggle { display: none; }
             .profile-name { font-size: clamp(1.55rem, 8.2vw, 2.0rem); }
             body.menu-open { overflow: hidden; }
             .nav-backdrop{
