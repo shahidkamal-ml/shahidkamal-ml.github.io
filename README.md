@@ -32,4 +32,4 @@ Personal portfolio website showcasing my work in machine learning, large languag
 
 - 📧 kamal.sh@northeastern.edu
 - 🐙 [GitHub](https://github.com/shahidkamal-ml)
-- 💼 [LinkedIn](https://linkedin.com/in/)
+- 💼 [LinkedIn](https://www.linkedin.com/in/shahidkamal-ml)
