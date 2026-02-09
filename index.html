@@ -157,7 +157,7 @@
             position: absolute;
             inset: 0;
             z-index: 1;
-            opacity: 0.5;
+            opacity: 0.78;
         }
 
         .hero-glow-1 {
@@ -1595,21 +1595,22 @@ function resize() {
 
 function initNodes() {
     nodes = [];
-    const count = Math.floor((canvas.width * canvas.height) / 18000);
+    // Slightly denser for better visibility, still performant on mobile
+    const count = Math.floor((canvas.width * canvas.height) / 14000);
     for (let i = 0; i < count; i++) {
         nodes.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.4,
-            vy: (Math.random() - 0.5) * 0.4,
-            r: Math.random() * 2 + 1
+            vx: (Math.random() - 0.5) * 0.45,
+            vy: (Math.random() - 0.5) * 0.45,
+            r: Math.random() * 2.2 + 1.1
         });
     }
 }
 
 function drawNetwork() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const maxDist = 140;
+    const maxDist = 175;
 
     for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
@@ -1620,7 +1621,8 @@ function drawNetwork() {
         // Draw node
         ctx.beginPath();
         ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(37, 99, 235, 0.25)';
+        // Slightly brighter nodes
+        ctx.fillStyle = 'rgba(37, 99, 235, 0.42)';
         ctx.fill();
 
         // Draw connections
@@ -1633,8 +1635,9 @@ function drawNetwork() {
                 ctx.beginPath();
                 ctx.moveTo(a.x, a.y);
                 ctx.lineTo(b.x, b.y);
-                ctx.strokeStyle = `rgba(37, 99, 235, ${0.08 * (1 - dist / maxDist)})`;
-                ctx.lineWidth = 0.8;
+                // Brighter connections (stronger near nodes)
+                ctx.strokeStyle = `rgba(37, 99, 235, ${0.18 * (1 - dist / maxDist)})`;
+                ctx.lineWidth = 1.2;
                 ctx.stroke();
             }
         }
