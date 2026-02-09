@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fine-Tuning Qwen3-4B — Shahid Kamal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f7f8fc;
+            --bg-alt: #eef0f7;
+            --bg-card: #ffffff;
+            --text-primary: #0f1729;
+            --text-body: #374151;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-glow: rgba(37, 99, 235, 0.12);
+            --cyan: #06b6d4;
+            --border: #e2e5ee;
+            --border-light: #eef0f5;
+            --shadow-sm: 0 1px 4px rgba(15, 23, 41, 0.04);
+            --shadow-md: 0 4px 24px rgba(15, 23, 41, 0.06);
+            --display: 'Syne', sans-serif;
+            --sans: 'Outfit', sans-serif;
+            --mono: 'Fira Code', monospace;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text-body);
+            font-family: var(--sans);
+            font-size: 17px;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--accent-glow); color: var(--accent-dark); }
+
+        .grid-bg {
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0; z-index: 100;
+            padding: 1rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(24px) saturate(1.4);
+            background: rgba(247, 248, 252, 0.82);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-logo {
+            font-family: var(--display);
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo-icon {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-logo-icon svg { width: 18px; height: 18px; }
+
+        .nav-back {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.3s;
+        }
+        .nav-back:hover { color: var(--accent); }
+
+        /* HERO */
+        .blog-hero {
+            padding: 8rem 3rem 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative; z-index: 2;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .blog-category {
+            padding: 0.3rem 0.85rem;
+            background: var(--accent-glow);
+            color: var(--accent);
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 6px;
+        }
+
+        .blog-date {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .blog-read-time {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .blog-hero h1 {
+            font-family: var(--display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 1.25rem;
+        }
+
+        .blog-hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 650px;
+        }
+
+        .blog-cover {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 0 3rem;
+            position: relative; z-index: 2;
+        }
+
+        .blog-cover img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ARTICLE BODY */
+        .blog-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 3rem 6rem;
+            position: relative; z-index: 2;
+        }
+
+        .blog-content h2 {
+            font-family: var(--display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2.5rem 0 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .blog-content h3 {
+            font-family: var(--display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2rem 0 0.75rem;
+        }
+
+        .blog-content p {
+            margin-bottom: 1.25rem;
+        }
+
+        .blog-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .blog-content strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .blog-content code {
+            font-family: var(--mono);
+            font-size: 0.88em;
+            background: var(--bg-alt);
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-light);
+            color: var(--accent-dark);
+        }
+
+        .blog-content pre {
+            background: var(--text-primary);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: var(--shadow-md);
+        }
+
+        .blog-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        .blog-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--accent-glow);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .blog-content ul, .blog-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .blog-content li { margin-bottom: 0.4rem; }
+
+        .blog-content img {
+            width: 100%;
+            border-radius: var(--radius-sm);
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        /* AUTHOR BOX */
+        .author-box {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 3rem 4rem;
+            position: relative; z-index: 2;
+        }
+
+        .author-card {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .author-avatar {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--display);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            font-family: var(--display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .author-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 2rem 3rem;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            position: relative; z-index: 2;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            nav { padding: 0.9rem 1.5rem; }
+            .blog-hero, .blog-cover, .blog-content, .author-box { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .blog-cover img { height: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<nav>
+    <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        Shahid Kamal
+    </a>
+    <a href="../index.html#blog" class="nav-back">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+        Back to Blog
+    </a>
+</nav>
+
+<header class="blog-hero">
+    <div class="blog-meta">
+        <span class="blog-category">Deep Learning</span>
+        <span class="blog-date">Jan 15, 2026</span>
+        <span class="blog-read-time">· 14 min read</span>
+    </div>
+    <h1>Fine-Tuning Qwen3-4B: A Practical Guide to In-House LLMs</h1>
+    <p class="blog-hero-subtitle">How we replaced expensive API calls with a fine-tuned open-source model — data preparation, LoRA training, evaluation, and production deployment on AWS.</p>
+</header>
+
+<div class="blog-cover">
+    <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&q=80" alt="Neural network computation">
+</div>
+
+<article class="blog-content">
+
+    <!-- ============================================================
+         Fine-Tuning Qwen3-4B: A Practical Guide to In-House LLMs
+         ============================================================ -->
+
+    <p>At Checkit Analytics, we were spending thousands of dollars a month on OpenAI API calls for our financial Q&A product. The responses were good, but the costs were scaling linearly with users, latency was unpredictable, and we had zero control over model updates. One morning, GPT-4 started formatting outputs differently — and our entire parsing pipeline broke.</p>
+
+    <p>That was the moment we decided to bring the LLM in-house. After evaluating several open-source models, we landed on <strong>Qwen3-4B</strong> — and fine-tuned it to outperform GPT-3.5 on our domain-specific tasks at a fraction of the cost. This post is the complete story of how we did it.</p>
+
+    <h2>1. Why Qwen3-4B?</h2>
+
+    <p>Choosing the right base model is the most important decision in the entire pipeline. We evaluated five candidates on our internal benchmark of 500 financial Q&A pairs:</p>
+
+    <ul>
+        <li><strong>Llama 3-8B</strong> — Strong general performance, but 8B parameters meant higher inference costs and slower latency</li>
+        <li><strong>Mistral 7B</strong> — Excellent reasoning, but struggled with structured financial data</li>
+        <li><strong>Phi-3 Mini (3.8B)</strong> — Impressive for its size but weak on long-context financial documents</li>
+        <li><strong>Gemma 2-2B</strong> — Too small; couldn't handle multi-step reasoning over financial tables</li>
+        <li><strong>Qwen3-4B</strong> — Best balance of size, multilingual support, and structured data understanding</li>
+    </ul>
+
+    <p>Qwen3-4B stood out because of its strong performance on structured data and instruction following out of the box. For financial analytics — where responses need to reference specific numbers from tables, perform light calculations, and cite sources — this mattered more than raw benchmark scores.</p>
+
+    <blockquote>The best model isn't the one with the highest leaderboard rank. It's the one that performs best on YOUR data, at a cost you can sustain.</blockquote>
+
+    <h2>2. Data Preparation</h2>
+
+    <p>Fine-tuning is only as good as your data. We built our training dataset from three sources:</p>
+
+    <p><strong>Source 1: Production logs.</strong> We had 6 months of user queries and GPT-4 responses from our existing product. We manually reviewed and filtered these down to ~3,200 high-quality question-answer pairs. The key was being ruthless about quality — we threw away any pair where the GPT-4 answer was wrong, incomplete, or poorly formatted.</p>
+
+    <p><strong>Source 2: Synthetic generation.</strong> For underrepresented query types (risk analysis, ratio comparisons, time-series trends), we used GPT-4 to generate additional training examples from our financial document corpus. We generated ~1,800 synthetic pairs, then manually validated a 20% sample to check quality.</p>
+
+    <p><strong>Source 3: Edge cases.</strong> We specifically crafted ~400 examples for failure modes we'd seen in production: questions about missing data, ambiguous time periods, multi-company comparisons, and "I don't know" scenarios where the answer isn't in the context.</p>
+
+    <p>Total dataset: <strong>5,400 examples</strong>, split 90/5/5 into train/validation/test sets.</p>
+
+    <h3>Data format</h3>
+
+    <p>We used the ChatML format that Qwen expects, with a system prompt that anchors the model in its role:</p>
+
+    <pre><code>{
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a financial analyst AI. Answer questions using ONLY the provided context. Cite specific numbers. If the answer is not in the context, say so."
+    },
+    {
+      "role": "user", 
+      "content": "Context: [document chunks]\n\nQuestion: What was Apple's gross margin in Q3 2025?"
+    },
+    {
+      "role": "assistant",
+      "content": "Apple's gross margin in Q3 2025 was 46.3%, up from 44.5% in Q3 2024. This 1.8 percentage point improvement was primarily driven by higher services revenue, which carries margins above 70%."
+    }
+  ]
+}</code></pre>
+
+    <p>Two critical details: first, we always included the source context in the user message — this trains the model to ground answers in provided documents rather than hallucinate from parametric knowledge. Second, we trained explicit refusal behavior: about 8% of our examples had the assistant respond with "This information is not available in the provided documents" when the context didn't contain the answer.</p>
+
+    <h2>3. Fine-Tuning with LoRA</h2>
+
+    <p>Full fine-tuning a 4B parameter model requires significant GPU memory and risks catastrophic forgetting of the model's general capabilities. Instead, we used <strong>LoRA (Low-Rank Adaptation)</strong> — which freezes the base model weights and trains small adapter matrices on top.</p>
+
+    <p>The math is elegant: instead of updating a weight matrix W (dimensions d×d), LoRA decomposes the update into two smaller matrices A (d×r) and B (r×d), where r is the rank (typically 8-64). This reduces trainable parameters by 100-1000x while preserving most of the fine-tuning benefit.</p>
+
+    <pre><code>from peft import LoraConfig, get_peft_model, TaskType
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+
+# Load base model
+model = AutoModelForCausalLM.from_pretrained(
+    "Qwen/Qwen3-4B",
+    torch_dtype=torch.bfloat16,
+    device_map="auto",
+    attn_implementation="flash_attention_2"
+)
+
+tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-4B")
+
+# LoRA configuration
+lora_config = LoraConfig(
+    task_type=TaskType.CAUSAL_LM,
+    r=32,                          # Rank — sweet spot for our task
+    lora_alpha=64,                 # Scaling factor
+    lora_dropout=0.05,
+    target_modules=[
+        "q_proj", "k_proj", "v_proj", "o_proj",  # Attention
+        "gate_proj", "up_proj", "down_proj"        # MLP
+    ],
+    bias="none"
+)
+
+model = get_peft_model(model, lora_config)
+model.print_trainable_parameters()
+# trainable params: 41,943,040 || all params: 3,937,054,720 
+# trainable%: 1.065%</code></pre>
+
+    <p>Only ~1% of parameters are trainable, but the impact on domain performance is dramatic.</p>
+
+    <h3>Training configuration</h3>
+
+    <p>We trained on a single <strong>A100 80GB</strong> GPU (AWS <code>p4d.24xlarge</code> instance). Key hyperparameters after our sweep:</p>
+
+    <pre><code>from transformers import TrainingArguments
+from trl import SFTTrainer
+
+training_args = TrainingArguments(
+    output_dir="./qwen3-4b-financial",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=8,    # Effective batch size: 32
+    learning_rate=2e-4,
+    lr_scheduler_type="cosine",
+    warmup_ratio=0.05,
+    bf16=True,
+    logging_steps=10,
+    eval_strategy="steps",
+    eval_steps=100,
+    save_strategy="steps",
+    save_steps=100,
+    load_best_model_at_end=True,
+    metric_for_best_model="eval_loss",
+    max_grad_norm=1.0,
+    report_to="wandb"
+)
+
+trainer = SFTTrainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=val_dataset,
+    tokenizer=tokenizer,
+    max_seq_length=4096,
+    dataset_text_field="text"
+)
+
+trainer.train()</code></pre>
+
+    <p>Training took <strong>~2.5 hours</strong> for 3 epochs over 4,860 examples. Total compute cost: about $30 on AWS spot instances. Compare that to the $2,000+/month we were spending on API calls.</p>
+
+    <h3>What we learned about hyperparameters</h3>
+
+    <ul>
+        <li><strong>LoRA rank 32</strong> was our sweet spot. Rank 8 underfit on financial reasoning; rank 64 showed no improvement over 32 but trained slower</li>
+        <li><strong>Learning rate 2e-4</strong> with cosine decay. Higher rates caused training instability; lower rates needed more epochs</li>
+        <li><strong>3 epochs</strong> was optimal. At epoch 4, validation loss started increasing — classic overfitting on a relatively small dataset</li>
+        <li><strong>Gradient accumulation</strong> to reach effective batch size 32 was important for training stability with our data distribution</li>
+    </ul>
+
+    <h2>4. Evaluation</h2>
+
+    <p>We evaluated the fine-tuned model against GPT-3.5-turbo, GPT-4, and the base Qwen3-4B on our held-out test set of 270 examples. We measured four dimensions:</p>
+
+    <p><strong>Correctness</strong> — Is the answer factually accurate given the context? Scored by human reviewers on a 1-5 scale.</p>
+
+    <p><strong>Faithfulness</strong> — Does the answer only use information from the provided context, without hallucinating? Binary yes/no per response.</p>
+
+    <p><strong>Completeness</strong> — Does the answer address all parts of the question? Scored 1-5.</p>
+
+    <p><strong>Format compliance</strong> — Does the response follow our expected structure (citations, numerical formatting, appropriate length)? Binary.</p>
+
+    <pre><code># Results on 270-example test set
+
+| Model               | Correctness | Faithfulness | Completeness | Format |
+|---------------------|-------------|--------------|--------------|--------|
+| GPT-4               |    4.6      |    94%       |     4.5      |  91%   |
+| Qwen3-4B (ours)     |    4.3      |    96%       |     4.2      |  97%   |
+| GPT-3.5-turbo       |    3.8      |    82%       |     3.6      |  74%   |
+| Qwen3-4B (base)     |    2.9      |    68%       |     2.7      |  45%   |</code></pre>
+
+    <p>The fine-tuned model significantly outperformed GPT-3.5 across all metrics and came close to GPT-4 on correctness and completeness — while <strong>beating GPT-4 on faithfulness and format compliance</strong>. This makes sense: our fine-tuning data explicitly trained the model to stay grounded in context and follow our output format, which general-purpose models don't optimize for.</p>
+
+    <p>The base Qwen3-4B scored poorly across the board, confirming that fine-tuning (not just prompting) was necessary for production-quality results on domain tasks.</p>
+
+    <h2>5. Deployment on AWS</h2>
+
+    <p>For serving, we deployed the model using <strong>vLLM</strong> on an AWS <code>g5.2xlarge</code> instance (A10G GPU, 24GB VRAM). vLLM's PagedAttention and continuous batching gave us dramatically better throughput than naive HuggingFace inference:</p>
+
+    <pre><code># Start vLLM server with merged LoRA weights
+python -m vllm.entrypoints.openai.api_server \
+    --model ./qwen3-4b-financial-merged \
+    --host 0.0.0.0 \
+    --port 8000 \
+    --max-model-len 4096 \
+    --gpu-memory-utilization 0.90 \
+    --dtype bfloat16</code></pre>
+
+    <p>Before deploying, we merged the LoRA adapters back into the base model to avoid any adapter overhead at inference time:</p>
+
+    <pre><code>from peft import PeftModel
+
+# Load base + adapter, then merge
+base_model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-4B")
+model = PeftModel.from_pretrained(base_model, "./qwen3-4b-financial")
+merged = model.merge_and_unload()
+merged.save_pretrained("./qwen3-4b-financial-merged")</code></pre>
+
+    <h3>Production performance</h3>
+
+    <ul>
+        <li><strong>Latency:</strong> ~800ms median for a typical financial Q&A response (vs 2-4s with GPT-4 API)</li>
+        <li><strong>Throughput:</strong> ~35 requests/sec with continuous batching</li>
+        <li><strong>Cost:</strong> $0.50/hr for the g5.2xlarge instance → roughly <strong>$360/month</strong> vs $2,000+/month on OpenAI API</li>
+        <li><strong>Uptime:</strong> 99.7% over the first month (one restart due to CUDA OOM on an unusually large batch)</li>
+    </ul>
+
+    <p>We put an <strong>API gateway</strong> (FastAPI) in front of vLLM that handles authentication, rate limiting, request logging, and a fallback to GPT-4 for edge cases where our model's confidence is low. This hybrid approach gives us the cost savings of self-hosting with the safety net of a frontier model.</p>
+
+    <h2>6. Lessons Learned</h2>
+
+    <p><strong>Data quality > data quantity.</strong> Our first attempt used 12,000 examples with less rigorous filtering. The model trained on 5,400 curated examples performed significantly better. Every bad training example teaches the model a bad habit.</p>
+
+    <p><strong>Train refusal behavior explicitly.</strong> Without "I don't know" examples in training data, the model will always attempt an answer — even when the context doesn't support one. This is the #1 source of hallucination in RAG systems, and it's fixable with data.</p>
+
+    <p><strong>Evaluate on YOUR metrics, not benchmarks.</strong> Qwen3-4B scores lower than Llama 3-8B on MMLU, but it scores higher on our financial task after fine-tuning. Public benchmarks measure general capability; you need to measure domain performance.</p>
+
+    <p><strong>LoRA is almost always enough.</strong> We experimented with QLoRA (quantized base + LoRA) and full fine-tuning. QLoRA had a small quality drop. Full fine-tuning had marginal quality gains but 10x the compute cost and a higher risk of catastrophic forgetting. Standard LoRA hit the sweet spot.</p>
+
+    <p><strong>Monitor post-deployment.</strong> We log every request and response, and run nightly automated evals on a rolling 100-response sample. Model quality can drift if your user queries shift — and you need to catch that early.</p>
+
+    <h2>What's Next</h2>
+
+    <p>We're currently exploring two extensions: <strong>DPO (Direct Preference Optimization)</strong> to further align the model with human preferences on answer quality, and <strong>speculative decoding</strong> with a smaller draft model to cut latency further. I'll share our findings in a future post.</p>
+
+    <p>The bottom line: if you're spending serious money on LLM API calls for a domain-specific task, fine-tuning a small open-source model is almost certainly worth it. The upfront effort is a few days of work; the ongoing savings compound every month.</p>
+
+    <p>Questions or working on something similar? Reach out via <a href="mailto:kamal.sh@northeastern.edu">email</a> or connect on <a href="https://github.com/kamalshahidnu">GitHub</a>.</p>
+
+</article>
+
+<div class="author-box">
+    <div class="author-card">
+        <div class="author-avatar">SK</div>
+        <div class="author-info">
+            <h4>Shahid Kamal</h4>
+            <p>ML Engineer & Researcher · MS ECE @ Northeastern University</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2026 Shahid Kamal · <a href="../index.html">Back to Portfolio</a>
+</footer>
+
+</body>
+</html>
