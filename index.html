@@ -483,6 +483,19 @@
             font-size: 1.02rem;
             line-height: 1.85;
         }
+        .panel p + p { margin-top: 0.75rem; }
+        .about-bullets {
+            margin-top: 0.95rem;
+            padding-left: 1.15rem;
+            color: var(--text-body);
+        }
+        .about-bullets li {
+            margin: 0.45rem 0;
+        }
+        .about-bullets strong {
+            color: var(--text-primary);
+            font-weight: 750;
+        }
         .download-row {
             margin-top: 1.05rem;
             display: flex;
@@ -1717,9 +1730,19 @@
                     <div class="panel-title">About Me</div>
                 </div>
                 <p>
-                    I'm a graduate student at <strong>Northeastern University</strong> pursuing my MS in Electrical and Computer Engineering in Machine Learning. At <strong>Checkit Analytics</strong>, I build LLM-based RAG pipelines and deploy fine-tuned models for production financial analytics — eliminating external API costs and shipping AI products end-to-end.
-                    I focus on <strong>Deep Learning</strong>, <strong>Computer Vision</strong>, <strong>LLMs</strong>, and <strong>Robotics</strong>, with a pragmatic mindset: build it, deploy it, and make it reliable.
+                    I'm a graduate student at <strong>Northeastern University</strong> pursuing my MS in Electrical and Computer Engineering (Machine Learning). At <strong>Checkit Analytics</strong>, I build LLM-based RAG pipelines and deploy fine-tuned models for production financial analytics — eliminating external API costs and shipping AI products end-to-end.
                 </p>
+                <p>
+                    My background spans <strong>Deep Learning</strong>, <strong>Computer Vision</strong>, <strong>LLMs</strong>, and <strong>Robotics</strong>. I’ve also published research on <strong>COVID-19 detection from chest X-rays</strong> and <strong>edge deployment</strong>, which shaped how I think about data quality, reliability, and real-world constraints.
+                </p>
+                <p>
+                    I like projects where I can own the full loop — from modeling and evaluation to deployment, monitoring, and iteration.
+                </p>
+                <ul class="about-bullets">
+                    <li><strong>LLMs &amp; RAG:</strong> retrieval, grounding, fine-tuning (LoRA), and production serving</li>
+                    <li><strong>Computer Vision:</strong> medical imaging, CNN baselines, and practical model compression</li>
+                    <li><strong>MLOps:</strong> reproducible pipelines, experiments, and AWS deployment workflows</li>
+                </ul>
                 <div class="download-row">
                     <a href="#contact" class="btn-ghost">Get in Touch</a>
                     <a href="https://github.com/shahidkamal-ml" target="_blank" rel="noopener" class="btn-ghost">View GitHub</a>
