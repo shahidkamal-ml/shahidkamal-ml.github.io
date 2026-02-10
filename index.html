@@ -1490,6 +1490,14 @@
             transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
             z-index: 5000;
         }
+        :root[data-theme="dark"] .back-to-top {
+            background: rgba(15, 23, 42, 0.72);
+            border-color: rgba(148, 163, 184, 0.22);
+            color: #f8fafc;
+            box-shadow:
+                0 14px 44px rgba(0, 0, 0, 0.55),
+                0 0 0 1px rgba(37, 99, 235, 0.12);
+        }
         .back-to-top svg { width: 18px; height: 18px; }
         .back-to-top.show {
             opacity: 1;
@@ -1499,6 +1507,12 @@
         .back-to-top:hover {
             box-shadow: var(--shadow-lg), var(--shadow-glow);
             transform: translateY(-2px);
+        }
+        :root[data-theme="dark"] .back-to-top:hover {
+            box-shadow:
+                0 18px 60px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(59, 130, 246, 0.18),
+                0 0 30px rgba(37, 99, 235, 0.22);
         }
         body.menu-open .back-to-top { opacity: 0; pointer-events: none; }
 
