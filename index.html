@@ -968,6 +968,10 @@
             backdrop-filter: blur(18px) saturate(1.4);
             -webkit-backdrop-filter: blur(18px) saturate(1.4);
         }
+        a.project-card {
+            text-decoration: none;
+            color: inherit;
+        }
         .project-card:hover {
             box-shadow: var(--shadow-lg), var(--shadow-glow);
             transform: translateY(-5px);
@@ -1794,9 +1798,9 @@
                 </div>
             </div>
         </div>
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="https://github.com/shahidkamal-ml/lab-lens" target="_blank" rel="noopener">
             <div class="project-img">
-                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80" alt="Medical AI diagnosis">
+                <img src="Images/lablens.jpeg" alt="Lab Lens project preview">
                 <div class="project-img-overlay"></div>
             </div>
             <div class="project-body">
@@ -1806,7 +1810,7 @@
                     <span>Healthcare AI</span><span>MLOps</span><span>RAG</span><span>Computer Vision</span>
                 </div>
             </div>
-        </div>
+        </a>
         <div class="project-card reveal">
             <div class="project-img">
                 <img src="https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&q=80" alt="Deep learning X-ray analysis">
