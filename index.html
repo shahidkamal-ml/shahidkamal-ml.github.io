@@ -551,14 +551,6 @@
             .edu-cards-inline { grid-template-columns: 1fr; }
         }
 
-        #neuralCanvas {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            opacity: 0.9;
-            pointer-events: none;
-        }
-
         .hero-glow-1 {
             position: absolute;
             top: -15%; right: -5%;
@@ -566,7 +558,6 @@
             background: radial-gradient(circle, var(--accent-glow-strong) 0%, transparent 65%);
             border-radius: 50%;
             filter: blur(80px);
-            animation: float 12s ease-in-out infinite alternate;
         }
 
         .hero-glow-2 {
@@ -576,12 +567,6 @@
             background: radial-gradient(circle, var(--cyan-glow) 0%, transparent 65%);
             border-radius: 50%;
             filter: blur(80px);
-            animation: float 10s ease-in-out infinite alternate-reverse;
-        }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, -20px) scale(1.08); }
         }
 
         .hero-content {
@@ -618,12 +603,6 @@
             width: 8px; height: 8px;
             background: var(--emerald);
             border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
         }
 
         .hero-name {
@@ -762,7 +741,6 @@
             width: 6px; height: 6px;
             background: var(--emerald);
             border-radius: 50%;
-            animation: pulse 2s infinite;
         }
 
         /* ===== SECTIONS ===== */
@@ -1655,7 +1633,6 @@
 <body>
 
 <div class="grid-bg"></div>
-<canvas id="neuralCanvas" aria-hidden="true"></canvas>
 
 <!-- Nav -->
 <nav>
@@ -2066,7 +2043,7 @@
 </section>
 
 <footer>
-    <div class="footer-left">© 2026 Shahid Kamal · Built with ❤️ and neurons</div>
+    <div class="footer-left">© 2026 Shahid Kamal · Built with ❤️</div>
     <div class="footer-right"><a href="https://github.com/shahidkamal-ml" target="_blank">github.com/shahidkamal-ml</a></div>
 </footer>
 
@@ -2365,74 +2342,6 @@ if (searchBtn && searchModal && searchInput) {
     });
     searchInput.addEventListener('input', () => renderSearchResults(searchInput.value));
 }
-
-// Neural network canvas animation
-const canvas = document.getElementById('neuralCanvas');
-const ctx = canvas.getContext('2d');
-let nodes = [];
-let animFrame;
-
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    initNodes();
-}
-
-function initNodes() {
-    nodes = [];
-    // Slightly denser for better visibility, still performant on mobile
-    const count = Math.floor((canvas.width * canvas.height) / 11500);
-    for (let i = 0; i < count; i++) {
-        nodes.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.45,
-            vy: (Math.random() - 0.5) * 0.45,
-            r: Math.random() * 2.6 + 1.2
-        });
-    }
-}
-
-function drawNetwork() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const maxDist = 210;
-
-    for (let i = 0; i < nodes.length; i++) {
-        const a = nodes[i];
-        a.x += a.vx; a.y += a.vy;
-        if (a.x < 0 || a.x > canvas.width) a.vx *= -1;
-        if (a.y < 0 || a.y > canvas.height) a.vy *= -1;
-
-        // Draw node
-        ctx.beginPath();
-        ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
-        // Slightly brighter nodes
-        ctx.fillStyle = 'rgba(37, 99, 235, 0.58)';
-        ctx.fill();
-
-        // Draw connections
-        for (let j = i + 1; j < nodes.length; j++) {
-            const b = nodes[j];
-            const dx = a.x - b.x;
-            const dy = a.y - b.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < maxDist) {
-                ctx.beginPath();
-                ctx.moveTo(a.x, a.y);
-                ctx.lineTo(b.x, b.y);
-                // Brighter connections (stronger near nodes)
-                ctx.strokeStyle = `rgba(37, 99, 235, ${0.28 * (1 - dist / maxDist)})`;
-                ctx.lineWidth = 1.6;
-                ctx.stroke();
-            }
-        }
-    }
-    animFrame = requestAnimationFrame(drawNetwork);
-}
-
-window.addEventListener('resize', resize);
-resize();
-drawNetwork();
 </script>
 
 </body>
