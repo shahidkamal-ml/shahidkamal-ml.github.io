@@ -41,23 +41,23 @@
 
         /* Optional dark theme (very lightweight). */
         :root[data-theme="dark"] {
-            --bg: #070a12;
-            --bg-alt: #0b1020;
-            --bg-card: rgba(17, 24, 39, 0.65);
-            --text-primary: #e5e7eb;
-            --text-body: #cbd5e1;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --border: rgba(148, 163, 184, 0.18);
-            --border-light: rgba(148, 163, 184, 0.14);
-            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.28);
-            --shadow-md: 0 10px 34px rgba(0, 0, 0, 0.38);
-            --shadow-lg: 0 20px 70px rgba(0, 0, 0, 0.48);
+            --bg: #000000;
+            --bg-alt: #000000;
+            --bg-card: rgba(0, 0, 0, 0.72);
+            --text-primary: #f8fafc;
+            --text-body: #e5e7eb;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.14);
+            --border-light: rgba(255, 255, 255, 0.10);
+            --shadow-sm: 0 1px 6px rgba(0, 0, 0, 0.55);
+            --shadow-md: 0 12px 44px rgba(0, 0, 0, 0.62);
+            --shadow-lg: 0 22px 86px rgba(0, 0, 0, 0.72);
         }
         :root[data-theme="dark"] .alt-bg {
-            background: rgba(15, 23, 42, 0.35);
-            border-top-color: rgba(148, 163, 184, 0.14);
-            border-bottom-color: rgba(148, 163, 184, 0.14);
+            background: rgba(0, 0, 0, 0.55);
+            border-top-color: rgba(255, 255, 255, 0.10);
+            border-bottom-color: rgba(255, 255, 255, 0.10);
         }
         :root[data-theme="dark"] .timeline-item,
         :root[data-theme="dark"] .project-card,
@@ -66,29 +66,29 @@
         :root[data-theme="dark"] .pub-card,
         :root[data-theme="dark"] .blog-card,
         :root[data-theme="dark"] .contact-section .reveal {
-            background: rgba(15, 23, 42, 0.58);
-            border-color: rgba(148, 163, 184, 0.14);
+            background: rgba(0, 0, 0, 0.60);
+            border-color: rgba(255, 255, 255, 0.12);
         }
         :root[data-theme="dark"] .timeline-item::before {
-            background: rgba(15, 23, 42, 0.95);
+            background: rgba(0, 0, 0, 0.92);
         }
         :root[data-theme="dark"] .skill-tag {
-            background: rgba(15, 23, 42, 0.48);
-            border-color: rgba(148, 163, 184, 0.14);
+            background: rgba(0, 0, 0, 0.52);
+            border-color: rgba(255, 255, 255, 0.12);
         }
         :root[data-theme="dark"] nav {
-            background: rgba(15, 23, 42, 0.62);
-            border-color: rgba(148, 163, 184, 0.14);
+            background: rgba(0, 0, 0, 0.68);
+            border-color: rgba(255, 255, 255, 0.12);
         }
         :root[data-theme="dark"] .glass-card {
-            background: rgba(15, 23, 42, 0.58);
-            border-color: rgba(148, 163, 184, 0.14);
+            background: rgba(0, 0, 0, 0.60);
+            border-color: rgba(255, 255, 255, 0.12);
         }
         :root[data-theme="dark"] .icon-btn,
         :root[data-theme="dark"] .social-pill,
         :root[data-theme="dark"] .edu-mini {
-            background: rgba(15, 23, 42, 0.52);
-            border-color: rgba(148, 163, 184, 0.14);
+            background: rgba(0, 0, 0, 0.56);
+            border-color: rgba(255, 255, 255, 0.12);
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -169,7 +169,7 @@
             align-items: flex-start;
             justify-content: center;
             padding: 6.5rem 1.25rem 1.5rem;
-            background: rgba(2, 6, 23, 0.35);
+            background: rgba(0, 0, 0, 0.45);
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease;
@@ -269,8 +269,8 @@
         :root[data-theme="dark"] .search-close,
         :root[data-theme="dark"] .search-input,
         :root[data-theme="dark"] .search-result {
-            background: rgba(15, 23, 42, 0.58);
-            border-color: rgba(148, 163, 184, 0.14);
+            background: rgba(0, 0, 0, 0.62);
+            border-color: rgba(255, 255, 255, 0.12);
         }
         .icon-btn {
             width: 36px;
@@ -398,7 +398,7 @@
             font-weight: 600;
         }
         :root[data-theme="dark"] .profile-subtitle {
-            color: rgba(147, 197, 253, 0.92);
+            color: rgba(229, 231, 235, 0.92);
         }
         .profile-org {
             margin-top: 0.25rem;
@@ -1466,12 +1466,11 @@
             z-index: 5000;
         }
         :root[data-theme="dark"] .back-to-top {
-            background: rgba(15, 23, 42, 0.72);
-            border-color: rgba(148, 163, 184, 0.22);
+            background: rgba(0, 0, 0, 0.76);
+            border-color: rgba(255, 255, 255, 0.16);
             color: #f8fafc;
             box-shadow:
-                0 14px 44px rgba(0, 0, 0, 0.55),
-                0 0 0 1px rgba(37, 99, 235, 0.12);
+                0 14px 44px rgba(0, 0, 0, 0.65);
         }
         .back-to-top svg { width: 18px; height: 18px; }
         .back-to-top.show {
@@ -1485,9 +1484,7 @@
         }
         :root[data-theme="dark"] .back-to-top:hover {
             box-shadow:
-                0 18px 60px rgba(0, 0, 0, 0.6),
-                0 0 0 1px rgba(59, 130, 246, 0.18),
-                0 0 30px rgba(37, 99, 235, 0.22);
+                0 18px 60px rgba(0, 0, 0, 0.75);
         }
         body.menu-open .back-to-top { opacity: 0; pointer-events: none; }
 
@@ -1543,7 +1540,7 @@
                 inset: 0;
                 height: 100dvh;
                 width: 100vw;
-                background: rgba(2, 6, 23, 0.18);
+                background: rgba(0, 0, 0, 0.28);
                 opacity: 0;
                 pointer-events: none;
                 transition: opacity 0.25s ease;
