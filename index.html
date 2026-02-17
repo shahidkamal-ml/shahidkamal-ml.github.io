@@ -434,6 +434,37 @@
             flex-direction: column;
             gap: 1.25rem;
         }
+
+        /* Education block inside left profile card */
+        .profile-edu {
+            width: 100%;
+            text-align: left;
+            margin-top: 1rem;
+        }
+        .profile-edu .panel-header {
+            margin-bottom: 0.55rem;
+        }
+        .profile-edu .panel-title {
+            font-size: 1.1rem;
+        }
+        .profile-edu .edu-cards-inline {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-top: 0.65rem;
+        }
+        .profile-edu .edu-mini {
+            padding: 0.9rem 0.95rem;
+            border-radius: 16px;
+        }
+        .profile-edu .edu-mini h3 {
+            font-size: 0.98rem;
+        }
+        .profile-edu .edu-mini .edu-mini-meta {
+            font-size: 0.88rem;
+        }
+        .profile-edu .edu-mini .edu-mini-courses {
+            font-size: 0.82rem;
+        }
         .panel {
             padding: 1.25rem 1.25rem 1.2rem;
         }
@@ -1664,6 +1695,26 @@
             <div class="profile-subtitle">Machine Learning, Computer Vision, Robotics</div>
             <div class="profile-org">Northeastern University</div>
 
+            <div class="profile-edu">
+                <div class="panel-header" style="margin-top: 0.9rem;">
+                    <div class="mini-icon" style="background: rgba(124,58,237,0.12); color: var(--violet);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
+                    </div>
+                    <div class="panel-title">Education</div>
+                </div>
+                <div class="edu-cards-inline">
+                    <div class="edu-mini">
+                        <h3>MS Electrical &amp; Computer Engineering (Machine Learning)</h3>
+                        <div class="edu-mini-meta">Northeastern University · Boston, MA<br>Expected Dec 2026</div>
+                        <div class="edu-mini-courses"><strong>Coursework:</strong> Machine Learning/Pattern Recognition, Machine Learning Operations, Large Language Models, Deep Learning, Advanced Computer Vision, Reinforcement Learning, Robotics Sensing &amp; Navigation, Algorithms</div>
+                    </div>
+                    <div class="edu-mini">
+                        <h3>B.E Electrical Engineering</h3>
+                        <div class="edu-mini-meta">Aligarh Muslim University · India<br>2019 – 2023</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="profile-socials">
                 <a class="social-pill" href="mailto:kamal.sh@northeastern.edu" aria-label="Email">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
@@ -1702,26 +1753,6 @@
                 <div class="download-row">
                     <a href="#contact" class="btn-ghost">Get in Touch</a>
                     <a href="https://github.com/shahidkamal-ml" target="_blank" rel="noopener" class="btn-ghost">View GitHub</a>
-                </div>
-            </div>
-
-            <div class="glass-card edu-strip reveal">
-                <div class="panel-header" style="margin-bottom: 0.25rem;">
-                    <div class="mini-icon" style="background: rgba(124,58,237,0.12); color: var(--violet);">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
-                    </div>
-                    <div class="panel-title">Education</div>
-                </div>
-                <div class="edu-cards-inline">
-                    <div class="edu-mini">
-                        <h3>MS Electrical & Computer Engineering (Machine Learning)</h3>
-                        <div class="edu-mini-meta">Northeastern University · Boston, MA<br>Expected Dec 2026</div>
-                        <div class="edu-mini-courses"><strong>Coursework:</strong> Machine Learning/Pattern Recognition, Machine Learning Operations, Large Language Models, Deep Learning, Advanced Computer Vision, Reinforcement Learning, Robotics Sensing & Navigation, Algorithms</div>
-                    </div>
-                    <div class="edu-mini">
-                        <h3>B.E Electrical Engineering</h3>
-                        <div class="edu-mini-meta">Aligarh Muslim University · India<br>2019 – 2023</div>
-                    </div>
                 </div>
             </div>
         </div>
