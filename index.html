@@ -275,6 +275,19 @@
             font-size: 0.82rem;
             color: var(--muted);
         }
+        .entry-preview {
+            display: block;
+            margin-top: 0.6rem;
+            max-width: 560px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .entry-preview img, .entry-preview video {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
 
         .contact-list { list-style: none; }
         .contact-list li { margin: 0.4rem 0; overflow-wrap: anywhere; }
@@ -523,7 +536,7 @@
                 <div class="entry-meta">2026</div>
                 <h2><a href="https://arxiv.org/abs/2609.09528" target="_blank" rel="noopener">MotionBlind: Probing the Illusion of Motion Understanding in Video-LLMs</a></h2>
                 <p class="venue">D. Bhatia, B. Galoaa, O. Fritsche, <strong>S. Kamal</strong>, M. O. Abdul Salam, U. Saleem, O. Rastogi, F. Felix Chettiar, N. Erdogmus, S. Ostadabbas. arXiv preprint arXiv:2609.09528.</p>
-                <p class="venue"><a href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">Project Page</a> · <a href="https://huggingface.co/datasets/augmentedcognitionlab/MotionBlind" target="_blank" rel="noopener">Dataset (Hugging Face)</a></p>
+                <p class="venue"><a href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">Project Page</a> · <a href="https://github.com/ostadabbas/MotionBlind" target="_blank" rel="noopener">Code (GitHub)</a> · <a href="https://huggingface.co/datasets/augmentedcognitionlab/MotionBlind" target="_blank" rel="noopener">Dataset (Hugging Face)</a></p>
             </article>
             <article class="entry">
                 <div class="entry-meta">2024</div>
@@ -585,8 +598,13 @@
             <h1 class="page-title">Projects</h1>
             <article class="entry">
                 <h2><a href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">MotionBlind — Video-LLM Motion Benchmark</a></h2>
-                <p class="venue"><a href="https://arxiv.org/abs/2609.09528" target="_blank" rel="noopener">Paper (arXiv)</a> · <a href="https://huggingface.co/datasets/augmentedcognitionlab/MotionBlind" target="_blank" rel="noopener">Dataset (Hugging Face)</a></p>
+                <p class="venue"><a href="https://arxiv.org/abs/2609.09528" target="_blank" rel="noopener">Paper (arXiv)</a> · <a href="https://github.com/ostadabbas/MotionBlind" target="_blank" rel="noopener">Code (GitHub)</a> · <a href="https://huggingface.co/datasets/augmentedcognitionlab/MotionBlind" target="_blank" rel="noopener">Dataset (Hugging Face)</a></p>
                 <p>Contrastive video benchmark isolating speed, magnitude, and direction — 82 self-recorded clips and 240 Q&amp;A items, evaluated across 170+ configurations spanning 8 video-language models, 4 frame selectors, and 5 frame budgets. Open models score at the 6.25% chance floor on motion despite reaching 58–70% on standard video QA.</p>
+                <a class="entry-preview" href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">
+                    <video src="Images/motionblind-preview.mp4" poster="Images/motionblind-preview.jpg" width="896" height="684"
+                           autoplay loop muted playsinline preload="metadata"
+                           aria-label="Grid of MotionBlind benchmark clips playing, labelled 82 clips and 240 questions"></video>
+                </a>
                 <div class="tags">Video Understanding · Video-LLMs · Benchmarking · Evaluation</div>
             </article>
             <article class="entry">
@@ -598,6 +616,11 @@
                 <h2><a href="https://github.com/shahidkamal-ml/lab-lens" target="_blank" rel="noopener">Lab Lens — Healthcare AI</a></h2>
                 <p>End-to-end healthcare AI for medical report summarization, diagnostic image analysis, and risk prediction. RAG Q&amp;A pipeline with MLOps workflows, monitoring, and bias checks.</p>
                 <div class="tags">Healthcare AI · MLOps · RAG · Computer Vision</div>
+            </article>
+            <article class="entry">
+                <h2>Contrast-Enhanced Emotion Recognition</h2>
+                <p>Facial emotion recognition across 7 expressions on FER2013, using a custom CNN and ResNet-18. A CLAHE contrast-enhancement pipeline improves robustness on low-contrast images, evaluated baseline vs. enhanced preprocessing — 58.19% test accuracy with the custom CNN.</p>
+                <div class="tags">Computer Vision · CNN · ResNet · Image Preprocessing</div>
             </article>
             <article class="entry">
                 <h2><a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">COVID-19 CXR Detection</a></h2>
