@@ -275,6 +275,36 @@
             font-size: 0.82rem;
             color: var(--muted);
         }
+        /* Publication rows: thumbnail left, metadata right. Wraps without a
+           media query once the body column can no longer hold its basis. */
+        .pub-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.15rem;
+            align-items: flex-start;
+        }
+        .pub-thumb {
+            display: block;
+            flex: 0 1 270px;
+            max-width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .pub-thumb img, .pub-thumb video {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .pub-body { flex: 1 1 270px; min-width: 0; }
+        .pub-body h2 { margin-bottom: 0.15rem; }
+        .pub-authors, .pub-venue, .pub-links {
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+        .pub-links { margin-top: 0.3rem; }
+        .pub-links .sep { color: var(--muted); }
+
         .entry-preview {
             display: block;
             margin-top: 0.6rem;
@@ -532,36 +562,44 @@
 
         <section id="publications">
             <h1 class="page-title">Publications</h1>
-            <article class="entry">
-                <div class="entry-meta">2026</div>
-                <h2><a href="https://arxiv.org/abs/2609.09528" target="_blank" rel="noopener">MotionBlind: Probing the Illusion of Motion Understanding in Video-LLMs</a></h2>
-                <p class="venue">D. Bhatia, B. Galoaa, O. Fritsche, <strong>S. Kamal</strong>, M. O. Abdul Salam, U. Saleem, O. Rastogi, F. Felix Chettiar, N. Erdogmus, S. Ostadabbas. arXiv preprint arXiv:2609.09528.</p>
-                <p class="venue"><a href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">Project Page</a> · <a href="https://github.com/ostadabbas/MotionBlind" target="_blank" rel="noopener">Code (GitHub)</a> · <a href="https://huggingface.co/datasets/augmentedcognitionlab/MotionBlind" target="_blank" rel="noopener">Dataset (Hugging Face)</a></p>
-                <a class="entry-preview" href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">
+            <article class="entry pub-row">
+                <a class="pub-thumb" href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">
                     <video src="Images/motionblind-preview.mp4" poster="Images/motionblind-preview.jpg" width="896" height="684"
                            autoplay loop muted playsinline preload="metadata"
                            aria-label="Grid of MotionBlind benchmark clips playing, labelled 82 clips and 240 questions"></video>
                 </a>
+                <div class="pub-body">
+                    <h2><a href="https://arxiv.org/abs/2609.09528" target="_blank" rel="noopener">MotionBlind: Probing the Illusion of Motion Understanding in Video-LLMs</a></h2>
+                    <p class="pub-authors">D. Bhatia, B. Galoaa, O. Fritsche, <strong>S. Kamal</strong>, M. O. Abdul Salam, U. Saleem, O. Rastogi, F. Felix Chettiar, N. Erdogmus, S. Ostadabbas</p>
+                    <p class="pub-venue">in <em>arXiv preprint</em> arXiv:2609.09528, 2026.</p>
+                    <p class="pub-links"><span class="sep">[</span><a href="https://arxiv.org/pdf/2609.09528" target="_blank" rel="noopener">PDF</a><span class="sep">][</span><a href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">Project</a><span class="sep">][</span><a href="https://github.com/ostadabbas/MotionBlind" target="_blank" rel="noopener">Code</a><span class="sep">][</span><a href="https://huggingface.co/datasets/augmentedcognitionlab/MotionBlind" target="_blank" rel="noopener">Dataset</a><span class="sep">]</span></p>
+                </div>
             </article>
-            <article class="entry">
-                <div class="entry-meta">2024</div>
-                <h2><a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">Deep Learning Model for Edge Devices for COVID-19 Detection from CXR Images</a></h2>
-                <p class="venue">U. Farooq, <strong>S. Kamal</strong>, M. Sarfraz. 6th International Conference on Bio Signals, Images, and Instrumentation (ICBSII), Chennai, India.</p>
-                <a class="entry-preview" href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">
+            <article class="entry pub-row">
+                <a class="pub-thumb" href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">
                     <video src="Images/edge-devices-covid-cxr-2024-preview.mp4" poster="Images/edge-devices-covid-cxr-2024-preview.jpg" width="896" height="684"
                            autoplay loop muted playsinline preload="none"
-                           aria-label="Figures from the paper: example CXR images, model architecture, classification report and confusion matrix"></video>
+                           aria-label="Figures from the paper: example CXR images and the model architecture"></video>
                 </a>
+                <div class="pub-body">
+                    <h2><a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">Deep Learning Model for Edge Devices for COVID-19 Detection from CXR Images</a></h2>
+                    <p class="pub-authors">U. Farooq, <strong>S. Kamal</strong>, M. Sarfraz</p>
+                    <p class="pub-venue">in <em>ICBSII</em> 2024, Chennai, India.</p>
+                    <p class="pub-links"><span class="sep">[</span><a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">PDF</a><span class="sep">]</span></p>
+                </div>
             </article>
-            <article class="entry">
-                <div class="entry-meta">2023</div>
-                <h2><a href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">Comparative Analysis of Deep Learning Techniques for Fast Detection of COVID-19 Using CXR Images</a></h2>
-                <p class="venue"><strong>S. Kamal</strong>, M. Sarfraz, S. Fatma, I. Al Fatma, S. Parween, M. Al Maathidi. Taylor &amp; Francis / CRC Press.</p>
-                <a class="entry-preview" href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">
+            <article class="entry pub-row">
+                <a class="pub-thumb" href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">
                     <video src="Images/comparative-analysis-covid-cxr-2023-preview.mp4" poster="Images/comparative-analysis-covid-cxr-2023-preview.jpg" width="896" height="684"
                            autoplay loop muted playsinline preload="none"
-                           aria-label="Figures from the paper: sample CXR images, training pipeline, accuracy curves and confusion matrices"></video>
+                           aria-label="Figures from the paper: sample CXR images and the training and prediction pipeline"></video>
                 </a>
+                <div class="pub-body">
+                    <h2><a href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">Comparative Analysis of Deep Learning Techniques for Fast Detection of COVID-19 Using CXR Images</a></h2>
+                    <p class="pub-authors"><strong>S. Kamal</strong>, M. Sarfraz, S. Fatma, I. Al Fatma, S. Parween, M. Al Maathidi</p>
+                    <p class="pub-venue">in <em>Advances in Computational Intelligence and its Applications</em> 2023, Taylor &amp; Francis / CRC Press.</p>
+                    <p class="pub-links"><span class="sep">[</span><a href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">PDF</a><span class="sep">]</span></p>
+                </div>
             </article>
         </section>
 
