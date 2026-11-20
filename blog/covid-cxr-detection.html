@@ -196,8 +196,7 @@ scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
 )
 criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
 
-# Training: 50 epochs, early stopping with patience=7
-# Hardware: NVIDIA Tesla T4 (Google Colab Pro)</code></pre>
+# Training: 50 epochs, early stopping with patience=7</code></pre>
 
     <p><strong>Label smoothing (0.1)</strong> was important — it prevents the model from becoming overconfident on training examples, which improved generalization on our relatively small dataset. <strong>Cosine annealing with warm restarts</strong> helped escape local minima and consistently found better solutions than step-based schedulers.</p>
 
@@ -279,7 +278,7 @@ model_quantized = quant.convert(model_prepared)</code></pre>
 
     <h3>Edge deployment evaluation</h3>
 
-    <p>We compared the model variants on accuracy, model size and inference time on a Raspberry Pi 4.</p>
+    <p>We compared the model variants on accuracy, model size and inference time.</p>
 
     <h2>7. Conference Presentations</h2>
 
@@ -308,7 +307,7 @@ model_quantized = quant.convert(model_prepared)</code></pre>
     <ul>
         <li><strong>The model is a small part of the work.</strong> Data curation, validation, compression, deployment, and clinical trust are the rest</li>
         <li><strong>Small, purpose-built models can beat large general ones</strong> when you understand your domain deeply</li>
-        <li><strong>Always verify what the model is learning</strong> — Grad-CAM saved us from deploying a model that was cheating by reading text labels on images</li>
+        <li><strong>Always verify what the model is learning</strong> — Grad-CAM shows whether a prediction rests on clinically meaningful regions rather than artifacts like text overlays</li>
         <li><strong>Edge deployment is a first-class requirement</strong>, not an afterthought — if your model can't run where it's needed, it doesn't matter how accurate it is</li>
     </ul>
 

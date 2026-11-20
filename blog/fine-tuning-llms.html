@@ -146,7 +146,7 @@ model.print_trainable_parameters()</code></pre>
 
     <h3>Training configuration</h3>
 
-    <p>We trained on a single <strong>A100 80GB</strong> GPU (AWS <code>p4d.24xlarge</code> instance). Key hyperparameters after our sweep:</p>
+    <p>Key hyperparameters after our sweep:</p>
 
     <pre><code>from transformers import TrainingArguments
 from trl import SFTTrainer
@@ -208,7 +208,7 @@ trainer.train()</code></pre>
 
     <h2>5. Deployment on AWS</h2>
 
-    <p>For serving, we deployed the model using <strong>vLLM</strong> on an AWS <code>g5.2xlarge</code> instance (A10G GPU, 24GB VRAM). We chose vLLM for its PagedAttention and continuous batching:</p>
+    <p>For serving, we deployed the model using <strong>vLLM</strong>. We chose vLLM for its PagedAttention and continuous batching:</p>
 
     <pre><code># Start vLLM server with merged LoRA weights
 python -m vllm.entrypoints.openai.api_server \
