@@ -36,6 +36,6 @@ Personal portfolio website showcasing my work in machine learning, computer visi
 
 ### Contact
 
-- 📧 kamal.sh@northeastern.edu
+- 📧 contact@shahidkamal.dev
 - 🐙 [GitHub](https://github.com/shahidkamal-ml)
 - 💼 [LinkedIn](https://www.linkedin.com/in/shahidkamal-ml)
