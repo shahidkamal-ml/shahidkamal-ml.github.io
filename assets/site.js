@@ -130,3 +130,10 @@
         label();
     });
 })();
+
+/* Resume PDF on phones and tablets: open it in the same tab. iPhone Safari can do nothing when a
+   PDF link opens a new tab; in the same tab its built-in viewer shows the PDF and Back returns here. */
+(function () {
+    if (!window.matchMedia || !window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
+    document.querySelectorAll('a[data-pdf]').forEach(function (a) { a.removeAttribute('target'); a.removeAttribute('rel'); });
+})();
