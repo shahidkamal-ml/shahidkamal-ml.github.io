@@ -27,7 +27,7 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2315171c'/%3E%3Ccircle cx='7' cy='21' r='2.6' fill='%23ff7a52' opacity='.35'/%3E%3Ccircle cx='14' cy='13' r='3' fill='%23ff7a52' opacity='.65'/%3E%3Ccircle cx='23' cy='11' r='4.2' fill='%23ff7a52'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/site.css">
 
     <script type="application/ld+json">
@@ -65,7 +65,7 @@
     <div class="wrap top-in">
         <a class="brand" href="#top" aria-label="Shahid Kamal, back to top">
             <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="var(--ink)"/><circle cx="7" cy="21" r="2.6" fill="var(--a)" opacity=".4"/><circle cx="14" cy="13" r="3" fill="var(--a)" opacity=".7"/><circle cx="23" cy="11" r="4.2" fill="var(--a)"/></svg>
-            Shahid Kamal
+            <span class="brand-name">Shahid Kamal</span>
         </a>
         <nav aria-label="Sections">
             <ul>
@@ -88,7 +88,7 @@
         <div class="hero-grid">
             <div>
                 <div class="who">
-                    <img src="Images/IMG_7966-square.jpg" alt="Portrait of Shahid Kamal" width="640" height="640">
+                    <picture><source type="image/webp" srcset="Images/opt/avatar-96.webp 96w, Images/opt/avatar-144.webp 144w, Images/opt/avatar-216.webp 216w, Images/opt/avatar-288.webp 288w" sizes="(max-width: 720px) 48px, 68px"><img src="Images/opt/avatar-144.jpg" srcset="Images/opt/avatar-96.jpg 96w, Images/opt/avatar-144.jpg 144w, Images/opt/avatar-216.jpg 216w, Images/opt/avatar-288.jpg 288w" sizes="(max-width: 720px) 48px, 68px" alt="Portrait of Shahid Kamal" width="288" height="288" decoding="async"></picture>
                     <p class="status"><b><span class="dot" aria-hidden="true"></span>Open to full-time ML / AI / computer-vision roles</b>Boston, MA</p>
                 </div>
                 <h1 id="name">Shahid Kamal</h1>
@@ -192,7 +192,8 @@
             </div>
             <div>
                 <div class="media">
-                    <video data-preview src="Images/motionblind-preview.mp4" poster="Images/motionblind-preview.jpg" width="896" height="684"
+                    <picture><source type="image/webp" srcset="Images/opt/motionblind-480.webp 480w, Images/opt/motionblind-896.webp 896w" sizes="(max-width: 960px) calc(100vw - 72px), 36vw"><img src="Images/opt/motionblind-896.jpg" srcset="Images/opt/motionblind-480.jpg 480w, Images/opt/motionblind-896.jpg 896w" sizes="(max-width: 960px) calc(100vw - 72px), 36vw" alt="" width="896" height="684" loading="lazy" decoding="async"></picture>
+                    <video class="over" data-preview src="Images/motionblind-preview.mp4" width="896" height="684"
                            loop muted playsinline preload="none"
                            aria-label="Grid of MotionBlind benchmark clips playing, labelled 82 clips and 240 questions"></video>
                     <button type="button" class="ghost-btn">Play preview</button>
@@ -225,38 +226,49 @@
                 </ol>
                 <p class="fine">Informed by Norman's seven-stage model of action. Feedback and correction are treated as an interpersonal process, completed by a co-present partner.</p>
 
-                <p class="side-title">Example: two people disassembling a monitor stand</p>
-                <ol class="tl">
-                    <li><b>Person</b>Turns the mount screws with the wrong tool.</li>
-                    <li class="partner"><b>Partner · a few seconds later</b>Suggests a smaller wrench and points to the hex key.</li>
-                    <li><b>Person</b>Switches tools and carries on.</li>
-                </ol>
-                <p class="fine">An action-recognition model may label this "turning a screw" yet miss that the tool is wrong, why the partner steps in, or whether the correction worked.</p>
+                <details class="fold eg" data-collapse open>
+                    <summary>Example: a monitor stand</summary>
+                    <div class="fold-body">
+                        <p class="fine" style="margin-top:0">Two people are disassembling a monitor stand.</p>
+                        <ol class="tl" style="margin-top:10px">
+                            <li><b>Person</b>Turns the mount screws with the wrong tool.</li>
+                            <li class="partner"><b>Partner · a few seconds later</b>Suggests a smaller wrench and points to the hex key.</li>
+                            <li><b>Person</b>Switches tools and carries on.</li>
+                        </ol>
+                        <p class="fine">An action-recognition model may label this "turning a screw" yet miss that the tool is wrong, why the partner steps in, or whether the correction worked.</p>
+                    </div>
+                </details>
             </div>
-            <div class="sub">
-                <p class="side-title">Data: synchronized streams</p>
-                <ul class="tracks">
-                    <li>Ego video</li><li>Exo video</li><li>Audio</li><li>Gaze</li><li>Motion (IMU)</li><li>Wrist sEMG</li>
-                </ul>
-                <p class="fine">Annotations are temporally aligned and participant-attributed on a shared 30-fps timeline. The seven layers map many-to-many onto the 8 annotation types.</p>
+            <div class="stats stats-4 span">
+                <div><b>86</b><span>two-person sessions</span></div>
+                <div><b>67.2</b><span>view-hours</span></div>
+                <div><b>31,126</b><span>audited annotations</span></div>
+                <div><b>12</b><span>models evaluated</span></div>
             </div>
-            <div class="sub">
-                <p class="side-title">Benchmark: BEYOND-MISTAKE, four tasks</p>
-                <ol class="steps">
-                    <li>Mistake anticipation</li><li>Early detection</li><li>First-response identification</li><li>Correction completion</li>
-                </ol>
-                <div class="stats stats-4">
-                    <div><b>86</b><span>two-person sessions</span></div>
-                    <div><b>67.2</b><span>view-hours</span></div>
-                    <div><b>31,126</b><span>audited annotations</span></div>
-                    <div><b>12</b><span>models evaluated</span></div>
+            <details class="fold span" data-collapse open>
+                <summary>Data streams and benchmark tasks</summary>
+                <div class="fold-body fold-grid">
+                    <div>
+                        <p class="side-title">Data: synchronized streams</p>
+                        <ul class="tracks">
+                            <li>Ego video</li><li>Exo video</li><li>Audio</li><li>Gaze</li><li>Motion (IMU)</li><li>Wrist sEMG</li>
+                        </ul>
+                        <p class="fine">Annotations are temporally aligned and participant-attributed on a shared 30-fps timeline. The seven layers map many-to-many onto the 8 annotation types.</p>
+                    </div>
+                    <div>
+                        <p class="side-title">Benchmark: BEYOND-MISTAKE, four tasks</p>
+                        <ol class="steps">
+                            <li>Mistake anticipation</li><li>Early detection</li><li>First-response identification</li><li>Correction completion</li>
+                        </ol>
+                        <p class="fine">12 models evaluated across the four tasks.</p>
+                    </div>
                 </div>
-            </div>
+            </details>
         </article>
 
         <div class="grid2">
             <article class="card proj">
-                <div class="media"><img src="Images/lablens.jpeg" alt="Lab Lens web app: a chat assistant that explains medical lab reports in plain language" width="1920" height="1172" loading="lazy" decoding="async"></div>
+                <div class="media"><picture><source type="image/webp" srcset="Images/opt/lablens-480.webp 480w, Images/opt/lablens-960.webp 960w, Images/opt/lablens-1440.webp 1440w" sizes="(max-width: 720px) calc(100vw - 66px), (max-width: 1199px) 46vw, 30vw"><img src="Images/opt/lablens-960.jpg" srcset="Images/opt/lablens-480.jpg 480w, Images/opt/lablens-960.jpg 960w, Images/opt/lablens-1440.jpg 1440w" sizes="(max-width: 720px) calc(100vw - 66px), (max-width: 1199px) 46vw, 30vw" alt="Lab Lens web app: a chat assistant that explains medical lab reports in plain language" width="960" height="586" loading="lazy" decoding="async"></picture></div>
                 <p class="kicker"><b>Project</b> · Healthcare AI + MLOps · Sep–Dec 2025</p>
                 <h3>Lab Lens</h3>
                 <p class="what">Healthcare AI platform built on 5,000+ MIMIC-III discharge summaries that helps patients understand their results: plain-language summaries, chest X-ray analysis and risk scores.</p>
@@ -271,7 +283,7 @@
             </article>
 
             <article class="card proj">
-                <div class="media"><img src="Images/edge-devices-covid-cxr-2024-preview.jpg" alt="Example chest X-ray images from the COVID-19, non-COVID and normal classes" width="896" height="684" loading="lazy" decoding="async"></div>
+                <div class="media"><picture><source type="image/webp" srcset="Images/opt/cxr-2024-480.webp 480w, Images/opt/cxr-2024-896.webp 896w" sizes="(max-width: 720px) calc(100vw - 66px), (max-width: 1199px) 46vw, 30vw"><img src="Images/opt/cxr-2024-896.jpg" srcset="Images/opt/cxr-2024-480.jpg 480w, Images/opt/cxr-2024-896.jpg 896w" sizes="(max-width: 720px) calc(100vw - 66px), (max-width: 1199px) 46vw, 30vw" alt="Example chest X-ray images from the COVID-19, non-COVID and normal classes" width="896" height="684" loading="lazy" decoding="async"></picture></div>
                 <p class="kicker"><b>Research</b> · Medical imaging</p>
                 <h3>COVID-19 CXR Detection</h3>
                 <p class="what">Custom CNN that classifies COVID-19 from chest X-rays, compressed for edge deployment.</p>
@@ -289,6 +301,7 @@
             </article>
 
             <article class="card proj">
+                <div class="stat-tile" aria-hidden="true"><b>58.19%</b><span>test accuracy · 7 expressions · FER2013</span></div>
                 <p class="kicker"><b>Project</b> · Course project · Jan–Apr 2025</p>
                 <h3>Contrast-Enhanced Emotion Recognition</h3>
                 <p class="what">Facial emotion recognition across 7 expressions on FER2013, comparing a custom CNN with ResNet-18.</p>
@@ -416,7 +429,7 @@
                 </div>
             </li>
             <li>
-                <a class="thumb" href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="Images/motionblind-preview.jpg" alt="" width="896" height="684" loading="lazy" decoding="async"></a>
+                <a class="thumb" href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source type="image/webp" srcset="Images/opt/motionblind-320.webp 320w, Images/opt/motionblind-480.webp 480w" sizes="(max-width: 720px) 92px, 190px"><img src="Images/opt/motionblind-320.jpg" srcset="Images/opt/motionblind-320.jpg 320w, Images/opt/motionblind-480.jpg 480w" sizes="(max-width: 720px) 92px, 190px" alt="" width="480" height="366" loading="lazy" decoding="async"></picture></a>
                 <div>
                     <h3><a href="https://arxiv.org/abs/2609.09528" target="_blank" rel="noopener">MotionBlind: Probing the Illusion of Motion Understanding in Video-LLMs</a></h3>
                     <p>D. Bhatia, B. Galoaa, O. Fritsche, <strong>S. Kamal</strong>, M. O. Abdul Salam, U. Saleem, O. Rastogi, F. Felix Chettiar, N. Erdogmus, S. Ostadabbas</p>
@@ -430,7 +443,7 @@
                 </div>
             </li>
             <li>
-                <a class="thumb" href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="Images/edge-devices-covid-cxr-2024-preview.jpg" alt="" width="896" height="684" loading="lazy" decoding="async"></a>
+                <a class="thumb" href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source type="image/webp" srcset="Images/opt/cxr-2024-320.webp 320w, Images/opt/cxr-2024-480.webp 480w" sizes="(max-width: 720px) 92px, 190px"><img src="Images/opt/cxr-2024-320.jpg" srcset="Images/opt/cxr-2024-320.jpg 320w, Images/opt/cxr-2024-480.jpg 480w" sizes="(max-width: 720px) 92px, 190px" alt="" width="480" height="366" loading="lazy" decoding="async"></picture></a>
                 <div>
                     <h3><a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">Deep Learning Model for Edge Devices for COVID-19 Detection from CXR Images</a></h3>
                     <p>U. Farooq, <strong>S. Kamal</strong>, M. Sarfraz</p>
@@ -439,7 +452,7 @@
                 </div>
             </li>
             <li>
-                <a class="thumb" href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="Images/comparative-analysis-covid-cxr-2023-preview.jpg" alt="" width="896" height="684" loading="lazy" decoding="async"></a>
+                <a class="thumb" href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source type="image/webp" srcset="Images/opt/cxr-2023-320.webp 320w, Images/opt/cxr-2023-480.webp 480w" sizes="(max-width: 720px) 92px, 190px"><img src="Images/opt/cxr-2023-320.jpg" srcset="Images/opt/cxr-2023-320.jpg 320w, Images/opt/cxr-2023-480.jpg 480w" sizes="(max-width: 720px) 92px, 190px" alt="" width="480" height="366" loading="lazy" decoding="async"></picture></a>
                 <div>
                     <h3><a href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">Comparative Analysis of Deep Learning Techniques for Fast Detection of COVID-19 Using CXR Images</a></h3>
                     <p><strong>S. Kamal</strong>, M. Sarfraz, S. Fatma, I. Al Fatma, S. Parween, M. Al Maathidi</p>

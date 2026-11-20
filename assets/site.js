@@ -34,24 +34,24 @@
             return [c.x0 + (c.x1 - c.x0) * u, BASE - c.h * 4 * u * (1 - u)];
         }
         function panel(key, c) {
-            var s = '<svg class="clip-' + key + '" viewBox="0 0 200 150" role="img" aria-label="Clip ' +
+            var s = '<div class="clip clip-' + key + '"><p class="clip-lab"><span>Clip ' + key.toUpperCase() +
+                '</span><span class="val">' + c.val + '</span></p>' +
+                '<svg viewBox="0 0 200 150" role="img" aria-label="Clip ' +
                 key.toUpperCase() + ': a dot follows an arc, ' + c.val + '">' +
                 '<path class="tick" d="M8 20V8h12M180 8h12v12M192 130v12h-12M20 142H8v-12"/>' +
-                '<line class="ground" x1="18" y1="122" x2="182" y2="122"/>' +
-                '<text x="16" y="24">CLIP ' + key.toUpperCase() + '</text>' +
-                '<text class="val" x="184" y="24" text-anchor="end">' + c.val.toUpperCase() + '</text>';
+                '<line class="ground" x1="18" y1="122" x2="182" y2="122"/>';
             for (var k = 0; k < c.n; k++) {
                 var p = pos(c, k / (c.n - 1));
                 s += '<circle class="ghost" r="4" cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '"/>';
             }
-            return s + '<circle class="head" r="6.5"/></svg>';
+            return s + '<circle class="head" r="6.5"/></svg></div>';
         }
         function build() {
             var m = MODES[mode];
             stage.innerHTML = panel('a', m.a) + panel('b', m.b);
             qEl.textContent = m.q;
             panels = [m.a, m.b].map(function (c, i) {
-                var svg = stage.children[i];
+                var svg = stage.children[i].querySelector('svg');
                 return { c: c, ghosts: svg.querySelectorAll('.ghost'), head: svg.querySelector('.head') };
             });
             tabs.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.mode === mode)); });
@@ -99,6 +99,11 @@
         document.addEventListener('visibilitychange', function () { visible = !document.hidden; sync(); });
         build();
         sync();
+    }
+
+    /* ---------- long sections start collapsed on phones (open in the HTML, so no-JS shows everything) ---------- */
+    if (window.matchMedia('(max-width: 720px)').matches) {
+        document.querySelectorAll('details[data-collapse]').forEach(function (d) { d.open = false; });
     }
 
     /* ---------- preview videos: load and play only when on screen ---------- */
