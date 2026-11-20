@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://shahidkamal.dev/</loc><lastmod>2026-11-19</lastmod><priority>1.0</priority></url>
+  <url><loc>https://shahidkamal.dev/blog/covid-cxr-detection.html</loc><lastmod>2026-11-19</lastmod><priority>0.6</priority></url>
+  <url><loc>https://shahidkamal.dev/blog/fine-tuning-llms.html</loc><lastmod>2026-11-19</lastmod><priority>0.6</priority></url>
+  <url><loc>https://shahidkamal.dev/blog/rag-pipelines.html</loc><lastmod>2026-11-19</lastmod><priority>0.6</priority></url>
+  <url><loc>https://shahidkamal.dev/blog/ros2-slam.html</loc><lastmod>2026-11-19</lastmod><priority>0.6</priority></url>
+  <url><loc>https://shahidkamal.dev/Resume/Shahid-Kamal-Resume.pdf</loc><lastmod>2026-11-19</lastmod><priority>0.5</priority></url>
+</urlset>
