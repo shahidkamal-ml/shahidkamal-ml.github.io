@@ -15,14 +15,14 @@
     <meta property="og:url" content="https://shahidkamal.dev/">
     <meta property="og:title" content="Shahid Kamal — ML / Computer Vision Engineer &amp; Researcher">
     <meta property="og:description" content="MS ECE at Northeastern, graduating Dec 2026. Video-understanding research at ACLab (MotionBlind, BEYOND) and production LLM work at Checkit Analytics. Open to full-time ML, AI and computer-vision roles.">
-    <meta property="og:image" content="https://shahidkamal.dev/Images/Shahid-Photo.jpeg">
-    <meta property="og:image:width" content="541">
-    <meta property="og:image:height" content="550">
+    <meta property="og:image" content="https://shahidkamal.dev/Images/IMG_7966-square.jpg">
+    <meta property="og:image:width" content="640">
+    <meta property="og:image:height" content="640">
     <meta property="og:image:alt" content="Portrait of Shahid Kamal">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Shahid Kamal — ML / Computer Vision Engineer &amp; Researcher">
     <meta name="twitter:description" content="MS ECE at Northeastern, graduating Dec 2026. Video-understanding research at ACLab and production LLM work at Checkit Analytics.">
-    <meta name="twitter:image" content="https://shahidkamal.dev/Images/Shahid-Photo.jpeg">
+    <meta name="twitter:image" content="https://shahidkamal.dev/Images/IMG_7966-square.jpg">
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2315171c'/%3E%3Ccircle cx='7' cy='21' r='2.6' fill='%23ff7a52' opacity='.35'/%3E%3Ccircle cx='14' cy='13' r='3' fill='%23ff7a52' opacity='.65'/%3E%3Ccircle cx='23' cy='11' r='4.2' fill='%23ff7a52'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,7 +36,7 @@
         "@type": "Person",
         "name": "Shahid Kamal",
         "url": "https://shahidkamal.dev/",
-        "image": "https://shahidkamal.dev/Images/Shahid-Photo.jpeg",
+        "image": "https://shahidkamal.dev/Images/IMG_7966-square.jpg",
         "email": "mailto:kamal.sh@northeastern.edu",
         "description": "ML / computer vision engineer and researcher. MS in Electrical and Computer Engineering (Computer Vision and Machine Learning) at Northeastern University.",
         "address": { "@type": "PostalAddress", "addressLocality": "Boston", "addressRegion": "MA", "addressCountry": "US" },
@@ -88,7 +88,7 @@
         <div class="hero-grid">
             <div>
                 <div class="who">
-                    <img src="Images/Shahid-Photo.jpeg" alt="Portrait of Shahid Kamal" width="541" height="550">
+                    <img src="Images/IMG_7966-square.jpg" alt="Portrait of Shahid Kamal" width="640" height="640">
                     <p class="status"><b><span class="dot" aria-hidden="true"></span>Open to full-time ML / AI / computer-vision roles</b>Boston, MA</p>
                 </div>
                 <h1 id="name">Shahid Kamal</h1>
@@ -200,15 +200,18 @@
             </div>
         </article>
 
-        <article class="card feature" id="beyond">
+        <article class="card feature beyond" id="beyond">
             <div>
                 <p class="kicker"><b>Research</b> · Northeastern ACLab · Jul–Nov 2026</p>
                 <h3>BEYOND</h3>
                 <p class="what">A multimodal dataset and benchmark testing seven layers of human-interaction understanding beyond action recognition: anticipating, noticing and correcting mistakes in two-person tasks.</p>
+                <p class="idea">Recognizing an action doesn't reveal a person's intention, whether the action fits the task, what it causes, or how others respond. BEYOND connects seven layers of interaction and calls the relationships among them the <strong>interaction chain</strong>.</p>
+                <p class="side-title">My part</p>
                 <ul class="out">
                     <li>Assembled the egocentric + exocentric capture setup and recorded <strong>86 two-person sessions</strong> (13.84 interaction hours, 67.2 view-hours).</li>
                     <li>Deployed and monitored the human-auditing server behind <strong>31,126 audited annotations</strong> across 8 label types.</li>
                     <li>Developed the benchmark and evaluation pipeline for 4 tasks and <strong>evaluated 12 models</strong>.</li>
+                    <li>Co-wrote the paper.</li>
                 </ul>
                 <ul class="tags" aria-label="Topics">
                     <li>Egocentric + exocentric video</li><li>Multimodal dataset</li><li>Benchmark design</li><li>Evaluation pipeline</li>
@@ -216,13 +219,31 @@
                 <p class="note">CVPR 2027 submission, under review. 3rd of 22 authors.</p>
             </div>
             <div>
-                <p class="side-title">Synchronized streams</p>
+                <p class="side-title">The interaction chain: seven layers</p>
+                <ol class="chain">
+                    <li>Intention evidence</li><li>Motor activity</li><li>Physical interaction</li><li>Object-state change</li><li>Procedural outcome</li><li class="partner">Feedback</li><li class="partner">Correction</li>
+                </ol>
+                <p class="fine">Informed by Norman's seven-stage model of action. Feedback and correction are treated as an interpersonal process, completed by a co-present partner.</p>
+
+                <p class="side-title">Example: two people disassembling a monitor stand</p>
+                <ol class="tl">
+                    <li><b>Person</b>Turns the mount screws with the wrong tool.</li>
+                    <li class="partner"><b>Partner · a few seconds later</b>Suggests a smaller wrench and points to the hex key.</li>
+                    <li><b>Person</b>Switches tools and carries on.</li>
+                </ol>
+                <p class="fine">An action-recognition model may label this "turning a screw" yet miss that the tool is wrong, why the partner steps in, or whether the correction worked.</p>
+            </div>
+            <div class="sub">
+                <p class="side-title">Data: synchronized streams</p>
                 <ul class="tracks">
-                    <li>Video</li><li>Audio</li><li>Gaze</li><li>Motion</li><li>Wrist sEMG</li>
+                    <li>Ego video</li><li>Exo video</li><li>Audio</li><li>Gaze</li><li>Motion (IMU)</li><li>Wrist sEMG</li>
                 </ul>
-                <p class="side-title">Benchmark tasks</p>
+                <p class="fine">Annotations are temporally aligned and participant-attributed on a shared 30-fps timeline. The seven layers map many-to-many onto the 8 annotation types.</p>
+            </div>
+            <div class="sub">
+                <p class="side-title">Benchmark: BEYOND-MISTAKE, four tasks</p>
                 <ol class="steps">
-                    <li>Mistake anticipation</li><li>Early detection</li><li>First response</li><li>Correction completion</li>
+                    <li>Mistake anticipation</li><li>Early detection</li><li>First-response identification</li><li>Correction completion</li>
                 </ol>
                 <div class="stats stats-4">
                     <div><b>86</b><span>two-person sessions</span></div>
