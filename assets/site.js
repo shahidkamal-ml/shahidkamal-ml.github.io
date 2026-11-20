@@ -131,9 +131,10 @@
     });
 })();
 
-/* Resume PDF on phones and tablets: open it in the same tab. iPhone Safari can do nothing when a
-   PDF link opens a new tab; in the same tab its built-in viewer shows the PDF and Back returns here. */
+/* Phones and tablets: open links in the same tab. iPhone Safari can do nothing when a link opens a
+   new tab (seen with the resume PDF, GitHub and Scholar); in the same tab it works and Back returns here. */
 (function () {
     if (!window.matchMedia || !window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
-    document.querySelectorAll('a[data-pdf]').forEach(function (a) { a.removeAttribute('target'); a.removeAttribute('rel'); });
+    // Same for every new-tab link (GitHub, Scholar, LinkedIn, papers): on touch devices they open in this tab.
+    document.querySelectorAll('a[data-pdf], a[target="_blank"]').forEach(function (a) { a.removeAttribute('target'); a.removeAttribute('rel'); });
 })();
