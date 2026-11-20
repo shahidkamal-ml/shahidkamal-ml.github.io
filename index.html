@@ -8,7 +8,7 @@
     <meta name="author" content="Shahid Kamal">
     <link rel="canonical" href="https://shahidkamal.dev/">
     <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#101215" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#0c0e11" media="(prefers-color-scheme: dark)">
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Shahid Kamal">
@@ -28,7 +28,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/site.css?v=202611192345">
+    <link rel="stylesheet" href="assets/site.css?v=202611200115">
 
     <script type="application/ld+json">
     {
@@ -84,11 +84,12 @@
 
 <!-- ================= HERO ================= -->
 <section class="hero" id="top" aria-labelledby="name">
+    <canvas class="flow" id="flow" aria-hidden="true"></canvas>
     <div class="wrap">
         <div class="hero-grid">
             <div>
                 <div class="who">
-                    <picture><source type="image/webp" srcset="Images/opt/avatar-96.webp 96w, Images/opt/avatar-144.webp 144w, Images/opt/avatar-216.webp 216w, Images/opt/avatar-288.webp 288w" sizes="(max-width: 720px) 48px, 68px"><img src="Images/opt/avatar-144.jpg" srcset="Images/opt/avatar-96.jpg 96w, Images/opt/avatar-144.jpg 144w, Images/opt/avatar-216.jpg 216w, Images/opt/avatar-288.jpg 288w" sizes="(max-width: 720px) 48px, 68px" alt="Portrait of Shahid Kamal" width="288" height="288" decoding="async"></picture>
+                    <div class="det"><span class="det-tag" aria-hidden="true">person</span><picture><source type="image/webp" srcset="Images/opt/avatar-96.webp 96w, Images/opt/avatar-144.webp 144w, Images/opt/avatar-216.webp 216w, Images/opt/avatar-288.webp 288w" sizes="(max-width: 720px) 48px, 68px"><img src="Images/opt/avatar-144.jpg" srcset="Images/opt/avatar-96.jpg 96w, Images/opt/avatar-144.jpg 144w, Images/opt/avatar-216.jpg 216w, Images/opt/avatar-288.jpg 288w" sizes="(max-width: 720px) 48px, 68px" alt="Portrait of Shahid Kamal" width="288" height="288" decoding="async"></picture></div>
                     <p class="status"><b><span class="dot" aria-hidden="true"></span>Open to full-time ML / AI / computer-vision roles</b>Boston, MA</p>
                 </div>
                 <h1 id="name">Shahid Kamal</h1>
@@ -165,12 +166,12 @@
 <section class="sec" id="projects" aria-labelledby="h-work">
     <div class="wrap">
         <header class="sec-head">
-            <span class="idx">01</span>
+            <span class="idx" aria-hidden="true">f.001</span>
             <h2 id="h-work">Selected work</h2>
             <p>Research first, then projects.</p>
         </header>
 
-        <article class="card feature" id="motionblind">
+        <article class="card feature tagged" data-tag="video-llm" id="motionblind">
             <div>
                 <p class="kicker"><b>Research</b> · ACLab · Jul–Sep 2026</p>
                 <h3>MotionBlind</h3>
@@ -201,7 +202,7 @@
             </div>
         </article>
 
-        <article class="card feature beyond" id="beyond">
+        <article class="card feature beyond tagged" data-tag="dataset" id="beyond">
             <div>
                 <p class="kicker"><b>Research</b> · Northeastern ACLab · Jul–Nov 2026</p>
                 <h3>BEYOND</h3>
@@ -267,7 +268,7 @@
         </article>
 
         <div class="grid2">
-            <article class="card proj">
+            <article class="card proj tagged" data-tag="healthcare-ai">
                 <div class="media"><picture><source type="image/webp" srcset="Images/opt/lablens-480.webp 480w, Images/opt/lablens-960.webp 960w, Images/opt/lablens-1440.webp 1440w" sizes="(max-width: 720px) calc(100vw - 66px), (max-width: 1199px) 46vw, 30vw"><img src="Images/opt/lablens-960.jpg" srcset="Images/opt/lablens-480.jpg 480w, Images/opt/lablens-960.jpg 960w, Images/opt/lablens-1440.jpg 1440w" sizes="(max-width: 720px) calc(100vw - 66px), (max-width: 1199px) 46vw, 30vw" alt="Lab Lens web app: a chat assistant that explains medical lab reports in plain language" width="960" height="586" loading="lazy" decoding="async"></picture></div>
                 <p class="kicker"><b>Project</b> · Healthcare AI + MLOps · Sep–Dec 2025</p>
                 <h3>Lab Lens</h3>
@@ -282,7 +283,7 @@
                 <p class="links"><a href="https://github.com/shahidkamal-ml/lab-lens" target="_blank" rel="noopener">Code (GitHub)</a></p>
             </article>
 
-            <article class="card proj">
+            <article class="card proj tagged" data-tag="medical-imaging">
                 <div class="media"><picture><source type="image/webp" srcset="Images/opt/cxr-2024-480.webp 480w, Images/opt/cxr-2024-896.webp 896w" sizes="(max-width: 720px) calc(100vw - 66px), (max-width: 1199px) 46vw, 30vw"><img src="Images/opt/cxr-2024-896.jpg" srcset="Images/opt/cxr-2024-480.jpg 480w, Images/opt/cxr-2024-896.jpg 896w" sizes="(max-width: 720px) calc(100vw - 66px), (max-width: 1199px) 46vw, 30vw" alt="Example chest X-ray images from the COVID-19, non-COVID and normal classes" width="896" height="684" loading="lazy" decoding="async"></picture></div>
                 <p class="kicker"><b>Research</b> · Medical imaging</p>
                 <h3>COVID-19 CXR Detection</h3>
@@ -300,7 +301,7 @@
                 </p>
             </article>
 
-            <article class="card proj">
+            <article class="card proj tagged" data-tag="computer-vision">
                 <div class="stat-tile" aria-hidden="true"><b>58.19%</b><span>test accuracy · 7 expressions · FER2013</span></div>
                 <p class="kicker"><b>Project</b> · Course project · Jan–Apr 2025</p>
                 <h3>Contrast-Enhanced Emotion Recognition</h3>
@@ -321,7 +322,7 @@
 <section class="sec" id="experience" aria-labelledby="h-xp">
     <div class="wrap">
         <header class="sec-head">
-            <span class="idx">02</span>
+            <span class="idx" aria-hidden="true">f.002</span>
             <h2 id="h-xp">Experience</h2>
         </header>
         <ol class="xp">
@@ -416,7 +417,7 @@
 <section class="sec" id="publications" aria-labelledby="h-pubs">
     <div class="wrap">
         <header class="sec-head">
-            <span class="idx">03</span>
+            <span class="idx" aria-hidden="true">f.003</span>
             <h2 id="h-pubs">Publications</h2>
         </header>
         <ol class="pubs">
@@ -469,26 +470,26 @@
 <section class="sec" id="blog" aria-labelledby="h-blog">
     <div class="wrap">
         <header class="sec-head">
-            <span class="idx">04</span>
+            <span class="idx" aria-hidden="true">f.004</span>
             <h2 id="h-blog">Writing</h2>
         </header>
         <ul class="posts">
-            <li><a class="card" href="blog/rag-pipelines.html">
+            <li><a class="card tagged" data-tag="llms" href="blog/rag-pipelines.html">
                 <p class="kicker"><b>LLMs</b> · Feb 2026</p>
                 <h3>Building Production RAG Pipelines: Lessons from the Trenches</h3>
                 <p>What I learned deploying retrieval-augmented generation at scale — chunking strategies, embedding models, and the hard trade-offs nobody talks about.</p>
             </a></li>
-            <li><a class="card" href="blog/fine-tuning-llms.html">
+            <li><a class="card tagged" data-tag="deep-learning" href="blog/fine-tuning-llms.html">
                 <p class="kicker"><b>Deep Learning</b> · Jan 2026</p>
                 <h3>Fine-Tuning Qwen3-4B: A Practical Guide to In-House LLMs</h3>
                 <p>How we replaced expensive API calls with a fine-tuned open-source model — data prep, training loops, and deployment on AWS.</p>
             </a></li>
-            <li><a class="card" href="blog/ros2-slam.html">
+            <li><a class="card tagged" data-tag="robotics" href="blog/ros2-slam.html">
                 <p class="kicker"><b>Robotics</b> · Dec 2025</p>
                 <h3>SLAM with ROS 2: Mapping the Unknown with LiDAR</h3>
                 <p>An end-to-end walkthrough of implementing SLAM on a mobile robot — from sensor fusion with Kalman filters to real-time map building.</p>
             </a></li>
-            <li><a class="card" href="blog/covid-cxr-detection.html">
+            <li><a class="card tagged" data-tag="medical-ai" href="blog/covid-cxr-detection.html">
                 <p class="kicker"><b>Medical AI</b> · 2023 &amp; 2024</p>
                 <h3>Detecting COVID-19 from Chest X-rays: Deep Learning for Edge Devices</h3>
                 <p>How I designed a custom CNN achieving 97.2% accuracy on CXR classification, compressed it for edge deployment, and presented findings at two international conferences.</p>
@@ -526,6 +527,6 @@
     </div>
 </footer>
 
-<script src="assets/site.js?v=202611192345" defer></script>
+<script src="assets/site.js?v=202611200115" defer></script>
 </body>
 </html>

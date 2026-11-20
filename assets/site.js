@@ -3,6 +3,65 @@
     'use strict';
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+    /* ---------- hero background: a quiet optical-flow field. Static by default; on desktop it
+       bends toward the pointer's motion and settles again. Decorative only. ---------- */
+    var cv = document.getElementById('flow');
+    if (cv && cv.getContext) {
+        var ctx = cv.getContext('2d'), W = 0, H = 0, ink = '#000', hot = '#f00';
+        var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        var step = fine ? 34 : 44, px = 0, py = 0, vx = 1, vy = 0, en = 0, fraf = 0, lx = null, ly = 0;
+        var drawFlow = function () {
+            ctx.clearRect(0, 0, W, H);
+            ctx.lineWidth = 1; ctx.lineCap = 'round';
+            for (var y = step / 2; y < H; y += step) {
+                for (var x = step / 2; x < W; x += step) {
+                    var a = Math.sin(x * 0.0045) * 1.1 + Math.cos(y * 0.007 + x * 0.002) * 1.3;
+                    var ux = Math.cos(a), uy = Math.sin(a), k = 0;
+                    if (en > 0.01) {
+                        var dx = x - px, dy = y - py;
+                        k = en * Math.exp(-(dx * dx + dy * dy) / 26000);
+                        if (k > 0.02) {
+                            ux = ux * (1 - k) + vx * k; uy = uy * (1 - k) + vy * k;
+                            var n = Math.sqrt(ux * ux + uy * uy) || 1; ux /= n; uy /= n;
+                        } else { k = 0; }
+                    }
+                    var len = 4 + 5 * k;
+                    ctx.globalAlpha = (fine ? 0.13 : 0.08) + 0.45 * k;
+                    ctx.strokeStyle = ctx.fillStyle = k > 0.2 ? hot : ink;
+                    ctx.beginPath(); ctx.moveTo(x - ux * len, y - uy * len); ctx.lineTo(x + ux * len, y + uy * len); ctx.stroke();
+                    ctx.beginPath(); ctx.arc(x + ux * len, y + uy * len, 1.2, 0, 6.3); ctx.fill();
+                }
+            }
+        };
+        var sizeFlow = function () {
+            var r = cv.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+            var cs = getComputedStyle(document.documentElement);
+            ink = cs.getPropertyValue('--ink').trim() || ink; hot = cs.getPropertyValue('--a').trim() || hot;
+            W = r.width; H = r.height; cv.width = Math.round(W * d); cv.height = Math.round(H * d);
+            ctx.setTransform(d, 0, 0, d, 0, 0);
+            drawFlow();
+        };
+        var settle = function () {
+            en *= 0.93; drawFlow();
+            if (en > 0.01) fraf = requestAnimationFrame(settle); else { en = 0; fraf = 0; drawFlow(); }
+        };
+        var rz = 0;
+        window.addEventListener('resize', function () { cancelAnimationFrame(rz); rz = requestAnimationFrame(sizeFlow); });
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', sizeFlow);
+        if (fine && !reduce.matches) {
+            cv.parentNode.addEventListener('pointermove', function (e) {
+                var r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+                if (lx !== null) {
+                    var dx = x - lx, dy = y - ly, m = Math.sqrt(dx * dx + dy * dy);
+                    if (m > 1) { vx = vx * 0.7 + dx / m * 0.3; vy = vy * 0.7 + dy / m * 0.3; }
+                }
+                lx = x; ly = y; px = x; py = y; en = 1;
+                if (!fraf) fraf = requestAnimationFrame(settle);
+            }, { passive: true });
+        }
+        sizeFlow();
+    }
+
     /* ---------- contrastive pair: same scene, different motion ---------- */
     var stage = document.getElementById('pairStage');
     if (stage) {
