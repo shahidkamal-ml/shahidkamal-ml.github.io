@@ -3,879 +3,511 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Shahid Kamal</title>
-    <meta name="description" content="Portfolio of Shahid Kamal — AI Engineer and researcher at Northeastern University.">
+    <title>Shahid Kamal — ML / Computer Vision Engineer &amp; Researcher</title>
+    <meta name="description" content="Shahid Kamal is an ML / computer vision engineer and researcher: MS ECE at Northeastern University (graduating Dec 2026), video-understanding research at ACLab, and production LLM work at Checkit Analytics. Open to full-time ML, AI and computer-vision roles.">
+    <meta name="author" content="Shahid Kamal">
+    <link rel="canonical" href="https://shahidkamal.dev/">
+    <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#101215" media="(prefers-color-scheme: dark)">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Shahid Kamal">
+    <meta property="og:url" content="https://shahidkamal.dev/">
+    <meta property="og:title" content="Shahid Kamal — ML / Computer Vision Engineer &amp; Researcher">
+    <meta property="og:description" content="MS ECE at Northeastern, graduating Dec 2026. Video-understanding research at ACLab (MotionBlind, BEYOND) and production LLM work at Checkit Analytics. Open to full-time ML, AI and computer-vision roles.">
+    <meta property="og:image" content="https://shahidkamal.dev/Images/motionblind-preview.jpg">
+    <meta property="og:image:width" content="896">
+    <meta property="og:image:height" content="684">
+    <meta property="og:image:alt" content="Grid of clips from the MotionBlind video benchmark, labelled 82 clips and 240 questions">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Shahid Kamal — ML / Computer Vision Engineer &amp; Researcher">
+    <meta name="twitter:description" content="MS ECE at Northeastern, graduating Dec 2026. Video-understanding research at ACLab and production LLM work at Checkit Analytics.">
+    <meta name="twitter:image" content="https://shahidkamal.dev/Images/motionblind-preview.jpg">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2315171c'/%3E%3Ccircle cx='7' cy='21' r='2.6' fill='%23ff7a52' opacity='.35'/%3E%3Ccircle cx='14' cy='13' r='3' fill='%23ff7a52' opacity='.65'/%3E%3Ccircle cx='23' cy='11' r='4.2' fill='%23ff7a52'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #fff;
-            --text: #494e52;
-            --heading: #2d2d2d;
-            --muted: #7a8288;
-            --link: #0092ca;
-            --link-hover: #0077a5;
-            --border: #f2f3f3;
-            --masthead: #fff;
-            --sidebar-w: 220px;
-            --max: 1280px;
-            --sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-        }
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html {
-            scroll-behavior: auto;
-            overflow-x: clip;
-        }
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--sans);
-            font-size: 16px;
-            line-height: 1.7;
-            min-height: 0;
-            -webkit-font-smoothing: antialiased;
-            -webkit-text-size-adjust: 100%;
-            text-size-adjust: 100%;
-        }
-        a { color: var(--link); text-decoration: none; }
-        a:hover { color: var(--link-hover); text-decoration: underline; }
-        img { max-width: 100%; }
-
-        /* ===== MASTHEAD ===== */
-        .masthead {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: var(--masthead);
-            border-bottom: 1px solid var(--border);
-        }
-        .masthead-inner {
-            max-width: var(--max);
-            margin: 0 auto;
-            padding: 0.85rem max(1.5rem, env(safe-area-inset-right)) 0.85rem max(1.5rem, env(safe-area-inset-left));
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-        }
-        .site-title {
-            color: var(--heading);
-            font-size: 1.15rem;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-        .site-title:hover { color: var(--link); text-decoration: none; }
-
-        .nav-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            gap: 0.15rem 1.35rem;
-            list-style: none;
-        }
-        .nav-links a {
-            color: var(--heading);
-            font-size: 0.92rem;
-            font-weight: 400;
-            text-decoration: none;
-        }
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--link);
-            text-decoration: none;
-        }
-
-        .nav-tools {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .icon-btn {
-            width: 34px;
-            height: 34px;
-            border: 0;
-            background: transparent;
-            color: var(--heading);
-            cursor: pointer;
-            display: grid;
-            place-items: center;
-        }
-        .icon-btn:hover { color: var(--link); }
-        .icon-btn svg { width: 18px; height: 18px; }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
-            padding: 10px;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .hamburger span {
-            display: block;
-            width: 18px;
-            height: 2px;
-            background: var(--heading);
-        }
-
-        /* ===== PAGE LAYOUT ===== */
-        .page {
-            max-width: var(--max);
-            margin: 0 auto;
-            padding: 2rem max(1.5rem, env(safe-area-inset-right)) 1.5rem max(1.5rem, env(safe-area-inset-left));
-            display: grid;
-            grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
-            gap: 3rem;
-            align-items: start;
-        }
-
-        /* ===== SIDEBAR ===== */
-        .sidebar {
-            position: sticky;
-            top: 5.25rem;
-        }
-        .sidebar-photo {
-            width: 170px;
-            height: 170px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin: 0 auto 1rem;
-            background: #f3f4f6;
-        }
-        .sidebar-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 38%;
-        }
-        .sidebar-name {
-            text-align: center;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--heading);
-            margin-bottom: 0.45rem;
-        }
-        .sidebar-bio {
-            text-align: center;
-            font-size: 0.86rem;
-            color: var(--muted);
-            line-height: 1.55;
-            margin-bottom: 0.75rem;
-        }
-        .sidebar-links {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0.15rem;
-        }
-        .sidebar-links a,
-        .sidebar-links .sidebar-meta {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text);
-            font-size: 0.86rem;
-            text-decoration: none;
-            min-height: 1.7rem;
-            padding: 0.1rem 0;
-        }
-        .sidebar-links a:hover { color: var(--link); }
-        .sidebar-links svg {
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-            color: var(--muted);
-        }
-        .sidebar-resume {
-            display: block;
-            width: 100%;
-            margin-top: 0.7rem;
-            padding: 0.5rem 1rem;
-            text-align: center;
-            font-size: 0.84rem;
-            font-weight: 600;
-            text-decoration: none;
-            color: var(--heading);
-            background: transparent;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-        }
-        .sidebar-resume:hover,
-        .sidebar-resume:focus-visible,
-        .sidebar-resume:active {
-            text-decoration: none;
-            background: var(--link);
-            color: #fff;
-            border-color: var(--link);
-        }
-
-        /* ===== MAIN ===== */
-        main { min-width: 0; }
-        section[id] { display: none !important; }
-        section[id].is-active { display: block !important; }
-
-        .page-title {
-            font-size: 1.85rem;
-            font-weight: 700;
-            color: var(--heading);
-            letter-spacing: -0.02em;
-            margin-bottom: 1.15rem;
-            padding-bottom: 0.45rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .prose p { margin-bottom: 1.05rem; overflow-wrap: anywhere; }
-        .prose strong { color: var(--heading); font-weight: 700; }
-
-        footer {
-            max-width: var(--max);
-            margin: 0 auto;
-            padding: 0 max(1.5rem, env(safe-area-inset-right)) 1.5rem max(1.5rem, env(safe-area-inset-left));
-            color: var(--muted);
-            font-size: 0.8rem;
-        }
-
-        .entry {
-            padding: 1.05rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .entry:last-child { border-bottom: 0; }
-        .entry-meta {
-            font-size: 0.82rem;
-            color: var(--muted);
-            margin-bottom: 0.2rem;
-        }
-        .entry h2, .entry h3 {
-            font-size: 1.12rem;
-            font-weight: 700;
-            color: var(--heading);
-            line-height: 1.35;
-            margin-bottom: 0.2rem;
-        }
-        .entry h2 a, .entry h3 a { color: var(--heading); }
-        .entry h2 a:hover, .entry h3 a:hover { color: var(--link); text-decoration: none; }
-        .entry .venue { font-size: 0.92rem; color: var(--text); margin-bottom: 0.35rem; }
-        .entry p { font-size: 0.95rem; }
-        .entry ul {
-            margin: 0.45rem 0 0 1.15rem;
-            font-size: 0.95rem;
-        }
-        .entry li { margin: 0.2rem 0; }
-        .tags {
-            margin-top: 0.45rem;
-            font-size: 0.82rem;
-            color: var(--muted);
-        }
-        /* Publication rows: thumbnail left, metadata right. Wraps without a
-           media query once the body column can no longer hold its basis. */
-        .pub-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.15rem;
-            align-items: flex-start;
-        }
-        .pub-thumb {
-            display: block;
-            flex: 0 1 270px;
-            max-width: 100%;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        .pub-thumb img, .pub-thumb video {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-        .pub-body { flex: 1 1 270px; min-width: 0; }
-        .pub-body h2 { margin-bottom: 0.15rem; }
-        .pub-authors, .pub-venue, .pub-links {
-            font-size: 0.92rem;
-            line-height: 1.55;
-        }
-        .pub-links { margin-top: 0.3rem; }
-        .pub-links .sep { color: var(--muted); }
-
-        .entry-preview {
-            display: block;
-            margin-top: 0.6rem;
-            max-width: 560px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .entry-preview img, .entry-preview video {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-
-        .contact-list { list-style: none; }
-        .contact-list li { margin: 0.4rem 0; overflow-wrap: anywhere; }
-
-        /* ===== SEARCH ===== */
-        .search-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.35);
-            display: none;
-            z-index: 200;
-            padding: 8vh 1rem 2rem;
-            overflow: auto;
-            overscroll-behavior: contain;
-        }
-        .search-modal.open { display: block; }
-        .search-dialog {
-            max-width: 640px;
-            margin: 0 auto;
-            background: #fff;
-            border: 1px solid var(--border);
-            padding: 1rem 1.1rem 1.2rem;
-        }
-        .search-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.7rem;
-            color: var(--heading);
-            font-weight: 700;
-        }
-        .search-close {
-            border: 0;
-            background: none;
-            color: var(--muted);
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-        .search-input {
-            width: 100%;
-            padding: 0.75rem 0.8rem;
-            border: 1px solid #d9dce0;
-            font: inherit;
-            font-size: 16px;
-            outline: none;
-            border-radius: 0;
-        }
-        .search-input:focus { border-color: var(--link); }
-        .search-hint { margin-top: 0.55rem; font-size: 0.82rem; color: var(--muted); }
-        .search-results { margin-top: 0.8rem; }
-        .search-result {
-            display: block;
-            padding: 0.55rem 0;
-            border-bottom: 1px solid var(--border);
-            text-decoration: none;
-            color: inherit;
-        }
-        .search-result:hover { text-decoration: none; }
-        .search-result-title { color: var(--heading); font-weight: 700; }
-        .search-result-meta { font-size: 0.8rem; color: var(--muted); }
-
-        .nav-backdrop {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.28);
-            z-index: 90;
-        }
-        .nav-backdrop.open { display: block; }
-
-        @media (max-width: 980px) {
-            .masthead-inner {
-                padding: 0.7rem max(1rem, env(safe-area-inset-right)) 0.7rem max(1rem, env(safe-area-inset-left));
-                gap: 0.75rem;
-            }
-            .hamburger { display: flex; }
-            .icon-btn { width: 44px; height: 44px; }
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: #fff;
-                border-bottom: 1px solid var(--border);
-                flex-direction: column;
-                padding: 0.4rem 1rem 0.85rem;
-                gap: 0;
-                max-height: min(70vh, 420px);
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            .nav-links.open { display: flex; }
-            .nav-links a {
-                display: block;
-                padding: 0.85rem 0.35rem;
-                font-size: 1.02rem;
-                min-height: 44px;
-            }
-            .masthead-inner { position: relative; }
-            body.menu-open { overflow: hidden; }
-            .hamburger span { transition: transform 0.2s ease, opacity 0.2s ease; }
-            .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-            .hamburger.open span:nth-child(2) { opacity: 0; }
-            .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-            .page {
-                display: block;
-                padding: 1.25rem max(1rem, env(safe-area-inset-right)) 1.25rem max(1rem, env(safe-area-inset-left));
-            }
-            .sidebar {
-                position: static;
-                max-width: 22rem;
-                width: 100%;
-                margin: 0 auto 1.5rem;
-            }
-            body:not(.view-about) .sidebar { display: none; }
-            .sidebar-resume { min-height: 44px; padding: 0.7rem 1rem; }
-            .page-title { font-size: 1.5rem; }
-            .search-modal { padding: 5.5rem 0.75rem 1.25rem; }
-            footer {
-                padding: 0 max(1rem, env(safe-area-inset-right)) 1.25rem max(1rem, env(safe-area-inset-left));
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .site-title { font-size: 1.02rem; }
-            .sidebar-photo {
-                width: 132px;
-                height: 132px;
-            }
-            .entry h2, .entry h3 { font-size: 1.02rem; }
-            .prose p, .entry p, .entry ul { font-size: 0.95rem; }
-        }
-
-        @media (hover: none) {
-            .sidebar-resume:hover {
-                background: transparent;
-                color: var(--heading);
-                border-color: #d1d5db;
-            }
-            .sidebar-resume:active {
-                background: var(--link);
-                color: #fff;
-                border-color: var(--link);
-            }
-        }
-    </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Shahid Kamal",
+        "url": "https://shahidkamal.dev/",
+        "image": "https://shahidkamal.dev/Images/Shahid-Photo.jpeg",
+        "email": "mailto:kamal.sh@northeastern.edu",
+        "description": "ML / computer vision engineer and researcher. MS in Electrical and Computer Engineering (Computer Vision and Machine Learning) at Northeastern University.",
+        "address": { "@type": "PostalAddress", "addressLocality": "Boston", "addressRegion": "MA", "addressCountry": "US" },
+        "sameAs": [
+            "https://www.linkedin.com/in/shahidkamal-ml",
+            "https://github.com/shahidkamal-ml",
+            "https://scholar.google.com/citations?user=z_ZZoiwAAAAJ&hl=en"
+        ],
+        "alumniOf": [
+            { "@type": "CollegeOrUniversity", "name": "Northeastern University", "url": "https://www.northeastern.edu" },
+            { "@type": "CollegeOrUniversity", "name": "Aligarh Muslim University" }
+        ],
+        "affiliation": {
+            "@type": "ResearchOrganization",
+            "name": "Augmented Cognition Lab (ACLab), Northeastern University",
+            "url": "https://ostadabbas.sites.northeastern.edu"
+        },
+        "knowsAbout": ["Machine learning", "Computer vision", "Video understanding", "Large language models"]
+    }
+    </script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<header class="masthead">
-    <div class="masthead-inner">
-        <a class="site-title" href="#about">Shahid Kamal</a>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#publications">Publications</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#blog">Blog</a></li>
-            <li><a href="Resume/Shahid%20Resume.pdf" target="_blank" rel="noopener">CV</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-        <div class="nav-tools">
-            <button class="icon-btn" type="button" aria-label="Search" id="searchBtn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
-            </button>
-            <button class="hamburger" id="hamburger" type="button" onclick="toggleMenu()" aria-label="Menu" aria-expanded="false">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
+<header class="top">
+    <div class="wrap top-in">
+        <a class="brand" href="#top" aria-label="Shahid Kamal, back to top">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="var(--ink)"/><circle cx="7" cy="21" r="2.6" fill="var(--a)" opacity=".4"/><circle cx="14" cy="13" r="3" fill="var(--a)" opacity=".7"/><circle cx="23" cy="11" r="4.2" fill="var(--a)"/></svg>
+            Shahid Kamal
+        </a>
+        <nav aria-label="Sections">
+            <ul>
+                <li><a href="#projects">Work</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#publications">Publications</a></li>
+                <li><a href="#blog">Writing</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <a class="btn btn-primary" href="Resume/Shahid%20Resume.pdf" target="_blank" rel="noopener">Resume</a>
     </div>
 </header>
-<div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()" aria-hidden="true"></div>
 
-<div class="page">
-    <aside class="sidebar">
-        <div class="sidebar-photo">
-            <img src="Images/IMG_7966.jpeg" alt="Shahid Kamal">
+<main id="main">
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top" aria-labelledby="name">
+    <div class="wrap">
+        <div class="hero-grid">
+            <div>
+                <div class="who">
+                    <img src="Images/Shahid-Photo.jpeg" alt="Portrait of Shahid Kamal" width="541" height="550">
+                    <p class="status"><b><span class="dot" aria-hidden="true"></span>Open to full-time ML / AI / computer-vision roles</b>Boston, MA</p>
+                </div>
+                <h1 id="name">Shahid Kamal</h1>
+                <p class="lead">ML / computer vision engineer &amp; researcher. I work on <em>motion and video understanding</em> research, and I've shipped LLM systems to production.</p>
+                <dl class="facts">
+                    <div><dt>Now</dt><dd>MS ECE (Computer Vision and Machine Learning), Northeastern University, <strong>graduating Dec 2026</strong></dd></div>
+                    <div><dt>Research</dt><dd>Video understanding at <a href="https://ostadabbas.sites.northeastern.edu" target="_blank" rel="noopener">ACLab</a> with Prof. Sarah Ostadabbas</dd></div>
+                </dl>
+                <div class="cta">
+                    <a class="btn btn-primary" href="Resume/Shahid%20Resume.pdf" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg>
+                        Resume (PDF)
+                    </a>
+                    <a class="btn" href="mailto:kamal.sh@northeastern.edu">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                        Email
+                    </a>
+                    <a class="btn" href="https://github.com/shahidkamal-ml" target="_blank" rel="noopener">GitHub</a>
+                    <a class="btn" href="https://www.linkedin.com/in/shahidkamal-ml" target="_blank" rel="noopener">LinkedIn</a>
+                    <a class="btn" href="https://scholar.google.com/citations?user=z_ZZoiwAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
+                </div>
+            </div>
+
+            <figure class="pair" aria-labelledby="pairCap">
+                <div class="pair-head">
+                    <span class="pair-title">Same scene, different motion</span>
+                    <div class="seg" role="group" aria-label="What differs between the two clips">
+                        <button type="button" data-mode="speed" aria-pressed="true">Speed</button>
+                        <button type="button" data-mode="magnitude" aria-pressed="false">Magnitude</button>
+                        <button type="button" data-mode="direction" aria-pressed="false">Direction</button>
+                    </div>
+                    <button type="button" class="ghost-btn" id="pairToggle">Pause</button>
+                </div>
+                <div class="pair-stage" id="pairStage"></div>
+                <p class="pair-q"><span>Q&nbsp;</span><span id="pairQ" style="color:inherit" aria-live="polite">Which clip is faster?</span></p>
+                <figcaption id="pairCap">
+                    This is the idea behind <a href="#motionblind">MotionBlind</a>: pairs of clips that differ only in speed, magnitude or direction. Open video-language models answer at the <strong>6.25% chance floor</strong> on motion, despite 58–70% on standard video QA.
+                    <small>Illustration of the idea, not benchmark footage.</small>
+                </figcaption>
+            </figure>
         </div>
-        <div class="sidebar-name">Shahid Kamal</div>
-        <p class="sidebar-bio">MS ECE (Computer Vision and Machine Learning) at Northeastern University.</p>
-        <ul class="sidebar-links">
-            <li>
-                <a href="https://ostadabbas.sites.northeastern.edu/" target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
-                    ACLab
-                </a>
-            </li>
-            <li>
-                <span class="sidebar-meta">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-                    Boston, MA
-                </span>
-            </li>
-            <li>
-                <a href="mailto:kamal.sh@northeastern.edu">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                    Email
-                </a>
-            </li>
-            <li>
-                <a href="https://github.com/shahidkamal-ml" target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
-                    GitHub
-                </a>
-            </li>
-            <li>
-                <a href="https://www.linkedin.com/in/shahidkamal-ml" target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                    LinkedIn
-                </a>
-            </li>
-            <li>
-                <a href="https://scholar.google.com/citations?user=z_ZZoiwAAAAJ&amp;hl=en" target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8M8 11h6"/></svg>
-                    Google Scholar
-                </a>
-            </li>
+
+        <ul class="proof" aria-label="Highlights">
+            <li><a href="#beyond">
+                <span class="k">CVPR 2027 submission</span>
+                <span class="t">BEYOND</span>
+                <span class="d">Multimodal human-interaction dataset and benchmark: 86 two-person sessions, 12 models evaluated.</span>
+            </a></li>
+            <li><a href="#motionblind">
+                <span class="k">arXiv:2609.09528</span>
+                <span class="t">MotionBlind</span>
+                <span class="d">Benchmark showing video-LLMs sit at chance on motion: 8 models, 170+ configurations.</span>
+            </a></li>
+            <li><a href="#experience">
+                <span class="k">Checkit Analytics</span>
+                <span class="t">Production LLMs</span>
+                <span class="d">Fine-tuned Qwen3-4B and deployed it as the in-house backbone LLM, replacing paid APIs.</span>
+            </a></li>
         </ul>
-        <a class="sidebar-resume" href="Resume/Shahid%20Resume.pdf" target="_blank" rel="noopener">Download Resume (PDF)</a>
-    </aside>
-
-    <main>
-        <section id="about" class="is-active">
-            <h1 class="page-title">About</h1>
-            <div class="prose">
-                <p>
-                    I'm a graduate student at <strong>Northeastern University</strong> pursuing my MS in Electrical and Computer Engineering, specializing in <strong>Computer Vision</strong> and <strong>Machine Learning</strong>. Previously, I worked as an <strong>AI Engineer</strong> at <a href="https://checkitanalytics.com" target="_blank" rel="noopener"><strong>Checkit Analytics</strong></a>, where I designed and deployed LLM-based RAG pipelines and fine-tuned open-source models for production financial analytics — reducing external API dependency and shipping AI products end-to-end.
-                </p>
-                <p>
-                    I am doing research under the supervision of <strong>Prof. Sarah Ostadabbas</strong> in the <a href="https://ostadabbas.sites.northeastern.edu/" target="_blank" rel="noopener">Augmented Cognition Laboratory (ACLab)</a>, focused on <strong>video understanding</strong>. ACLab builds intelligent systems that can reason about the real world from limited data rather than from ever-larger datasets. The lab specializes in motion-centric video understanding — because motion captures causality, intent, and dynamics that static frames cannot — and develops data-efficient models for tracking, behavior analysis, and action recognition in small-data domains where labels are scarce, expensive, or hard to share. My work sits in that agenda: learning structured representations such as pose, trajectories, and temporal dynamics so vision systems can interpret human and animal behavior in healthcare, robotics, and other real-world settings.
-                </p>
-                <p>
-                    My background spans <strong>Machine Learning</strong>, <strong>Computer Vision</strong>, and <strong>Large Language Models (LLMs)</strong>. I've published peer-reviewed research on <strong>COVID-19 detection from chest X-rays</strong>, including model compression for edge deployment, and built production AI systems spanning healthcare, financial analytics, and misinformation detection. These experiences shaped how I think about building AI that is not just accurate, but practical, reliable, and deployable.
-                </p>
-                <p>
-                    I'm particularly interested in problems that require owning the full ML lifecycle — from data and experimentation to evaluation, deployment, and monitoring at scale.
-                </p>
-            </div>
-        </section>
-
-        <section id="publications">
-            <h1 class="page-title">Publications</h1>
-            <article class="entry pub-row">
-                <a class="pub-thumb" href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">
-                    <video src="Images/motionblind-preview.mp4" poster="Images/motionblind-preview.jpg" width="896" height="684"
-                           autoplay loop muted playsinline preload="metadata"
-                           aria-label="Grid of MotionBlind benchmark clips playing, labelled 82 clips and 240 questions"></video>
-                </a>
-                <div class="pub-body">
-                    <h2><a href="https://arxiv.org/abs/2609.09528" target="_blank" rel="noopener">MotionBlind: Probing the Illusion of Motion Understanding in Video-LLMs</a></h2>
-                    <p class="pub-authors">D. Bhatia, B. Galoaa, O. Fritsche, <strong>S. Kamal</strong>, M. O. Abdul Salam, U. Saleem, O. Rastogi, F. Felix Chettiar, N. Erdogmus, S. Ostadabbas</p>
-                    <p class="pub-venue">in <em>arXiv preprint</em> arXiv:2609.09528, 2026.</p>
-                    <p class="pub-links"><span class="sep">[</span><a href="https://arxiv.org/pdf/2609.09528" target="_blank" rel="noopener">PDF</a><span class="sep">][</span><a href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">Project</a><span class="sep">][</span><a href="https://github.com/ostadabbas/MotionBlind" target="_blank" rel="noopener">Code</a><span class="sep">][</span><a href="https://huggingface.co/datasets/augmentedcognitionlab/MotionBlind" target="_blank" rel="noopener">Dataset</a><span class="sep">]</span></p>
-                </div>
-            </article>
-            <article class="entry pub-row">
-                <a class="pub-thumb" href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">
-                    <video src="Images/edge-devices-covid-cxr-2024-preview.mp4" poster="Images/edge-devices-covid-cxr-2024-preview.jpg" width="896" height="684"
-                           autoplay loop muted playsinline preload="none"
-                           aria-label="Figures from the paper: example CXR images and the model architecture"></video>
-                </a>
-                <div class="pub-body">
-                    <h2><a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">Deep Learning Model for Edge Devices for COVID-19 Detection from CXR Images</a></h2>
-                    <p class="pub-authors">U. Farooq, <strong>S. Kamal</strong>, M. Sarfraz</p>
-                    <p class="pub-venue">in <em>ICBSII</em> 2024, Chennai, India.</p>
-                    <p class="pub-links"><span class="sep">[</span><a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">PDF</a><span class="sep">]</span></p>
-                </div>
-            </article>
-            <article class="entry pub-row">
-                <a class="pub-thumb" href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">
-                    <video src="Images/comparative-analysis-covid-cxr-2023-preview.mp4" poster="Images/comparative-analysis-covid-cxr-2023-preview.jpg" width="896" height="684"
-                           autoplay loop muted playsinline preload="none"
-                           aria-label="Figures from the paper: sample CXR images and the training and prediction pipeline"></video>
-                </a>
-                <div class="pub-body">
-                    <h2><a href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">Comparative Analysis of Deep Learning Techniques for Fast Detection of COVID-19 Using CXR Images</a></h2>
-                    <p class="pub-authors"><strong>S. Kamal</strong>, M. Sarfraz, S. Fatma, I. Al Fatma, S. Parween, M. Al Maathidi</p>
-                    <p class="pub-venue">in <em>Advances in Computational Intelligence and its Applications</em> 2023, Taylor &amp; Francis / CRC Press.</p>
-                    <p class="pub-links"><span class="sep">[</span><a href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">PDF</a><span class="sep">]</span></p>
-                </div>
-            </article>
-        </section>
-
-        <section id="experience">
-            <h1 class="page-title">Experience</h1>
-            <article class="entry">
-                <div class="entry-meta">Jan 2026 – Aug 2026</div>
-                <h3>AI Engineer</h3>
-                <p class="venue"><a href="https://checkitanalytics.com" target="_blank" rel="noopener">Checkit Analytics</a> · California, United States</p>
-                <ul>
-                    <li>Built LLM-based RAG pipelines for grounded financial question answering and analytics</li>
-                    <li>Fine-tuned and deployed Qwen3-4B as the in-house backbone LLM, eliminating external API costs</li>
-                    <li>Built Rumor Check, a misinformation detection app leveraging LLM-as-Judge evaluation, and deployed it on AWS</li>
-                </ul>
-            </article>
-            <article class="entry">
-                <div class="entry-meta">Sep 2025 – Dec 2025</div>
-                <h3>Graduate Teaching Assistant</h3>
-                <p class="venue">Northeastern University · Boston, MA</p>
-                <ul>
-                    <li>TA for MKTG 6200: Creating and Sustaining Customer Markets (Fall 2025)</li>
-                    <li>Graded assignments, facilitated student discussions, and held office hours</li>
-                    <li>Assisted professor with course material preparation, exam proctoring, and student evaluations</li>
-                </ul>
-            </article>
-            <article class="entry">
-                <div class="entry-meta">Dec 2022 – Feb 2023</div>
-                <h3>Research Intern</h3>
-                <p class="venue">Centre of Advanced Research in Electrified Transportation · Aligarh, India</p>
-                <ul>
-                    <li>EV battery systems suffered from inefficiencies, leading to high energy loss during charging</li>
-                    <li>Optimized EV Battery Management System using ML, improving charging efficiency by 7%</li>
-                    <li>Utilized Random Forest and LSTMs, reducing energy loss during charging by 10%</li>
-                </ul>
-            </article>
-            <article class="entry">
-                <div class="entry-meta">June 2022 – July 2022</div>
-                <h3>Research Intern</h3>
-                <p class="venue">Indian Institute of Information Technology · Allahabad, India</p>
-                <ul>
-                    <li>Worked with the research team on developing a dynamic routing mechanism in Capsule Neural Networks</li>
-                    <li>Researched different routing mechanisms in CNNs and presented findings in the seminar</li>
-                    <li>Developed a hybrid architecture inception_efficientcaps for dynamic routing in CNN networks</li>
-                </ul>
-            </article>
-        </section>
-
-        <section id="projects">
-            <h1 class="page-title">Projects</h1>
-            <article class="entry">
-                <h2><a href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">MotionBlind — Video-LLM Motion Benchmark</a></h2>
-                <p class="venue"><a href="https://arxiv.org/abs/2609.09528" target="_blank" rel="noopener">Paper (arXiv)</a> · <a href="https://github.com/ostadabbas/MotionBlind" target="_blank" rel="noopener">Code (GitHub)</a> · <a href="https://huggingface.co/datasets/augmentedcognitionlab/MotionBlind" target="_blank" rel="noopener">Dataset (Hugging Face)</a></p>
-                <p>Contrastive video benchmark isolating speed, magnitude, and direction — 82 self-recorded clips and 240 Q&amp;A items, evaluated across 170+ configurations spanning 8 video-language models, 4 frame selectors, and 5 frame budgets. Open models score at the 6.25% chance floor on motion despite reaching 58–70% on standard video QA.</p>
-                <a class="entry-preview" href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">
-                    <video src="Images/motionblind-preview.mp4" poster="Images/motionblind-preview.jpg" width="896" height="684"
-                           autoplay loop muted playsinline preload="metadata"
-                           aria-label="Grid of MotionBlind benchmark clips playing, labelled 82 clips and 240 questions"></video>
-                </a>
-                <div class="tags">Video Understanding · Video-LLMs · Benchmarking · Evaluation</div>
-            </article>
-            <article class="entry">
-                <h2>Jobly — Agentic Job Platform</h2>
-                <p>Multi-agent agentic AI system automating job search, outreach, tracking, and interview prep. LLM agents for resume tailoring and personalized recruiter messaging with stateful human-in-the-loop controls.</p>
-                <div class="tags">LLM Agents · RAG · Python · Agentic AI</div>
-            </article>
-            <article class="entry">
-                <h2><a href="https://github.com/shahidkamal-ml/lab-lens" target="_blank" rel="noopener">Lab Lens — Healthcare AI</a></h2>
-                <p>End-to-end healthcare AI for medical report summarization, diagnostic image analysis, and risk prediction. RAG Q&amp;A pipeline with MLOps workflows, monitoring, and bias checks.</p>
-                <div class="tags">Healthcare AI · MLOps · RAG · Computer Vision</div>
-            </article>
-            <article class="entry">
-                <h2>Contrast-Enhanced Emotion Recognition</h2>
-                <p>Facial emotion recognition across 7 expressions on FER2013, using a custom CNN and ResNet-18. A CLAHE contrast-enhancement pipeline improves robustness on low-contrast images, evaluated baseline vs. enhanced preprocessing — 58.19% test accuracy with the custom CNN.</p>
-                <div class="tags">Computer Vision · CNN · ResNet · Image Preprocessing</div>
-            </article>
-            <article class="entry">
-                <h2><a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">COVID-19 CXR Detection</a></h2>
-                <p>Custom CNN achieving 97.2% accuracy in COVID-19 classification from chest X-rays. Model compression for edge deployment with clinical-level detection metrics.</p>
-                <div class="tags">Deep Learning · CNN · Edge AI · Medical Imaging</div>
-            </article>
-        </section>
-
-        <section id="blog">
-            <h1 class="page-title">Blog</h1>
-            <article class="entry">
-                <div class="entry-meta">Feb 2026 · LLMs</div>
-                <h2><a href="blog/rag-pipelines.html">Building Production RAG Pipelines: Lessons from the Trenches</a></h2>
-                <p>What I learned deploying retrieval-augmented generation at scale — chunking strategies, embedding models, and the hard trade-offs nobody talks about.</p>
-            </article>
-            <article class="entry">
-                <div class="entry-meta">Jan 2026 · Deep Learning</div>
-                <h2><a href="blog/fine-tuning-llms.html">Fine-Tuning Qwen3-4B: A Practical Guide to In-House LLMs</a></h2>
-                <p>How we replaced expensive API calls with a fine-tuned open-source model — data prep, training loops, and deployment on AWS.</p>
-            </article>
-            <article class="entry">
-                <div class="entry-meta">Dec 2025 · Robotics</div>
-                <h2><a href="blog/ros2-slam.html">SLAM with ROS 2: Mapping the Unknown with LiDAR</a></h2>
-                <p>An end-to-end walkthrough of implementing SLAM on a mobile robot — from sensor fusion with Kalman filters to real-time map building.</p>
-            </article>
-            <article class="entry">
-                <div class="entry-meta">2023 &amp; 2024 · Medical AI</div>
-                <h2><a href="blog/covid-cxr-detection.html">Detecting COVID-19 from Chest X-rays: Deep Learning for Edge Devices</a></h2>
-                <p>How I designed a custom CNN achieving 97.2% accuracy on CXR classification, compressed it for edge deployment, and presented findings at two international conferences.</p>
-            </article>
-        </section>
-
-        <section id="contact">
-            <h1 class="page-title">Contact</h1>
-            <div class="prose">
-                <p>Open to ML / computer vision roles, research collaborations, and robotics projects.</p>
-                <ul class="contact-list">
-                    <li>Email: <a href="mailto:kamal.sh@northeastern.edu">kamal.sh@northeastern.edu</a></li>
-                    <li>LinkedIn: <a href="https://www.linkedin.com/in/shahidkamal-ml" target="_blank" rel="noopener">linkedin.com/in/shahidkamal-ml</a></li>
-                    <li>GitHub: <a href="https://github.com/shahidkamal-ml" target="_blank" rel="noopener">github.com/shahidkamal-ml</a></li>
-                    <li>Google Scholar: <a href="https://scholar.google.com/citations?user=z_ZZoiwAAAAJ&amp;hl=en" target="_blank" rel="noopener">scholar.google.com/citations?user=z_ZZoiwAAAAJ</a></li>
-                </ul>
-            </div>
-        </section>
-    </main>
-</div>
-
-<footer>© 2026 Shahid Kamal</footer>
-
-<div class="search-modal" id="searchModal" aria-hidden="true">
-    <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="searchTitle">
-        <div class="search-top">
-            <div id="searchTitle">Search</div>
-            <button class="search-close" type="button" id="searchCloseBtn">Esc</button>
-        </div>
-        <input class="search-input" id="searchInput" type="search" placeholder="Search pages, papers, posts…" autocomplete="off">
-        <div class="search-hint">Press <strong>Ctrl</strong> + <strong>K</strong> (or <strong>⌘K</strong>) to open search.</div>
-        <div class="search-results" id="searchResults" aria-live="polite"></div>
     </div>
-</div>
+</section>
 
-<script>
-function toggleMenu() {
-    const links = document.getElementById('navLinks');
-    const burger = document.getElementById('hamburger');
-    const backdrop = document.getElementById('navBackdrop');
-    const isOpen = !links.classList.contains('open');
-    links.classList.toggle('open', isOpen);
-    burger.classList.toggle('open', isOpen);
-    backdrop.classList.toggle('open', isOpen);
-    backdrop.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-    burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    document.body.classList.toggle('menu-open', isOpen);
-}
-function closeMenu() {
-    document.getElementById('navLinks').classList.remove('open');
-    document.getElementById('hamburger').classList.remove('open');
-    document.getElementById('hamburger').setAttribute('aria-expanded', 'false');
-    document.getElementById('navBackdrop').classList.remove('open');
-    document.getElementById('navBackdrop').setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('menu-open');
-}
+<div class="wrap"><div class="ticks" aria-hidden="true"></div></div>
 
-const VIEWS = ['about', 'publications', 'experience', 'projects', 'blog', 'contact'];
+<!-- ================= ABOUT ================= -->
+<section class="about" id="about" aria-label="About">
+    <div class="wrap about-grid">
+        <p>I'm a graduate student at <strong>Northeastern University</strong>, doing research under <strong>Prof. Sarah Ostadabbas</strong> in the <a href="https://ostadabbas.sites.northeastern.edu" target="_blank" rel="noopener">Augmented Cognition Laboratory (ACLab)</a>. The lab specializes in motion-centric video understanding, because motion captures causality, intent and dynamics that static frames cannot.</p>
+        <p>Previously I was an <strong>AI Engineer Intern</strong> at <a href="https://checkitanalytics.com" target="_blank" rel="noopener">Checkit Analytics</a>, building RAG pipelines and fine-tuning open-source models for production financial analytics. I'm most interested in problems that need the full ML lifecycle: data, experimentation, evaluation, deployment and monitoring.</p>
+    </div>
+</section>
 
-function showView(id, { push = true } = {}) {
-    const next = VIEWS.includes(id) ? id : 'about';
-    document.querySelectorAll('main section[id]').forEach((section) => {
-        section.classList.toggle('is-active', section.id === next);
-    });
-    document.querySelectorAll('#navLinks a').forEach((a) => {
-        a.classList.toggle('active', a.getAttribute('href') === `#${next}`);
-    });
-    document.body.classList.toggle('view-about', next === 'about');
-    closeMenu();
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    if (push) history.pushState({ view: next }, '', `#${next}`);
-}
+<!-- ================= SELECTED WORK ================= -->
+<section class="sec" id="projects" aria-labelledby="h-work">
+    <div class="wrap">
+        <header class="sec-head">
+            <span class="idx">01</span>
+            <h2 id="h-work">Selected work</h2>
+            <p>Research first, then projects.</p>
+        </header>
 
-document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
-    const id = (a.getAttribute('href') || '').slice(1);
-    if (!VIEWS.includes(id)) return;
-    e.preventDefault();
-    showView(id);
-});
+        <article class="card feature" id="motionblind">
+            <div>
+                <p class="kicker"><b>Research</b> · ACLab · Jul–Sep 2026</p>
+                <h3>MotionBlind</h3>
+                <p class="what">A contrastive benchmark that tests whether video-LLMs truly understand motion.</p>
+                <ul class="out">
+                    <li><strong>82 self-recorded clips and 240 Q&amp;A items</strong> that differ only in speed, magnitude or direction.</li>
+                    <li><strong>170+ evaluation configurations</strong> across 8 video-language models, 4 frame selectors and 5 frame budgets.</li>
+                    <li>Open models sit at the <strong>6.25% chance floor</strong> on motion despite 58–70% on standard video QA.</li>
+                </ul>
+                <ul class="tags" aria-label="Topics">
+                    <li>Video understanding</li><li>Video-LLMs</li><li>Benchmarking</li><li>Evaluation</li>
+                </ul>
+                <p class="links">
+                    <a href="https://arxiv.org/abs/2609.09528" target="_blank" rel="noopener">Paper (arXiv)</a>
+                    <a href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">Project page</a>
+                    <a href="https://github.com/ostadabbas/MotionBlind" target="_blank" rel="noopener">Code</a>
+                    <a href="https://huggingface.co/datasets/augmentedcognitionlab/MotionBlind" target="_blank" rel="noopener">Dataset</a>
+                </p>
+            </div>
+            <div>
+                <div class="media">
+                    <video data-preview src="Images/motionblind-preview.mp4" poster="Images/motionblind-preview.jpg" width="896" height="684"
+                           loop muted playsinline preload="none"
+                           aria-label="Grid of MotionBlind benchmark clips playing, labelled 82 clips and 240 questions"></video>
+                    <button type="button" class="ghost-btn">Play preview</button>
+                </div>
+            </div>
+        </article>
 
-document.querySelectorAll('#navLinks a').forEach((a) => {
-    a.addEventListener('click', () => closeMenu());
-});
+        <article class="card feature" id="beyond">
+            <div>
+                <p class="kicker"><b>Research</b> · Northeastern ACLab · Jul–Nov 2026</p>
+                <h3>BEYOND</h3>
+                <p class="what">A multimodal dataset and benchmark testing seven layers of human-interaction understanding beyond action recognition: anticipating, noticing and correcting mistakes in two-person tasks.</p>
+                <ul class="out">
+                    <li>Assembled the egocentric + exocentric capture setup and recorded <strong>86 two-person sessions</strong> (13.84 interaction hours, 67.2 view-hours).</li>
+                    <li>Deployed and monitored the human-auditing server behind <strong>31,126 audited annotations</strong> across 8 label types.</li>
+                    <li>Developed the benchmark and evaluation pipeline for 4 tasks and <strong>evaluated 12 models</strong>.</li>
+                </ul>
+                <ul class="tags" aria-label="Topics">
+                    <li>Egocentric + exocentric video</li><li>Multimodal dataset</li><li>Benchmark design</li><li>Evaluation pipeline</li>
+                </ul>
+                <p class="note">CVPR 2027 submission, under review. 3rd of 22 authors.</p>
+            </div>
+            <div>
+                <p class="side-title">Synchronized streams</p>
+                <ul class="tracks">
+                    <li>Video</li><li>Audio</li><li>Gaze</li><li>Motion</li><li>Wrist sEMG</li>
+                </ul>
+                <p class="side-title">Benchmark tasks</p>
+                <ol class="steps">
+                    <li>Mistake anticipation</li><li>Early detection</li><li>First response</li><li>Correction completion</li>
+                </ol>
+                <div class="stats stats-4">
+                    <div><b>86</b><span>two-person sessions</span></div>
+                    <div><b>67.2</b><span>view-hours</span></div>
+                    <div><b>31,126</b><span>audited annotations</span></div>
+                    <div><b>12</b><span>models evaluated</span></div>
+                </div>
+            </div>
+        </article>
 
-window.addEventListener('popstate', () => {
-    showView((location.hash || '#about').slice(1), { push: false });
-});
+        <div class="grid2">
+            <article class="card proj">
+                <div class="media"><img src="Images/lablens.jpeg" alt="Lab Lens web app: a chat assistant that explains medical lab reports in plain language" width="1920" height="1172" loading="lazy" decoding="async"></div>
+                <p class="kicker"><b>Project</b> · Healthcare AI + MLOps · Sep–Dec 2025</p>
+                <h3>Lab Lens</h3>
+                <p class="what">Healthcare AI platform built on 5,000+ MIMIC-III discharge summaries that helps patients understand their results: plain-language summaries, chest X-ray analysis and risk scores.</p>
+                <ul class="out">
+                    <li>RAG Q&amp;A with BioBERT embeddings, FAISS search and cited sources, answering in <strong>2–5 seconds</strong> per question.</li>
+                    <li>Single-patient mode cut memory from 2–4 GB to <strong>under 100 MB</strong>.</li>
+                    <li>CI/CD to Google Cloud Run with automatic rollback, inference and drift monitoring, and automated bias checks (gender gap not significant, p=0.21).</li>
+                </ul>
+                <ul class="tags" aria-label="Topics"><li>Healthcare AI</li><li>MLOps</li><li>RAG</li><li>Computer vision</li></ul>
+                <p class="note">Team project; I was the top committer.</p>
+                <p class="links"><a href="https://github.com/shahidkamal-ml/lab-lens" target="_blank" rel="noopener">Code (GitHub)</a></p>
+            </article>
 
-showView((location.hash || '#about').slice(1), { push: false });
+            <article class="card proj">
+                <div class="media"><img src="Images/edge-devices-covid-cxr-2024-preview.jpg" alt="Example chest X-ray images from the COVID-19, non-COVID and normal classes" width="896" height="684" loading="lazy" decoding="async"></div>
+                <p class="kicker"><b>Research</b> · Medical imaging</p>
+                <h3>COVID-19 CXR Detection</h3>
+                <p class="what">Custom CNN that classifies COVID-19 from chest X-rays, compressed for edge deployment.</p>
+                <ul class="out">
+                    <li><strong>97.2% accuracy</strong> in COVID-19 classification from chest X-rays.</li>
+                    <li>Model compression for edge deployment with clinical-level detection metrics.</li>
+                    <li>Published as two peer-reviewed papers (ICBSII 2024; Taylor &amp; Francis / CRC Press 2023).</li>
+                </ul>
+                <ul class="tags" aria-label="Topics"><li>Deep learning</li><li>CNN</li><li>Edge AI</li><li>Medical imaging</li></ul>
+                <p class="links">
+                    <a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">2024 paper (PDF)</a>
+                    <a href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">2023 paper (PDF)</a>
+                    <a class="int" href="blog/covid-cxr-detection.html">Write-up</a>
+                </p>
+            </article>
 
-const searchBtn = document.getElementById('searchBtn');
-const searchModal = document.getElementById('searchModal');
-const searchCloseBtn = document.getElementById('searchCloseBtn');
-const searchInput = document.getElementById('searchInput');
-const searchResults = document.getElementById('searchResults');
-let searchIndex = [];
+            <article class="card proj">
+                <p class="kicker"><b>Project</b> · Course project · Jan–Apr 2025</p>
+                <h3>Contrast-Enhanced Emotion Recognition</h3>
+                <p class="what">Facial emotion recognition across 7 expressions on FER2013, comparing a custom CNN with ResNet-18.</p>
+                <ul class="out">
+                    <li>CLAHE contrast-enhancement pipeline to improve robustness on low-contrast images.</li>
+                    <li>Evaluated baseline vs. enhanced preprocessing.</li>
+                    <li><strong>58.19% test accuracy</strong> with the custom CNN.</li>
+                </ul>
+                <ul class="tags" aria-label="Topics"><li>Computer vision</li><li>CNN</li><li>ResNet</li><li>Image preprocessing</li></ul>
+                <p class="links"><a href="https://github.com/shahidkamal-ml/contrast-enhanced-emotion-recognition" target="_blank" rel="noopener">Code (GitHub)</a></p>
+            </article>
 
-function buildSearchIndex() {
-    const items = [];
-    document.querySelectorAll('main section[id]').forEach((section) => {
-        const title = (section.querySelector('.page-title')?.textContent || section.id).trim();
-        items.push({ title, href: `#${section.id}`, meta: 'Page', text: (section.innerText || '').replace(/\s+/g, ' ') });
-    });
-    document.querySelectorAll('a.pub-card, section#publications a, section#blog a, section#projects a').forEach((a) => {
-        const href = a.getAttribute('href') || '';
-        const title = (a.textContent || '').replace(/\s+/g, ' ').trim();
-        if (!href || !title || href.startsWith('#')) return;
-        items.push({ title, href, meta: href.includes('blog/') ? 'Blog' : href.includes('Publications/') ? 'Publication' : 'Link', text: title });
-    });
-    items.push({ title: 'Resume (PDF)', href: 'Resume/Shahid%20Resume.pdf', meta: 'CV', text: 'Resume CV PDF' });
-    const seen = new Set();
-    searchIndex = items.filter((it) => {
-        const key = `${it.href}::${it.title}`;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-    });
-}
+            <article class="card proj">
+                <p class="kicker"><b>Industry</b> · Checkit Analytics · 2026</p>
+                <h3>In-house LLM and Rumor Check</h3>
+                <p class="what">LLM systems for financial analytics, built and deployed during my AI Engineer internship.</p>
+                <ul class="out">
+                    <li>Fine-tuned the open-weight <strong>Qwen3-4B</strong> and deployed it as the company's in-house backbone LLM, replacing paid external LLM APIs.</li>
+                    <li>RAG pipelines for financial question answering, grounded in retrieved financial data.</li>
+                    <li><strong>Rumor Check</strong>: a misinformation detection app using LLM-as-Judge evaluation, deployed on AWS.</li>
+                </ul>
+                <ul class="tags" aria-label="Topics"><li>LLM fine-tuning</li><li>RAG</li><li>LLM-as-Judge</li><li>AWS</li></ul>
+                <p class="links">
+                    <a class="int" href="blog/fine-tuning-llms.html">Fine-tuning write-up</a>
+                    <a class="int" href="blog/rag-pipelines.html">RAG write-up</a>
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
 
-function openSearch() {
-    searchModal.classList.add('open');
-    searchModal.setAttribute('aria-hidden', 'false');
-    searchInput.value = '';
-    searchResults.innerHTML = '';
-    setTimeout(() => searchInput.focus(), 50);
-}
-function closeSearch() {
-    searchModal.classList.remove('open');
-    searchModal.setAttribute('aria-hidden', 'true');
-}
+<!-- ================= EXPERIENCE ================= -->
+<section class="sec" id="experience" aria-labelledby="h-xp">
+    <div class="wrap">
+        <header class="sec-head">
+            <span class="idx">02</span>
+            <h2 id="h-xp">Experience</h2>
+        </header>
+        <ol class="xp">
+            <li>
+                <p class="when">Jul 2026 – Nov 2026</p>
+                <div>
+                    <h3>Video-understanding research</h3>
+                    <p class="org"><a href="https://ostadabbas.sites.northeastern.edu" target="_blank" rel="noopener">Augmented Cognition Lab (ACLab)</a>, Northeastern University · with Prof. Sarah Ostadabbas</p>
+                    <ul class="out">
+                        <li><a href="#beyond">BEYOND</a>: capture setup, 86 recorded sessions, the auditing server behind 31,126 annotations, and the benchmark pipeline for 4 tasks and 12 models.</li>
+                        <li><a href="#motionblind">MotionBlind</a>: contrastive motion benchmark for video-LLMs, 170+ evaluation configurations across 8 models.</li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <p class="when">Jan 2026 – Aug 2026</p>
+                <div>
+                    <h3>AI Engineer Intern</h3>
+                    <p class="org"><a href="https://checkitanalytics.com" target="_blank" rel="noopener">Checkit Analytics</a> · San Diego, California, USA</p>
+                    <ul class="out">
+                        <li>Fine-tuned the open-weight Qwen3-4B model and deployed it as the company's in-house backbone LLM, replacing paid external LLM APIs and eliminating those costs.</li>
+                        <li>Engineered LLM-based RAG pipelines for financial question answering and analytics, grounded in retrieved financial data.</li>
+                        <li>Created Rumor Check, a misinformation detection app using LLM-as-Judge evaluation, deployed on AWS.</li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <p class="when">Sep 2025 – Dec 2025</p>
+                <div>
+                    <h3>Graduate Teaching Assistant</h3>
+                    <p class="org">Northeastern University · Boston, MA</p>
+                    <ul class="out">
+                        <li>TA for MKTG 6200: Creating and Sustaining Customer Markets (Fall 2025).</li>
+                        <li>Graded assignments, facilitated student discussions, and held office hours.</li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <p class="when">Dec 2022 – Feb 2023</p>
+                <div>
+                    <h3>Research Intern</h3>
+                    <p class="org">Centre of Advanced Research in Electrified Transportation · Aligarh, India</p>
+                    <ul class="out">
+                        <li>Optimized an EV battery management system with machine learning (Random Forest, LSTM), improving charging efficiency by 7% and reducing energy lost during charging by 10%.</li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <p class="when">Jun 2022 – Jul 2022</p>
+                <div>
+                    <h3>Research Intern</h3>
+                    <p class="org">Indian Institute of Information Technology · Allahabad, India</p>
+                    <ul class="out">
+                        <li>Researched dynamic routing in capsule neural networks and presented findings at a research seminar.</li>
+                        <li>Designed inception_efficientcaps, a hybrid Inception + EfficientCaps routing architecture.</li>
+                    </ul>
+                </div>
+            </li>
+        </ol>
 
-function renderSearchResults(q) {
-    const query = (q || '').trim().toLowerCase();
-    if (!query) { searchResults.innerHTML = ''; return; }
-    const tokens = query.split(/\s+/).filter(Boolean);
-    const results = searchIndex
-        .map((it) => {
-            const hay = `${it.title} ${it.meta} ${it.text}`.toLowerCase();
-            const match = tokens.every((t) => hay.includes(t));
-            return { ...it, match, score: match ? tokens.length + (hay.includes(query) ? 3 : 0) : 0 };
-        })
-        .filter((it) => it.match)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 10);
-    if (!results.length) {
-        searchResults.innerHTML = `<div class="search-hint">No results for <strong>${q.replace(/</g,'&lt;')}</strong>.</div>`;
-        return;
-    }
-    searchResults.innerHTML = results.map((it) => `
-        <a class="search-result" href="${it.href}"${/\.pdf/i.test(it.href) ? ' target="_blank" rel="noopener"' : ''}>
-            <div class="search-result-title">${it.title.replace(/</g,'&lt;')}</div>
-            <div class="search-result-meta">${it.meta}</div>
-        </a>
-    `).join('');
-    searchResults.querySelectorAll('a.search-result').forEach((a) => {
-        a.addEventListener('click', (e) => {
-            const href = a.getAttribute('href') || '';
-            if (!href.startsWith('#')) { closeSearch(); return; }
-            e.preventDefault();
-            closeSearch();
-            showView(href.slice(1));
-        });
-    });
-}
+        <div class="bg-grid">
+            <section class="card panel" aria-labelledby="h-edu">
+                <h3 id="h-edu">Education</h3>
+                <ul class="edu">
+                    <li>
+                        <b>MS, Electrical and Computer Engineering (Computer Vision and Machine Learning)</b>
+                        <span>Northeastern University · GPA 3.8</span>
+                        <span class="when">Sep 2024 – Dec 2026 (expected)</span>
+                    </li>
+                    <li>
+                        <b>BE, Electrical Engineering</b>
+                        <span>Aligarh Muslim University, Aligarh, India</span>
+                        <span class="when">2019 – 2023</span>
+                    </li>
+                </ul>
+            </section>
+            <section class="card panel" aria-labelledby="h-skills">
+                <h3 id="h-skills">Skills</h3>
+                <dl class="skills">
+                    <div><dt>Languages</dt><dd>Python, C, C++, SQL, MATLAB</dd></div>
+                    <div><dt>ML</dt><dd>PyTorch, TensorFlow, Keras, scikit-learn, NumPy, Pandas</dd></div>
+                    <div><dt>LLMs &amp; eval</dt><dd>RAG, LLM fine-tuning, LLM-as-Judge evaluation, benchmark design</dd></div>
+                    <div><dt>Robotics</dt><dd>ROS 2, SLAM, robotic perception, sensor fusion, Kalman filter</dd></div>
+                    <div><dt>Infrastructure</dt><dd>Git, Docker, Kubernetes, AWS, GCP, CI/CD, MLOps</dd></div>
+                </dl>
+            </section>
+        </div>
+    </div>
+</section>
 
-buildSearchIndex();
-searchBtn.addEventListener('click', openSearch);
-searchCloseBtn.addEventListener('click', closeSearch);
-searchModal.addEventListener('click', (e) => { if (e.target === searchModal) closeSearch(); });
-document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); }
-    if (e.key === 'Escape') closeSearch();
-});
-searchInput.addEventListener('input', () => renderSearchResults(searchInput.value));
-</script>
+<!-- ================= PUBLICATIONS ================= -->
+<section class="sec" id="publications" aria-labelledby="h-pubs">
+    <div class="wrap">
+        <header class="sec-head">
+            <span class="idx">03</span>
+            <h2 id="h-pubs">Publications</h2>
+        </header>
+        <ol class="pubs">
+            <li>
+                <div class="thumb blank" aria-hidden="true">Under review</div>
+                <div>
+                    <span class="badge">CVPR 2027 submission · under review</span>
+                    <h3>BEYOND: A Dataset for Seven Layers of Human Interaction Understanding beyond Action Recognition</h3>
+                    <p>B. Galoaa, O. Fritsche, <strong>S. Kamal</strong>, et al. (22 authors)</p>
+                </div>
+            </li>
+            <li>
+                <a class="thumb" href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="Images/motionblind-preview.jpg" alt="" width="896" height="684" loading="lazy" decoding="async"></a>
+                <div>
+                    <h3><a href="https://arxiv.org/abs/2609.09528" target="_blank" rel="noopener">MotionBlind: Probing the Illusion of Motion Understanding in Video-LLMs</a></h3>
+                    <p>D. Bhatia, B. Galoaa, O. Fritsche, <strong>S. Kamal</strong>, M. O. Abdul Salam, U. Saleem, O. Rastogi, F. Felix Chettiar, N. Erdogmus, S. Ostadabbas</p>
+                    <p><em>arXiv preprint</em> arXiv:2609.09528, 2026.</p>
+                    <p class="links">
+                        <a href="https://arxiv.org/pdf/2609.09528" target="_blank" rel="noopener">PDF</a>
+                        <a href="https://ostadabbas.github.io/motionblind.github.io/" target="_blank" rel="noopener">Project</a>
+                        <a href="https://github.com/ostadabbas/MotionBlind" target="_blank" rel="noopener">Code</a>
+                        <a href="https://huggingface.co/datasets/augmentedcognitionlab/MotionBlind" target="_blank" rel="noopener">Dataset</a>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <a class="thumb" href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="Images/edge-devices-covid-cxr-2024-preview.jpg" alt="" width="896" height="684" loading="lazy" decoding="async"></a>
+                <div>
+                    <h3><a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">Deep Learning Model for Edge Devices for COVID-19 Detection from CXR Images</a></h3>
+                    <p>U. Farooq, <strong>S. Kamal</strong>, M. Sarfraz</p>
+                    <p><em>ICBSII</em> 2024, Chennai, India.</p>
+                    <p class="links"><a href="Publications/edge-devices-covid-cxr-2024.pdf" target="_blank" rel="noopener">PDF</a></p>
+                </div>
+            </li>
+            <li>
+                <a class="thumb" href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="Images/comparative-analysis-covid-cxr-2023-preview.jpg" alt="" width="896" height="684" loading="lazy" decoding="async"></a>
+                <div>
+                    <h3><a href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">Comparative Analysis of Deep Learning Techniques for Fast Detection of COVID-19 Using CXR Images</a></h3>
+                    <p><strong>S. Kamal</strong>, M. Sarfraz, S. Fatma, I. Al Fatma, S. Parween, M. Al Maathidi</p>
+                    <p><em>Advances in Computational Intelligence and its Applications</em> 2023, Taylor &amp; Francis / CRC Press.</p>
+                    <p class="links"><a href="Publications/comparative-analysis-covid-cxr-2023.pdf" target="_blank" rel="noopener">PDF</a></p>
+                </div>
+            </li>
+        </ol>
+        <p class="note">Full list on <a href="https://scholar.google.com/citations?user=z_ZZoiwAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>.</p>
+    </div>
+</section>
+
+<!-- ================= WRITING ================= -->
+<section class="sec" id="blog" aria-labelledby="h-blog">
+    <div class="wrap">
+        <header class="sec-head">
+            <span class="idx">04</span>
+            <h2 id="h-blog">Writing</h2>
+        </header>
+        <ul class="posts">
+            <li><a class="card" href="blog/rag-pipelines.html">
+                <p class="kicker"><b>LLMs</b> · Feb 2026</p>
+                <h3>Building Production RAG Pipelines: Lessons from the Trenches</h3>
+                <p>What I learned deploying retrieval-augmented generation at scale — chunking strategies, embedding models, and the hard trade-offs nobody talks about.</p>
+            </a></li>
+            <li><a class="card" href="blog/fine-tuning-llms.html">
+                <p class="kicker"><b>Deep Learning</b> · Jan 2026</p>
+                <h3>Fine-Tuning Qwen3-4B: A Practical Guide to In-House LLMs</h3>
+                <p>How we replaced expensive API calls with a fine-tuned open-source model — data prep, training loops, and deployment on AWS.</p>
+            </a></li>
+            <li><a class="card" href="blog/ros2-slam.html">
+                <p class="kicker"><b>Robotics</b> · Dec 2025</p>
+                <h3>SLAM with ROS 2: Mapping the Unknown with LiDAR</h3>
+                <p>An end-to-end walkthrough of implementing SLAM on a mobile robot — from sensor fusion with Kalman filters to real-time map building.</p>
+            </a></li>
+            <li><a class="card" href="blog/covid-cxr-detection.html">
+                <p class="kicker"><b>Medical AI</b> · 2023 &amp; 2024</p>
+                <h3>Detecting COVID-19 from Chest X-rays: Deep Learning for Edge Devices</h3>
+                <p>How I designed a custom CNN achieving 97.2% accuracy on CXR classification, compressed it for edge deployment, and presented findings at two international conferences.</p>
+            </a></li>
+        </ul>
+    </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="sec" id="contact" aria-labelledby="h-contact">
+    <div class="wrap">
+        <div class="card contact">
+            <div>
+                <h2 id="h-contact">Hiring for ML, AI or computer vision? Let's talk.</h2>
+                <p>Open to full-time ML / AI / computer-vision roles, research collaborations, and robotics projects. I graduate in Dec 2026 and am based in Boston, MA.</p>
+                <a class="mail" href="mailto:kamal.sh@northeastern.edu">kamal.sh@northeastern.edu</a>
+            </div>
+            <div class="cta">
+                <a class="btn btn-primary" href="Resume/Shahid%20Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+                <a class="btn" href="mailto:kamal.sh@northeastern.edu">Email</a>
+                <a class="btn" href="https://www.linkedin.com/in/shahidkamal-ml" target="_blank" rel="noopener">LinkedIn</a>
+                <a class="btn" href="https://github.com/shahidkamal-ml" target="_blank" rel="noopener">GitHub</a>
+                <a class="btn" href="https://scholar.google.com/citations?user=z_ZZoiwAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+    <div class="wrap">
+        <span>© 2026 Shahid Kamal</span>
+        <a href="#top">Back to top</a>
+    </div>
+</footer>
+
+<script src="assets/site.js" defer></script>
 </body>
 </html>
