@@ -51,13 +51,13 @@
          Fine-Tuning Qwen3-4B: A Practical Guide to In-House LLMs
          ============================================================ -->
 
-    <p>At Checkit Analytics, we were spending thousands of dollars a month on OpenAI API calls for our financial Q&A product. The responses were good, but the costs were scaling linearly with users, latency was unpredictable, and we had zero control over model updates. One morning, GPT-4 started formatting outputs differently — and our entire parsing pipeline broke.</p>
+    <p>At Checkit Analytics, our financial Q&A product ran on OpenAI API calls. The responses were good, but the costs were scaling linearly with users, latency was unpredictable, and we had zero control over model updates. One morning, GPT-4 started formatting outputs differently — and our entire parsing pipeline broke.</p>
 
-    <p>That was the moment we decided to bring the LLM in-house. After evaluating several open-source models, we landed on <strong>Qwen3-4B</strong> — and fine-tuned it to outperform GPT-3.5 on our domain-specific tasks at a fraction of the cost. This post is the complete story of how we did it.</p>
+    <p>That was the moment we decided to bring the LLM in-house. After evaluating several open-source models, we landed on <strong>Qwen3-4B</strong> — and fine-tuned it for our domain-specific tasks. This post is the complete story of how we did it.</p>
 
     <h2>1. Why Qwen3-4B?</h2>
 
-    <p>Choosing the right base model is the most important decision in the entire pipeline. We evaluated five candidates on our internal benchmark of 500 financial Q&A pairs:</p>
+    <p>Choosing the right base model is the most important decision in the entire pipeline. We evaluated five candidates on our internal benchmark of financial Q&A pairs:</p>
 
     <ul>
         <li><strong>Llama 3-8B</strong> — Strong general performance, but 8B parameters meant higher inference costs and slower latency</li>
@@ -75,13 +75,13 @@
 
     <p>Fine-tuning is only as good as your data. We built our training dataset from three sources:</p>
 
-    <p><strong>Source 1: Production logs.</strong> We had 6 months of user queries and GPT-4 responses from our existing product. We manually reviewed and filtered these down to ~3,200 high-quality question-answer pairs. The key was being ruthless about quality — we threw away any pair where the GPT-4 answer was wrong, incomplete, or poorly formatted.</p>
+    <p><strong>Source 1: Production logs.</strong> We had user queries and GPT-4 responses from our existing product. We manually reviewed and filtered these down to high-quality question-answer pairs. The key was being ruthless about quality — we threw away any pair where the GPT-4 answer was wrong, incomplete, or poorly formatted.</p>
 
-    <p><strong>Source 2: Synthetic generation.</strong> For underrepresented query types (risk analysis, ratio comparisons, time-series trends), we used GPT-4 to generate additional training examples from our financial document corpus. We generated ~1,800 synthetic pairs, then manually validated a 20% sample to check quality.</p>
+    <p><strong>Source 2: Synthetic generation.</strong> For underrepresented query types (risk analysis, ratio comparisons, time-series trends), we used GPT-4 to generate additional training examples from our financial document corpus. We generated synthetic pairs, then manually validated a sample to check quality.</p>
 
-    <p><strong>Source 3: Edge cases.</strong> We specifically crafted ~400 examples for failure modes we'd seen in production: questions about missing data, ambiguous time periods, multi-company comparisons, and "I don't know" scenarios where the answer isn't in the context.</p>
+    <p><strong>Source 3: Edge cases.</strong> We specifically crafted examples for failure modes we'd seen in production: questions about missing data, ambiguous time periods, multi-company comparisons, and "I don't know" scenarios where the answer isn't in the context.</p>
 
-    <p>Total dataset: <strong>5,400 examples</strong>, split 90/5/5 into train/validation/test sets.</p>
+    <p>The combined dataset was split into train, validation and test sets.</p>
 
     <h3>Data format</h3>
 
@@ -99,18 +99,18 @@
     },
     {
       "role": "assistant",
-      "content": "Apple's gross margin in Q3 2025 was 46.3%, up from 44.5% in Q3 2024. This 1.8 percentage point improvement was primarily driven by higher services revenue, which carries margins above 70%."
+      "content": "[Answer that cites the specific figures from the context]"
     }
   ]
 }</code></pre>
 
-    <p>Two critical details: first, we always included the source context in the user message — this trains the model to ground answers in provided documents rather than hallucinate from parametric knowledge. Second, we trained explicit refusal behavior: about 8% of our examples had the assistant respond with "This information is not available in the provided documents" when the context didn't contain the answer.</p>
+    <p>Two critical details: first, we always included the source context in the user message — this trains the model to ground answers in provided documents rather than hallucinate from parametric knowledge. Second, we trained explicit refusal behavior: a portion of our examples had the assistant respond with "This information is not available in the provided documents" when the context didn't contain the answer.</p>
 
     <h2>3. Fine-Tuning with LoRA</h2>
 
     <p>Full fine-tuning a 4B parameter model requires significant GPU memory and risks catastrophic forgetting of the model's general capabilities. Instead, we used <strong>LoRA (Low-Rank Adaptation)</strong> — which freezes the base model weights and trains small adapter matrices on top.</p>
 
-    <p>The math is elegant: instead of updating a weight matrix W (dimensions d×d), LoRA decomposes the update into two smaller matrices A (d×r) and B (r×d), where r is the rank (typically 8-64). This reduces trainable parameters by 100-1000x while preserving most of the fine-tuning benefit.</p>
+    <p>The math is elegant: instead of updating a weight matrix W (dimensions d×d), LoRA decomposes the update into two smaller matrices A (d×r) and B (r×d), where r is the rank (typically 8-64). This greatly reduces the number of trainable parameters while preserving most of the fine-tuning benefit.</p>
 
     <pre><code>from peft import LoraConfig, get_peft_model, TaskType
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -140,11 +140,9 @@ lora_config = LoraConfig(
 )
 
 model = get_peft_model(model, lora_config)
-model.print_trainable_parameters()
-# trainable params: 41,943,040 || all params: 3,937,054,720 
-# trainable%: 1.065%</code></pre>
+model.print_trainable_parameters()</code></pre>
 
-    <p>Only ~1% of parameters are trainable, but the impact on domain performance is dramatic.</p>
+    <p>Only a small fraction of the parameters are trainable.</p>
 
     <h3>Training configuration</h3>
 
@@ -185,8 +183,6 @@ trainer = SFTTrainer(
 
 trainer.train()</code></pre>
 
-    <p>Training took <strong>~2.5 hours</strong> for 3 epochs over 4,860 examples. Total compute cost: about $30 on AWS spot instances. Compare that to the $2,000+/month we were spending on API calls.</p>
-
     <h3>What we learned about hyperparameters</h3>
 
     <ul>
@@ -198,7 +194,7 @@ trainer.train()</code></pre>
 
     <h2>4. Evaluation</h2>
 
-    <p>We evaluated the fine-tuned model against GPT-3.5-turbo, GPT-4, and the base Qwen3-4B on our held-out test set of 270 examples. We measured four dimensions:</p>
+    <p>We evaluated the fine-tuned model against GPT-3.5-turbo, GPT-4, and the base Qwen3-4B on our held-out test set. We measured four dimensions:</p>
 
     <p><strong>Correctness</strong> — Is the answer factually accurate given the context? Scored by human reviewers on a 1-5 scale.</p>
 
@@ -208,22 +204,11 @@ trainer.train()</code></pre>
 
     <p><strong>Format compliance</strong> — Does the response follow our expected structure (citations, numerical formatting, appropriate length)? Binary.</p>
 
-    <pre><code># Results on 270-example test set
-
-| Model               | Correctness | Faithfulness | Completeness | Format |
-|---------------------|-------------|--------------|--------------|--------|
-| GPT-4               |    4.6      |    94%       |     4.5      |  91%   |
-| Qwen3-4B (ours)     |    4.3      |    96%       |     4.2      |  97%   |
-| GPT-3.5-turbo       |    3.8      |    82%       |     3.6      |  74%   |
-| Qwen3-4B (base)     |    2.9      |    68%       |     2.7      |  45%   |</code></pre>
-
-    <p>The fine-tuned model significantly outperformed GPT-3.5 across all metrics and came close to GPT-4 on correctness and completeness — while <strong>beating GPT-4 on faithfulness and format compliance</strong>. This makes sense: our fine-tuning data explicitly trained the model to stay grounded in context and follow our output format, which general-purpose models don't optimize for.</p>
-
-    <p>The base Qwen3-4B scored poorly across the board, confirming that fine-tuning (not just prompting) was necessary for production-quality results on domain tasks.</p>
+    <p>Our fine-tuning data explicitly trained the model to stay grounded in context and follow our output format, which general-purpose models don't optimize for.</p>
 
     <h2>5. Deployment on AWS</h2>
 
-    <p>For serving, we deployed the model using <strong>vLLM</strong> on an AWS <code>g5.2xlarge</code> instance (A10G GPU, 24GB VRAM). vLLM's PagedAttention and continuous batching gave us dramatically better throughput than naive HuggingFace inference:</p>
+    <p>For serving, we deployed the model using <strong>vLLM</strong> on an AWS <code>g5.2xlarge</code> instance (A10G GPU, 24GB VRAM). We chose vLLM for its PagedAttention and continuous batching:</p>
 
     <pre><code># Start vLLM server with merged LoRA weights
 python -m vllm.entrypoints.openai.api_server \
@@ -244,34 +229,25 @@ model = PeftModel.from_pretrained(base_model, "./qwen3-4b-financial")
 merged = model.merge_and_unload()
 merged.save_pretrained("./qwen3-4b-financial-merged")</code></pre>
 
-    <h3>Production performance</h3>
-
-    <ul>
-        <li><strong>Latency:</strong> ~800ms median for a typical financial Q&A response (vs 2-4s with GPT-4 API)</li>
-        <li><strong>Throughput:</strong> ~35 requests/sec with continuous batching</li>
-        <li><strong>Cost:</strong> $0.50/hr for the g5.2xlarge instance → roughly <strong>$360/month</strong> vs $2,000+/month on OpenAI API</li>
-        <li><strong>Uptime:</strong> 99.7% over the first month (one restart due to CUDA OOM on an unusually large batch)</li>
-    </ul>
-
     <p>We put an <strong>API gateway</strong> (FastAPI) in front of vLLM that handles authentication, rate limiting, request logging, and a fallback to GPT-4 for edge cases where our model's confidence is low. This hybrid approach gives us the cost savings of self-hosting with the safety net of a frontier model.</p>
 
     <h2>6. Lessons Learned</h2>
 
-    <p><strong>Data quality > data quantity.</strong> Our first attempt used 12,000 examples with less rigorous filtering. The model trained on 5,400 curated examples performed significantly better. Every bad training example teaches the model a bad habit.</p>
+    <p><strong>Data quality > data quantity.</strong> Our first attempt used a larger dataset with less rigorous filtering; we then switched to a smaller, carefully curated one. Every bad training example teaches the model a bad habit.</p>
 
-    <p><strong>Train refusal behavior explicitly.</strong> Without "I don't know" examples in training data, the model will always attempt an answer — even when the context doesn't support one. This is the #1 source of hallucination in RAG systems, and it's fixable with data.</p>
+    <p><strong>Train refusal behavior explicitly.</strong> Without "I don't know" examples in training data, the model will always attempt an answer — even when the context doesn't support one. This is a common source of hallucination in RAG systems, and it's fixable with data.</p>
 
-    <p><strong>Evaluate on YOUR metrics, not benchmarks.</strong> Qwen3-4B scores lower than Llama 3-8B on MMLU, but it scores higher on our financial task after fine-tuning. Public benchmarks measure general capability; you need to measure domain performance.</p>
+    <p><strong>Evaluate on YOUR metrics, not benchmarks.</strong> Public benchmarks measure general capability; you need to measure domain performance.</p>
 
-    <p><strong>LoRA is almost always enough.</strong> We experimented with QLoRA (quantized base + LoRA) and full fine-tuning. QLoRA had a small quality drop. Full fine-tuning had marginal quality gains but 10x the compute cost and a higher risk of catastrophic forgetting. Standard LoRA hit the sweet spot.</p>
+    <p><strong>LoRA is almost always enough.</strong> We experimented with QLoRA (quantized base + LoRA) and full fine-tuning. Full fine-tuning carries a higher compute cost and a higher risk of catastrophic forgetting. Standard LoRA was the right trade-off for us.</p>
 
-    <p><strong>Monitor post-deployment.</strong> We log every request and response, and run nightly automated evals on a rolling 100-response sample. Model quality can drift if your user queries shift — and you need to catch that early.</p>
+    <p><strong>Monitor post-deployment.</strong> We log every request and response, and run nightly automated evals on a rolling sample of responses. Model quality can drift if your user queries shift — and you need to catch that early.</p>
 
     <h2>What's Next</h2>
 
     <p>We're currently exploring two extensions: <strong>DPO (Direct Preference Optimization)</strong> to further align the model with human preferences on answer quality, and <strong>speculative decoding</strong> with a smaller draft model to cut latency further. I'll share our findings in a future post.</p>
 
-    <p>The bottom line: if you're spending serious money on LLM API calls for a domain-specific task, fine-tuning a small open-source model is almost certainly worth it. The upfront effort is a few days of work; the ongoing savings compound every month.</p>
+    <p>The bottom line: if you're spending serious money on LLM API calls for a domain-specific task, fine-tuning a small open-source model is almost certainly worth it. The upfront effort is real, but the savings are ongoing.</p>
 
     <p>Questions or working on something similar? Reach out via <a href="mailto:kamal.sh@northeastern.edu">email</a> or connect on <a href="https://github.com/shahidkamal-ml">GitHub</a>.</p>
 

@@ -47,7 +47,7 @@
 
 <article class="blog-content">
 
-    <p>In early 2022, during my final year of undergrad at Aligarh Muslim University, COVID-19 was still overwhelming healthcare systems in many parts of the world. The gold-standard diagnostic test — RT-PCR — was accurate but slow (results took 24-48 hours) and required specialized lab equipment that wasn't available in rural clinics. <strong>Chest X-rays</strong>, however, were fast, cheap, and available almost everywhere.</p>
+    <p>In early 2022, during my final year of undergrad at Aligarh Muslim University, COVID-19 was still overwhelming healthcare systems in many parts of the world. The gold-standard diagnostic test — RT-PCR — was accurate but slow and required specialized lab equipment that wasn't available in rural clinics. <strong>Chest X-rays</strong>, however, were fast, cheap, and available almost everywhere.</p>
 
     <p>The question was simple: could a deep learning model read a chest X-ray and reliably detect COVID-19 — fast enough to aid triage decisions, and lightweight enough to run on a hospital's existing hardware?</p>
 
@@ -72,21 +72,12 @@
     <p>Data is the hardest part of any medical AI project. We assembled our dataset from multiple public sources to ensure diversity and reduce institutional bias:</p>
 
     <ul>
-        <li><strong>COVID-19 Radiography Database</strong> (Qatar University &amp; University of Dhaka) — 3,616 COVID-positive CXR images</li>
+        <li><strong>COVID-19 Radiography Database</strong> (Qatar University &amp; University of Dhaka) — COVID-positive CXR images</li>
         <li><strong>RSNA Pneumonia Detection Challenge</strong> — non-COVID pneumonia and normal cases</li>
         <li><strong>NIH ChestX-ray14</strong> — additional normal cases for balance</li>
     </ul>
 
-    <p>After curation and quality checks (removing duplicates, discarding low-quality scans, ensuring consistent image orientation), our final dataset contained:</p>
-
-    <pre><code># Dataset distribution
-| Class              | Train  | Validation | Test  | Total  |
-|--------------------|--------|------------|-------|--------|
-| COVID-19           | 2,892  |    362     |  362  |  3,616 |
-| Non-COVID Pneumonia| 2,900  |    363     |  363  |  3,626 |
-| Normal             | 2,908  |    364     |  364  |  3,636 |
-|--------------------|--------|------------|-------|--------|
-| Total              | 8,700  |  1,089     | 1,089 | 10,878 |</code></pre>
+    <p>After curation and quality checks (removing duplicates, discarding low-quality scans, ensuring consistent image orientation), we split the dataset into train, validation and test sets.</p>
 
     <p>We deliberately balanced the classes to prevent the model from developing a bias toward the majority class. All images were resized to 224x224 pixels and normalized to the ImageNet mean and standard deviation.</p>
 
@@ -192,7 +183,7 @@ class COVID_CXR_Net(nn.Module):
     def forward(self, x):
         return self.classifier(self.features(x))</code></pre>
 
-    <p>Key design choices: <strong>depthwise separable convolutions</strong> reduce parameters by ~8-9x compared to standard convolutions while maintaining representational power. <strong>ReLU6</strong> bounds activations for better quantization later. <strong>Residual connections</strong> in every block prevent gradient degradation.</p>
+    <p>Key design choices: <strong>depthwise separable convolutions</strong> reduce parameters compared to standard convolutions while maintaining representational power. <strong>ReLU6</strong> bounds activations for better quantization later. <strong>Residual connections</strong> in every block prevent gradient degradation.</p>
 
     <h2>4. Training</h2>
 
@@ -224,32 +215,7 @@ criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
 
     <h2>5. Results — Comparative Analysis</h2>
 
-    <p>Here's how each architecture performed on our held-out test set of 1,089 images:</p>
-
-    <pre><code># Test set performance (1,089 images)
-
-| Model          | Accuracy | Precision | Recall | F1-Score | Params   |
-|----------------|----------|-----------|--------|----------|----------|
-| Custom CNN     |  97.2%   |   97.3%   | 97.1%  |  97.2%   |   2.1M   |
-| EfficientNet-B0|  96.8%   |   96.9%   | 96.7%  |  96.8%   |   5.3M   |
-| DenseNet-121   |  96.4%   |   96.5%   | 96.3%  |  96.4%   |   7.0M   |
-| ResNet-50      |  95.9%   |   96.1%   | 95.8%  |  95.9%   |  23.5M   |
-| MobileNetV2    |  95.1%   |   95.3%   | 94.9%  |  95.1%   |   2.2M   |
-| VGG-16         |  93.7%   |   93.9%   | 93.5%  |  93.7%   | 134.3M   |</code></pre>
-
-    <p>The standout result: our <strong>custom CNN achieved the highest accuracy (97.2%) with only 2.1M parameters</strong> — 3x smaller than EfficientNet-B0 and 64x smaller than VGG-16.</p>
-
-    <h3>Per-class performance</h3>
-
-    <pre><code># Custom CNN — Per-class metrics
-
-| Class               | Precision | Recall | F1-Score |
-|---------------------|-----------|--------|----------|
-| COVID-19            |   98.1%   | 97.5%  |  97.8%   |
-| Non-COVID Pneumonia |   96.2%   | 96.8%  |  96.5%   |
-| Normal              |   97.5%   | 97.0%  |  97.2%   |</code></pre>
-
-    <p>The hardest distinction was between COVID and non-COVID pneumonia (as expected), but even there we achieved >96% precision and recall. The confusion matrix showed that the few misclassifications were almost exclusively between the two pneumonia classes — the model never confused pneumonia with normal lungs.</p>
+    <p>We compared the architectures on our held-out test set using accuracy, precision, recall and F1-score. Our <strong>custom CNN achieved 97.2% accuracy</strong>.</p>
 
     <h2>6. Model Compression for Edge Deployment</h2>
 
@@ -274,11 +240,11 @@ for name, module in model.named_modules():
 # Fine-tune to recover accuracy
 # 5 epochs, lower learning rate 1e-4</code></pre>
 
-    <p>After pruning 30% of filters and fine-tuning, accuracy dropped only 0.4% (97.2% to 96.8%), but the model was 40% faster at inference.</p>
+    <p>After pruning, we fine-tuned the model to recover accuracy.</p>
 
     <h3>Step 2: Quantization</h3>
 
-    <p>We applied <strong>post-training quantization</strong> to convert 32-bit floating point weights to 8-bit integers — cutting model size by ~4x:</p>
+    <p>We applied <strong>post-training quantization</strong> to convert 32-bit floating point weights to 8-bit integers:</p>
 
     <pre><code>import torch.quantization as quant
 
@@ -287,20 +253,17 @@ model.eval()
 model.qconfig = quant.get_default_qconfig('fbgemm')
 model_prepared = quant.prepare(model)
 
-# Calibrate with representative data (100 batches)
+# Calibrate with representative data
 with torch.no_grad():
     for batch in calibration_loader:
         model_prepared(batch)
 
 # Convert to quantized model
-model_quantized = quant.convert(model_prepared)
-
-# Size: 8.4 MB (FP32) -> 2.2 MB (INT8)
-# Compression ratio: 3.8x</code></pre>
+model_quantized = quant.convert(model_prepared)</code></pre>
 
     <h3>Step 3: Knowledge distillation</h3>
 
-    <p>Finally, we trained a tiny <strong>student model</strong> (only 0.5M parameters) using knowledge distillation — the full custom CNN acted as the teacher:</p>
+    <p>Finally, we trained a much smaller <strong>student model</strong> using knowledge distillation — the full custom CNN acted as the teacher:</p>
 
     <pre><code>def distillation_loss(student_logits, teacher_logits, labels, 
                        temperature=4.0, alpha=0.7):
@@ -314,18 +277,9 @@ model_quantized = quant.convert(model_prepared)
     
     return alpha * soft_loss + (1 - alpha) * hard_loss</code></pre>
 
-    <h3>Edge deployment results</h3>
+    <h3>Edge deployment evaluation</h3>
 
-    <pre><code># Compression pipeline results
-
-| Model Variant       | Accuracy | Size   | Inference (RPi 4) |
-|---------------------|----------|--------|--------------------|
-| Full model (FP32)   |  97.2%   | 8.4 MB |     1.2 sec        |
-| Pruned + FT         |  96.8%   | 5.1 MB |     0.7 sec        |
-| Pruned + Quantized  |  96.5%   | 2.2 MB |     0.3 sec        |
-| Distilled student   |  95.1%   | 0.6 MB |     0.1 sec        |</code></pre>
-
-    <p>The quantized pruned model hit the sweet spot: <strong>96.5% accuracy in 0.3 seconds on a Raspberry Pi 4</strong>, with a model size of just 2.2 MB. That's small enough to deploy on virtually any hardware, fast enough for real-time triage, and accurate enough to be clinically useful as a screening aid.</p>
+    <p>We compared the model variants on accuracy, model size and inference time on a Raspberry Pi 4.</p>
 
     <h2>7. Conference Presentations</h2>
 
@@ -335,7 +289,7 @@ model_quantized = quant.convert(model_prepared)
 
     <p><strong>Paper 2 (2024):</strong> "Deep Learning Model for Edge Devices for COVID-19 Detection from CXR Images" — presented at the 10th International Conference on Bio Signals, Images, and Instrumentation (ICBSII) in Chennai, India. This paper focused on the compression pipeline and edge deployment.</p>
 
-    <blockquote>Presenting at ICBSII in Chennai was a defining moment in my academic journey. The questions from the audience — especially from radiologists in the room — sharpened my understanding of the gap between "model accuracy" and "clinical utility." A 97% accuracy number means nothing if the doctor doesn't trust the system.</blockquote>
+    <blockquote>Presenting at ICBSII in Chennai was a defining moment in my academic journey. The questions from the audience — especially from radiologists in the room — sharpened my understanding of the gap between "model accuracy" and "clinical utility." An accuracy number means nothing if the doctor doesn't trust the system.</blockquote>
 
     <h2>8. Reflections &amp; What I'd Do Differently</h2>
 
@@ -352,7 +306,7 @@ model_quantized = quant.convert(model_prepared)
     <p>This wasn't just an academic exercise. It was the project that convinced me to pursue graduate studies in ML and shaped how I think about building AI systems:</p>
 
     <ul>
-        <li><strong>The model is 20% of the work.</strong> Data curation, validation, compression, deployment, and clinical trust are the other 80%</li>
+        <li><strong>The model is a small part of the work.</strong> Data curation, validation, compression, deployment, and clinical trust are the rest</li>
         <li><strong>Small, purpose-built models can beat large general ones</strong> when you understand your domain deeply</li>
         <li><strong>Always verify what the model is learning</strong> — Grad-CAM saved us from deploying a model that was cheating by reading text labels on images</li>
         <li><strong>Edge deployment is a first-class requirement</strong>, not an afterthought — if your model can't run where it's needed, it doesn't matter how accurate it is</li>

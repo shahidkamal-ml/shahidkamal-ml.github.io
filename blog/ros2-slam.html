@@ -73,7 +73,7 @@
     <p>For this project, I used a differential-drive mobile robot with the following sensor stack:</p>
 
     <ul>
-        <li><strong>RPLiDAR A1</strong> — 360° 2D LiDAR, 8000 samples/sec, 12m range</li>
+        <li><strong>RPLiDAR A1</strong> — 360° 2D LiDAR</li>
         <li><strong>Wheel encoders</strong> — attached to both drive motors for odometry</li>
         <li><strong>IMU (MPU-6050)</strong> — 6-axis inertial measurement for angular velocity and acceleration</li>
         <li><strong>Jetson Nano</strong> — onboard compute running Ubuntu 22.04 + ROS 2 Humble</li>
@@ -188,13 +188,13 @@ slam    EKF     static TF</code></pre>
 
     <p><strong>Dynamic obstacles.</strong> People walking through the environment create transient scan features. The map shouldn't include a person standing in a doorway, but if the robot scans that spot while they're there, it might. slam_toolbox handles this reasonably well because it averages multiple observations, but it's still an issue in high-traffic areas.</p>
 
-    <p><strong>Compute constraints.</strong> On the Jetson Nano, running the LiDAR driver, EKF, slam_toolbox, and visualization simultaneously pushed CPU usage to ~85%. I had to reduce the LiDAR scan rate from 10Hz to 5Hz and lower the slam_toolbox processing rate. On a Jetson Orin, this wouldn't be an issue — but for a resource-constrained setup, optimization matters.</p>
+    <p><strong>Compute constraints.</strong> On the Jetson Nano, running the LiDAR driver, EKF, slam_toolbox, and visualization simultaneously was heavy on the CPU. I had to reduce the LiDAR scan rate and lower the slam_toolbox processing rate. On a Jetson Orin, this wouldn't be an issue — but for a resource-constrained setup, optimization matters.</p>
 
     <h2>7. Results</h2>
 
-    <p>After tuning, the system reliably mapped our lab environment — roughly 15m × 10m with multiple rooms, a corridor, and open spaces. The occupancy grid was accurate to within ~3cm compared to hand measurements, and loop closures corrected cumulative drift to under 5cm over a full traversal.</p>
+    <p>After tuning, I used the system to map our lab environment — multiple rooms, a corridor, and open spaces — and checked the occupancy grid against hand measurements.</p>
 
-    <p>The entire map-building run took about 4 minutes of manual teleoperation (driving the robot around via joystick). Once built, the map was saved and reused for autonomous navigation using Nav2's path planner and controller.</p>
+    <p>The map was built by manual teleoperation (driving the robot around via joystick). Once built, the map was saved and reused for autonomous navigation using Nav2's path planner and controller.</p>
 
     <h2>Key Takeaways</h2>
 

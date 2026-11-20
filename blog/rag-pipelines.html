@@ -90,7 +90,7 @@ chunks = splitter.split_documents(docs)</code></pre>
 
     <h2>3. The Retrieval-Generation Gap</h2>
 
-    <p>Even with perfect retrieval, generation quality depends heavily on <strong>how you format the context</strong> for the LLM. We found that structured prompts with clear document boundaries reduced hallucination by ~30% compared to naive concatenation.</p>
+    <p>Even with perfect retrieval, generation quality depends heavily on <strong>how you format the context</strong> for the LLM. We moved from naive concatenation to structured prompts with clear document boundaries.</p>
 
     <p>This is an active area of iteration for us, and I'll share more findings as we scale the system to handle complex multi-step financial analysis queries.</p>
 
