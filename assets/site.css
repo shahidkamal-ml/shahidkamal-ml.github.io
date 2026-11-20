@@ -462,7 +462,7 @@ strong { color: var(--ink); font-weight: 600; }
     .links { gap: 0 18px; }
     .links a { display: inline-block; padding-block: 11px; }
     .site-footer a, .contact .mail { display: inline-block; padding-block: 11px; }
-    .contact .mail { margin-top: 4px; }
+    .contact .mail { margin-top: 4px; padding-block: 13px; }
     .site-footer .wrap { align-items: center; }
     .pair-head { gap: 6px; }
     .pair-title { flex-basis: 100%; }
