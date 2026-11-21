@@ -629,14 +629,14 @@ strong { color: var(--ink); font-weight: 600; }
 /* glass panels: frosted, tinted panes over soft HUD light fixed behind the page, so the blur has colour to bend */
 :root {
     --grid: rgba(6, 70, 100, 0.028);
-    --glow-1: rgba(0, 150, 215, 0.26); --glow-2: rgba(40, 90, 230, 0.2); --glow-3: rgba(0, 185, 200, 0.18);
+    --glow-1: rgba(0, 150, 215, 0.13); --glow-2: rgba(40, 90, 230, 0.09); --glow-3: rgba(0, 185, 200, 0.07);
     --glass: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.14) 60%, rgba(255, 255, 255, 0.3));
     --glass-line: color-mix(in srgb, var(--b) 38%, rgba(255, 255, 255, 0.6));
     --glass-shadow: 0 14px 34px -16px rgba(10, 60, 90, 0.22), 0 0 30px -10px color-mix(in srgb, var(--b) 40%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 @media (prefers-color-scheme: dark) {
     :root {
-        --glow-1: rgba(40, 200, 255, 0.32); --glow-2: rgba(70, 120, 255, 0.26); --glow-3: rgba(0, 220, 200, 0.18); --grid: rgba(120, 220, 255, 0.05);
+        --glow-1: rgba(40, 200, 255, 0.13); --glow-2: rgba(70, 120, 255, 0.09); --glow-3: rgba(0, 220, 200, 0.06); --grid: rgba(120, 220, 255, 0.05);
         --glass: linear-gradient(135deg, rgba(140, 225, 255, 0.09), rgba(140, 225, 255, 0.01) 55%, rgba(140, 225, 255, 0.05));
         --glass-line: color-mix(in srgb, var(--b) 62%, transparent);
         --glass-shadow: 0 14px 40px -18px rgba(0, 0, 0, 0.7), 0 0 44px -8px color-mix(in srgb, var(--b) 55%, transparent), inset 0 0 22px -10px color-mix(in srgb, var(--b) 45%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.16);
@@ -646,9 +646,17 @@ body { background-image: linear-gradient(var(--grid) 1px, transparent 1px), line
 body::before {
     content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
     background:
-        radial-gradient(40rem 30rem at 10% 16%, var(--glow-1), transparent 70%),
-        radial-gradient(36rem 32rem at 90% 50%, var(--glow-2), transparent 70%),
-        radial-gradient(32rem 26rem at 32% 98%, var(--glow-3), transparent 70%);
+        radial-gradient(30rem 22rem at 8% 12%, var(--glow-1), transparent 70%),
+        radial-gradient(28rem 24rem at 94% 55%, var(--glow-2), transparent 70%),
+        radial-gradient(24rem 18rem at 30% 100%, var(--glow-3), transparent 70%);
+}
+/* phones: small, edge-hugging glows so the screen stays mostly dark (or paper) */
+@media (max-width: 720px) {
+    body::before {
+        background:
+            radial-gradient(16rem 12rem at 0% 8%, var(--glow-1), transparent 70%),
+            radial-gradient(14rem 14rem at 100% 70%, var(--glow-2), transparent 70%);
+    }
 }
 .card, .pair, .proof a {
     background: var(--glass); border: 1px solid var(--glass-line);
@@ -659,3 +667,5 @@ body::before {
 @media (max-width: 720px) {
     .card, .pair, .proof a { -webkit-backdrop-filter: blur(5px) saturate(1.6); backdrop-filter: blur(5px) saturate(1.6); }
 }
+/* iPhone Safari does not blur glass panels behind the header, so the header is opaque */
+.top { background: var(--bg); }
