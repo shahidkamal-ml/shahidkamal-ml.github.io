@@ -1,4 +1,4 @@
-/* SK Mark I: a small AI assistant that answers visitors' questions about Shahid.
+/* SK-Mark I: a small AI assistant that answers visitors' questions about Shahid.
    It talks to a Cloudflare Worker (data-endpoint on the script tag) that runs an open-weight model.
    Model output is only ever inserted as text nodes and as links built here, never as HTML. */
 (function () {
@@ -37,8 +37,8 @@
     launch.setAttribute('aria-expanded', 'false');
     launch.setAttribute('aria-controls', 'skm-panel');
     launch.innerHTML = '<svg class="skm-ring" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17" stroke-dasharray="4 5 22 5"/><circle cx="20" cy="20" r="11" stroke-dasharray="1.5 3.5" opacity=".7"/><circle cx="20" cy="20" r="4" class="skm-core"/></svg>' +
-        '<span class="skm-launch-t">Ask SK Mark I</span>';
-    launch.setAttribute('aria-label', 'Ask SK Mark I, an AI assistant about Shahid');
+        '<span class="skm-launch-t">Ask SK-Mark I</span>';
+    launch.setAttribute('aria-label', 'Ask SK-Mark I, an AI assistant about Shahid');
 
     var panel = el('section', 'skm');
     panel.id = 'skm-panel';
@@ -50,7 +50,7 @@
     var dot = el('span', 'skm-dot');
     dot.setAttribute('aria-hidden', 'true');
     var titles = el('div', 'skm-titles');
-    var h = el('h2', 'skm-title', 'SK Mark I');
+    var h = el('h2', 'skm-title', 'SK-Mark I');
     h.id = 'skm-title';
     titles.appendChild(h);
     titles.appendChild(el('p', 'skm-sub', 'AI assistant · answers from Shahid’s resume'));
@@ -86,7 +86,7 @@
     input.rows = 1;
     input.maxLength = 500;
     input.placeholder = 'Ask about Shahid’s work…';
-    input.setAttribute('aria-label', 'Your question for SK Mark I');
+    input.setAttribute('aria-label', 'Your question for SK-Mark I');
     var send = el('button', 'skm-send');
     send.type = 'submit';
     send.setAttribute('aria-label', 'Send');
@@ -244,7 +244,7 @@
         launch.setAttribute('aria-expanded', 'true');
         document.documentElement.classList.add('skm-open');
         if (!log.childNodes.length) {
-            addMsg('bot', 'Hi, I’m SK Mark I, the assistant on Shahid’s site. Ask me about his research, projects, experience or how to reach him.');
+            addMsg('bot', 'Hi, I’m SK-Mark I, the assistant on Shahid’s site. Ask me about his research, projects, experience or how to reach him.');
         }
         if (!touch) input.focus();
     }
