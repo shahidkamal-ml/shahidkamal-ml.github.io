@@ -547,9 +547,6 @@ strong { color: var(--ink); font-weight: 600; }
 .hud { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden;
     font: 500 0.75rem/1.2 var(--mono); letter-spacing: 0.04em; color: var(--b);
     animation: hud-out .6s linear 4.4s forwards; }
-.hud-sweep { position: absolute; top: 0; bottom: 0; left: 0; width: 160px; border-right: 1px solid var(--b);
-    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--b) 14%, transparent));
-    transform: translateX(-160px); animation: hud-sweep .9s cubic-bezier(.45, 0, .25, 1) both; }
 .hud-box { position: absolute; filter: drop-shadow(0 0 3px color-mix(in srgb, var(--b) 55%, transparent));
     animation: hud-in .3s cubic-bezier(.2, .9, .3, 1.15) var(--d) backwards;
     background:
@@ -568,7 +565,6 @@ strong { color: var(--ink); font-weight: 600; }
 .hud-ring circle { fill: none; stroke: var(--b); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
 .hud-run .det::before, .hud-run .det-tag { opacity: 0; }
 .hud-go .det::before, .hud-go .det-tag { animation: hud-settle .4s 4.7s both; }
-@keyframes hud-sweep { 80% { opacity: 1; } to { transform: translateX(var(--w, 100vw)); opacity: 0; } }
 @keyframes hud-in { from { opacity: 0; transform: scale(1.4); } }
 @keyframes hud-type { to { clip-path: inset(0 0 0 0); } }
 @keyframes hud-spin { from { opacity: 0; transform: translate(-50%, -50%) rotate(-300deg) scale(1.5); } 25% { opacity: 1; } to { transform: translate(-50%, -50%) rotate(0) scale(1); } }

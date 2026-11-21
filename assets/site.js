@@ -81,8 +81,6 @@
             var hr = hero.getBoundingClientRect(), small = window.innerWidth <= 720;
             var hud = mk('hud'), n = 0;
             hud.setAttribute('aria-hidden', 'true');
-            hud.style.setProperty('--w', hr.width + 'px');
-            hud.appendChild(mk('hud-sweep'));
             [['.det', 'person', 0.25, 0, ''], ['h1', 'name', 0.6, 5, ' r'], ['.cta', 'links', 0.95, 6, ' r b']].forEach(function (t, i) {
                 var el = hero.querySelector(t[0]);
                 if (!el || (small && i === 2)) return;
@@ -152,8 +150,6 @@
             var hr = host.getBoundingClientRect(), small = window.innerWidth <= 720;
             var hud = mk('hud');
             hud.setAttribute('aria-hidden', 'true');
-            hud.style.setProperty('--w', hr.width + 'px');
-            if (sweep) hud.appendChild(mk('hud-sweep'));
             targets.forEach(function (t, i) {
                 var r = t[0].getBoundingClientRect(), p = t[0].matches('img') ? 3 : 6, box = mk('hud-box e');
                 box.style.cssText = 'left:' + (r.left - hr.left - p) + 'px;top:' + (r.top - hr.top - p) + 'px;width:' + (r.width + 2 * p) + 'px;height:' + (r.height + 2 * p) + 'px;--d:' + (sweep ? 0.2 + i * 0.25 : 0) + 's';
