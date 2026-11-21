@@ -100,7 +100,7 @@
     mail.href = 'mailto:' + EMAIL;
     note.appendChild(mail);
     note.appendChild(document.createTextNode(' or '));
-    var book = el('a', '', 'book a call');
+    var book = el('a', '', 'book a meeting');
     book.href = BOOKING;
     if (!touch) { book.target = '_blank'; book.rel = 'noopener'; }
     note.appendChild(book);
