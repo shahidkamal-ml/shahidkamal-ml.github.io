@@ -5,6 +5,8 @@
     'use strict';
     var script = document.currentScript;
     var ENDPOINT = script && script.getAttribute('data-endpoint');
+    var BASE = ENDPOINT ? ENDPOINT.replace(/\/chat$/, '') : '';
+    var SITEKEY = script && script.getAttribute('data-turnstile');
     var EMAIL = 'contact@shahidkamal.dev';
     var BOOKING = 'https://calendar.app.google/bwwTwATQHtTPxEeZ7';
     var touch = window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
@@ -209,6 +211,12 @@
                             body.classList.remove('is-typing');
                             body.textContent = answer;
                             log.scrollTop = log.scrollHeight;
+                        } else if (msg.reset) {
+                            answer = '';
+                            body.textContent = '';
+                            body.classList.add('is-typing');
+                        } else if (Array.isArray(msg.slots) && msg.slots.length) {
+                            renderSlots(body.parentNode, msg.slots);
                         } else if (msg.error) {
                             failed = 'fallback';
                         }
@@ -237,6 +245,197 @@
         log.scrollTop = log.scrollHeight;
         setBusy(false);
     }
+
+    /* ---------- booking in the chat ---------- */
+    // Slots come from the server (via the AI's lookup or the booking bar). Booking itself is a plain
+    // form post to /book: the AI never books anything.
+    function renderSlots(container, slots) {
+        var box = el('div', 'skm-slots');
+        box.appendChild(el('p', 'skm-slots-h', 'Open times \u00b7 Eastern Time'));
+        var days = [];
+        var byDay = {};
+        slots.forEach(function (s) {
+            if (!byDay[s.day]) { byDay[s.day] = []; days.push(s.day); }
+            byDay[s.day].push(s);
+        });
+        days.forEach(function (day) {
+            var row = el('div', 'skm-day');
+            row.appendChild(el('span', 'skm-day-l', day));
+            var times = el('div', 'skm-times');
+            byDay[day].forEach(function (s) {
+                var b = el('button', 'skm-slot', s.time);
+                b.type = 'button';
+                b.setAttribute('aria-label', 'Book ' + s.day + ' at ' + s.time + ' Eastern Time');
+                b.addEventListener('click', function () {
+                    box.querySelectorAll('.skm-slot').forEach(function (x) { x.classList.remove('is-picked'); });
+                    b.classList.add('is-picked');
+                    bookingForm(s);
+                });
+                times.appendChild(b);
+            });
+            row.appendChild(times);
+            box.appendChild(row);
+        });
+        var alt = el('a', 'skm-alt', 'Other days? Open the booking page \u2197');
+        alt.href = BOOKING;
+        if (!touch) { alt.target = '_blank'; alt.rel = 'noopener'; }
+        box.appendChild(alt);
+        container.appendChild(box);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function field(labelText, inputEl) {
+        var l = el('label', 'skm-field');
+        l.appendChild(el('span', '', labelText));
+        l.appendChild(inputEl);
+        return l;
+    }
+
+    var turnstileLoading = null;
+    function loadTurnstile() {
+        if (!SITEKEY) return Promise.resolve(null);
+        if (window.turnstile) return Promise.resolve(window.turnstile);
+        if (!turnstileLoading) {
+            turnstileLoading = new Promise(function (resolve) {
+                var t = document.createElement('script');
+                t.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+                t.async = true;
+                t.onload = function () { resolve(window.turnstile || null); };
+                t.onerror = function () { resolve(null); };
+                document.head.appendChild(t);
+            });
+        }
+        return turnstileLoading;
+    }
+
+    var BOOK_ERRORS = {
+        bad_name: 'Please enter your name.',
+        bad_email: 'Please enter a valid email address.',
+        slot_taken: 'That time was just taken. Please pick another one.',
+        visitor_limit: 'You\u2019ve already booked a meeting today. To change it, use your invite or email ' + EMAIL + '.',
+        daily_limit: 'Today\u2019s chat bookings are full. Please use the booking page: ' + BOOKING,
+        not_human: 'Please complete the quick check, then confirm again.',
+        busy: 'Too many requests right now. Please wait a minute and try again.'
+    };
+
+    function bookingForm(slot) {
+        var old = log.querySelector('.skm-msg.is-form');
+        if (old) old.parentNode.removeChild(old);
+        var m = el('div', 'skm-msg bot is-form');
+        var tag = el('span', 'skm-tag', 'SK\u00b7I');
+        tag.setAttribute('aria-hidden', 'true');
+        m.appendChild(tag);
+        var f = el('form', 'skm-bookform');
+        var title = el('p', 'skm-bf-title');
+        title.appendChild(el('b', '', slot.day + ' \u00b7 ' + slot.time + ' ET'));
+        title.appendChild(el('small', '', '30 min \u00b7 Google Meet \u00b7 invite by email'));
+        f.appendChild(title);
+
+        var nameIn = el('input');
+        nameIn.type = 'text'; nameIn.required = true; nameIn.maxLength = 80; nameIn.autocomplete = 'name';
+        var mailIn = el('input');
+        mailIn.type = 'email'; mailIn.required = true; mailIn.maxLength = 254; mailIn.autocomplete = 'email';
+        var topicIn = el('input');
+        topicIn.type = 'text'; topicIn.maxLength = 300; topicIn.placeholder = 'Optional';
+        f.appendChild(field('Your name', nameIn));
+        f.appendChild(field('Your email (the invite goes here)', mailIn));
+        f.appendChild(field('What would you like to discuss?', topicIn));
+
+        var human = el('div', 'skm-human');
+        var widgetId = null;
+        if (SITEKEY) {
+            f.appendChild(human);
+            loadTurnstile().then(function (ts) {
+                if (ts) widgetId = ts.render(human, { sitekey: SITEKEY, theme: 'auto', size: 'flexible' });
+            });
+        }
+
+        var status = el('p', 'skm-bf-status');
+        status.setAttribute('aria-live', 'polite');
+        var actions = el('div', 'skm-bf-actions');
+        var ok = el('button', 'skm-bf-ok', 'Confirm booking');
+        ok.type = 'submit';
+        var cancel = el('button', 'skm-bf-cancel', 'Cancel');
+        cancel.type = 'button';
+        cancel.addEventListener('click', function () { m.parentNode.removeChild(m); });
+        actions.appendChild(ok);
+        actions.appendChild(cancel);
+        f.appendChild(actions);
+        f.appendChild(status);
+
+        f.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!f.reportValidity()) return;
+            var token = SITEKEY && window.turnstile && widgetId !== null ? window.turnstile.getResponse(widgetId) : '';
+            ok.disabled = true;
+            ok.textContent = 'Booking\u2026';
+            status.textContent = '';
+            fetch(BASE + '/book', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ start: slot.start, name: nameIn.value, email: mailIn.value, topic: topicIn.value, turnstile: token })
+            }).then(function (res) {
+                return res.json().catch(function () { return {}; }).then(function (j) { return { ok: res.ok, j: j }; });
+            }).then(function (r) {
+                if (r.ok && r.j.ok) {
+                    f.textContent = '';
+                    f.classList.add('is-done');
+                    var done = el('p', 'skm-bf-done');
+                    done.appendChild(el('b', '', '\u2713 Booked: ' + r.j.day + ' at ' + r.j.time + ' ET.'));
+                    done.appendChild(document.createTextNode(' A Google Calendar invite with the Meet link is on its way to ' + mailIn.value + '. To change or cancel, use the invite or email ' + EMAIL + '.'));
+                    f.appendChild(done);
+                    history.push({ q: '(The visitor booked a meeting.)', a: 'Booked a 30-minute Google Meet with Shahid on ' + r.j.day + ' at ' + r.j.time + ' ET; the invite was emailed.' });
+                    log.querySelectorAll('.skm-slots').forEach(function (x) { x.parentNode.removeChild(x); });
+                } else {
+                    var code = r.j && r.j.error;
+                    richText(status, BOOK_ERRORS[code] || ('I couldn\u2019t book that just now. Please use the booking page: ' + BOOKING));
+                    ok.disabled = false;
+                    ok.textContent = 'Confirm booking';
+                    if (SITEKEY && window.turnstile && widgetId !== null) window.turnstile.reset(widgetId);
+                    if (code === 'slot_taken') showOpenTimes();
+                }
+                log.scrollTop = log.scrollHeight;
+            }).catch(function () {
+                richText(status, 'I couldn\u2019t reach the calendar. Please use the booking page: ' + BOOKING);
+                ok.disabled = false;
+                ok.textContent = 'Confirm booking';
+            });
+        });
+
+        m.appendChild(f);
+        log.appendChild(m);
+        // Scroll so the form's date line sits at the top of the chat area.
+        log.scrollTop += m.getBoundingClientRect().top - log.getBoundingClientRect().top - 8;
+        if (!touch) nameIn.focus({ preventScroll: true });
+    }
+
+    // The booking bar shows open times right in the chat (no AI involved).
+    function showOpenTimes() {
+        chips.hidden = true;
+        var body = addMsg('bot', '');
+        body.classList.add('is-typing');
+        fetch(BASE + '/slots', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
+            .then(function (res) { return res.json().then(function (j) { return { ok: res.ok, j: j }; }); })
+            .then(function (r) {
+                body.classList.remove('is-typing');
+                if (!r.ok || !Array.isArray(r.j.slots)) throw new Error('slots');
+                if (!r.j.slots.length) {
+                    richText(body, 'No open times in the next week. For later dates, use the booking page: ' + BOOKING + ' or email ' + EMAIL + '.');
+                    return;
+                }
+                richText(body, 'Here are Shahid\u2019s next open times. Pick one to book a 30-minute Google Meet.');
+                renderSlots(body.parentNode, r.j.slots);
+            })
+            .catch(function () {
+                body.classList.remove('is-typing');
+                richText(body, 'I couldn\u2019t load his calendar just now. You can book here instead: ' + BOOKING);
+            });
+    }
+    bookBar.addEventListener('click', function (e) {
+        if (!BASE) return; // no server configured: the bar stays a plain link to the booking page
+        e.preventDefault();
+        showOpenTimes();
+    });
 
     /* ---------- open / close ---------- */
     function open() {

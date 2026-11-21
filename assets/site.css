@@ -701,8 +701,7 @@ body::before {
     width: min(390px, calc(100vw - 32px)); height: min(580px, calc(100dvh - 96px));
     display: flex; flex-direction: column; overflow: hidden;
     border-radius: 18px; border: 1px solid var(--glass-line);
-    background: color-mix(in srgb, var(--surface) 92%, transparent);
-    -webkit-backdrop-filter: blur(16px) saturate(1.5); backdrop-filter: blur(16px) saturate(1.5);
+    background: var(--surface); /* solid: iPhone Safari can't blur the glass cards behind it */
     box-shadow: var(--glass-shadow), 0 24px 60px -24px rgba(0, 0, 0, 0.45);
     color: var(--text);
 }
@@ -791,3 +790,32 @@ a.skm-chip { text-decoration: none; display: inline-flex; align-items: center; g
 .skm-book-t { display: grid; gap: 2px; min-width: 0; }
 .skm-book-t b { font: 600 0.9rem/1.2 var(--sans); color: var(--ink); }
 .skm-book-t small { font: 500 0.7rem/1.2 var(--mono); letter-spacing: 0.04em; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* SK-Mark I: in-chat booking (slot buttons + form) */
+.skm-slots { margin-top: 8px; padding: 10px 12px; border: 1px solid color-mix(in srgb, var(--b) 35%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--b) 6%, var(--surface)); display: grid; gap: 8px; }
+.skm-slots-h { font: 500 0.68rem/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.skm-day { display: grid; gap: 5px; }
+.skm-day-l { font: 600 0.8rem/1.2 var(--sans); color: var(--ink); }
+.skm-times { display: flex; flex-wrap: wrap; gap: 6px; }
+.skm-slot { padding: 6px 10px; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--b) 55%, var(--line)); background: transparent; color: var(--ink); font: 500 0.8rem/1 var(--mono); cursor: pointer; }
+.skm-slot:hover, .skm-slot:focus-visible { background: color-mix(in srgb, var(--b) 14%, transparent); border-color: var(--b); }
+.skm-slot.is-picked { background: var(--b); border-color: var(--b); color: var(--bg); }
+.skm-alt { font-size: 0.75rem; color: var(--muted); }
+.skm-msg.is-form { max-width: 100%; width: 100%; }
+.skm-bookform { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--b); border-radius: 12px; background: color-mix(in srgb, var(--b) 8%, var(--surface)); box-shadow: 0 0 18px -10px var(--b); }
+.skm-bf-title { font-size: 0.88rem; color: var(--ink); line-height: 1.4; }
+.skm-field { display: grid; gap: 3px; }
+.skm-field span { font: 500 0.7rem/1.2 var(--mono); letter-spacing: 0.04em; color: var(--muted); }
+.skm-field input { width: 100%; min-width: 0; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font: 400 16px/1.3 var(--sans); }
+.skm-field input:focus { outline: none; border-color: var(--b); }
+.skm-human:empty { display: none; }
+.skm-bf-actions { display: flex; gap: 8px; margin-top: 2px; }
+.skm-bf-ok { flex: 1; padding: 10px 12px; border-radius: 10px; border: 0; background: var(--ink); color: var(--bg); font: 600 0.88rem/1 var(--sans); cursor: pointer; }
+.skm-bf-ok:disabled { opacity: .6; cursor: default; }
+.skm-bf-cancel { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: 500 0.85rem/1 var(--sans); cursor: pointer; }
+.skm-bf-status { font-size: 0.8rem; color: var(--text); }
+.skm-bf-status:empty { display: none; }
+.skm-bf-done { font-size: 0.88rem; line-height: 1.5; color: var(--ink); }
+.skm-bf-done b { color: var(--b); }
+.skm-bf-title { display: grid; gap: 2px; }
+.skm-bf-title b { font: 600 0.95rem/1.3 var(--sans); }
+.skm-bf-title small { font: 500 0.7rem/1.2 var(--mono); letter-spacing: 0.04em; color: var(--muted); }
