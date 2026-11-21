@@ -629,17 +629,17 @@ strong { color: var(--ink); font-weight: 600; }
 /* glass panels: frosted, tinted panes over soft HUD light fixed behind the page, so the blur has colour to bend */
 :root {
     --grid: rgba(6, 70, 100, 0.05);
-    --glow-1: rgba(0, 150, 215, 0.17); --glow-2: rgba(40, 90, 230, 0.13); --glow-3: rgba(0, 185, 200, 0.12);
-    --glass: linear-gradient(135deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.34) 60%, rgba(255, 255, 255, 0.5));
-    --glass-line: color-mix(in srgb, var(--b) 24%, rgba(255, 255, 255, 0.6));
-    --glass-shadow: 0 14px 34px -16px rgba(10, 60, 90, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    --glow-1: rgba(0, 150, 215, 0.26); --glow-2: rgba(40, 90, 230, 0.2); --glow-3: rgba(0, 185, 200, 0.18);
+    --glass: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.14) 60%, rgba(255, 255, 255, 0.3));
+    --glass-line: color-mix(in srgb, var(--b) 38%, rgba(255, 255, 255, 0.6));
+    --glass-shadow: 0 14px 34px -16px rgba(10, 60, 90, 0.22), 0 0 30px -10px color-mix(in srgb, var(--b) 40%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 @media (prefers-color-scheme: dark) {
     :root {
-        --glow-1: rgba(40, 200, 255, 0.2); --glow-2: rgba(70, 120, 255, 0.16); --glow-3: rgba(0, 220, 200, 0.1);
-        --glass: linear-gradient(135deg, rgba(140, 225, 255, 0.12), rgba(140, 225, 255, 0.025) 55%, rgba(140, 225, 255, 0.07));
-        --glass-line: color-mix(in srgb, var(--b) 40%, transparent);
-        --glass-shadow: 0 14px 40px -18px rgba(0, 0, 0, 0.7), 0 0 34px -12px color-mix(in srgb, var(--b) 45%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        --glow-1: rgba(40, 200, 255, 0.32); --glow-2: rgba(70, 120, 255, 0.26); --glow-3: rgba(0, 220, 200, 0.18); --grid: rgba(120, 220, 255, 0.05);
+        --glass: linear-gradient(135deg, rgba(140, 225, 255, 0.09), rgba(140, 225, 255, 0.01) 55%, rgba(140, 225, 255, 0.05));
+        --glass-line: color-mix(in srgb, var(--b) 62%, transparent);
+        --glass-shadow: 0 14px 40px -18px rgba(0, 0, 0, 0.7), 0 0 44px -8px color-mix(in srgb, var(--b) 55%, transparent), inset 0 0 22px -10px color-mix(in srgb, var(--b) 45%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.16);
     }
 }
 body { background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 2.5rem 2.5rem; }
@@ -652,10 +652,10 @@ body::before {
 }
 .card, .pair, .proof a {
     background: var(--glass); border: 1px solid var(--glass-line);
-    -webkit-backdrop-filter: blur(18px) saturate(1.7); backdrop-filter: blur(18px) saturate(1.7);
+    -webkit-backdrop-filter: blur(6px) saturate(1.8); backdrop-filter: blur(6px) saturate(1.8);
     box-shadow: var(--glass-shadow);
 }
 .pair-stage svg { background: color-mix(in srgb, var(--sunk) 55%, transparent); }
 @media (max-width: 720px) {
-    .card, .pair, .proof a { -webkit-backdrop-filter: blur(10px) saturate(1.5); backdrop-filter: blur(10px) saturate(1.5); }
+    .card, .pair, .proof a { -webkit-backdrop-filter: blur(5px) saturate(1.6); backdrop-filter: blur(5px) saturate(1.6); }
 }
