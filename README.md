@@ -1,6 +1,6 @@
 # Shahid Kamal — Portfolio
 
-**ML / Computer Vision Engineer & Researcher | MS ECE @ Northeastern University**
+**ML / AI Engineer & Researcher | MS ECE @ Northeastern University**
 
 🔗 **Live Site:** [https://shahidkamal.dev](https://shahidkamal.dev)
 
