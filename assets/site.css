@@ -628,7 +628,7 @@ strong { color: var(--ink); font-weight: 600; }
 
 /* glass panels: frosted, tinted panes over soft HUD light fixed behind the page, so the blur has colour to bend */
 :root {
-    --grid: rgba(6, 70, 100, 0.05);
+    --grid: rgba(6, 70, 100, 0.028);
     --glow-1: rgba(0, 150, 215, 0.26); --glow-2: rgba(40, 90, 230, 0.2); --glow-3: rgba(0, 185, 200, 0.18);
     --glass: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.14) 60%, rgba(255, 255, 255, 0.3));
     --glass-line: color-mix(in srgb, var(--b) 38%, rgba(255, 255, 255, 0.6));
