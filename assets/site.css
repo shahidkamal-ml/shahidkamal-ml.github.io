@@ -778,3 +778,16 @@ body::before {
 .btn-book svg { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .btn-book:hover { border-color: var(--b); }
 a.skm-chip { text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-color: var(--b); }
+.skm-book {
+    display: flex; align-items: center; gap: 10px; margin: 12px 14px 2px; padding: 10px 12px;
+    border: 1px solid color-mix(in srgb, var(--b) 70%, transparent); border-radius: 12px;
+    background: color-mix(in srgb, var(--b) 10%, transparent); color: var(--ink); text-decoration: none;
+    box-shadow: 0 0 18px -10px var(--b); transition: background .15s, border-color .15s;
+}
+.skm-book:hover { background: color-mix(in srgb, var(--b) 18%, transparent); border-color: var(--b); }
+.skm-book svg { flex: none; fill: none; stroke: var(--b); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.skm-book-i { width: 22px; height: 22px; }
+.skm-book-a { width: 16px; height: 16px; margin-left: auto; }
+.skm-book-t { display: grid; gap: 2px; min-width: 0; }
+.skm-book-t b { font: 600 0.9rem/1.2 var(--sans); color: var(--ink); }
+.skm-book-t small { font: 500 0.7rem/1.2 var(--mono); letter-spacing: 0.04em; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

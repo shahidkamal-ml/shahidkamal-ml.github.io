@@ -61,6 +61,14 @@
     head.appendChild(titles);
     head.appendChild(close);
 
+    // Always-visible booking bar: opens Shahid's Google Calendar booking page directly (no AI involved).
+    var bookBar = el('a', 'skm-book');
+    bookBar.href = BOOKING;
+    if (!touch) { bookBar.target = '_blank'; bookBar.rel = 'noopener'; }
+    bookBar.innerHTML = '<svg class="skm-book-i" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4.5" width="14" height="12" rx="2"/><path d="M3 8.5h14M7 2.5v4M13 2.5v4"/></svg>' +
+        '<span class="skm-book-t"><b>Book a meeting with Shahid</b><small>30 min \u00b7 Google Meet</small></span>' +
+        '<svg class="skm-book-a" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.5 12.5 10 7 15.5"/></svg>';
+
     var log = el('div', 'skm-log');
     log.setAttribute('role', 'log');
     log.setAttribute('aria-live', 'polite');
@@ -72,10 +80,6 @@
         b.addEventListener('click', function () { ask(s); });
         chips.appendChild(b);
     });
-    var bookChip = el('a', 'skm-chip', 'Book a call with Shahid \u2197');
-    bookChip.href = BOOKING;
-    if (!touch) { bookChip.target = '_blank'; bookChip.rel = 'noopener'; }
-    chips.appendChild(bookChip);
 
     var form = el('form', 'skm-form');
     var input = el('textarea', 'skm-in');
@@ -103,6 +107,7 @@
     note.appendChild(document.createTextNode('.'));
 
     panel.appendChild(head);
+    panel.appendChild(bookBar);
     panel.appendChild(log);
     panel.appendChild(chips);
     panel.appendChild(form);
