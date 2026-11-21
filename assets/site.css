@@ -546,7 +546,7 @@ strong { color: var(--ink); font-weight: 600; }
 /* ================= HUD layer: lock-on animations (decorative, never blocks input) ================= */
 .hud { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden;
     font: 500 0.75rem/1.2 var(--mono); letter-spacing: 0.04em; color: var(--b);
-    animation: hud-out .3s linear 1.95s forwards; }
+    animation: hud-out .6s linear 4.4s forwards; }
 .hud-sweep { position: absolute; top: 0; bottom: 0; left: 0; width: 160px; border-right: 1px solid var(--b);
     background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--b) 14%, transparent));
     transform: translateX(-160px); animation: hud-sweep .9s cubic-bezier(.45, 0, .25, 1) both; }
@@ -567,7 +567,7 @@ strong { color: var(--ink); font-weight: 600; }
     transform: translate(-50%, -50%); animation: hud-spin 1.5s cubic-bezier(.15, .6, .2, 1) var(--d) both; }
 .hud-ring circle { fill: none; stroke: var(--b); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
 .hud-run .det::before, .hud-run .det-tag { opacity: 0; }
-.hud-go .det::before, .hud-go .det-tag { animation: hud-settle .3s 1.9s both; }
+.hud-go .det::before, .hud-go .det-tag { animation: hud-settle .4s 4.7s both; }
 @keyframes hud-sweep { 80% { opacity: 1; } to { transform: translateX(var(--w, 100vw)); opacity: 0; } }
 @keyframes hud-in { from { opacity: 0; transform: scale(1.4); } }
 @keyframes hud-type { to { clip-path: inset(0 0 0 0); } }
@@ -576,17 +576,17 @@ strong { color: var(--ink); font-weight: 600; }
 @keyframes hud-settle { from { opacity: 0; } to { opacity: 1; } }
 
 /* cards: lock-on when scrolled into view, snap on hover */
-.tagged > .hud-read { left: auto; right: 1rem; top: 0; margin: 0; transform: translateY(-50%); padding: 2px 6px; background: var(--bg); color: var(--accent);
+.tagged > .hud-read { left: auto; right: 1rem; top: auto; bottom: 0; margin: 0; transform: translateY(50%); padding: 2px 6px; background: var(--bg); color: var(--accent);
     font: 500 0.75rem/1.2 var(--mono); letter-spacing: 0.04em; clip-path: none; opacity: 0; animation: none; z-index: 2; pointer-events: none; }
-.tagged.lock::after { animation: card-lock 1.6s both; }
-.tagged.lock::before, .tagged.lock > .hud-read { animation: card-tag 1.6s both; }
+.tagged.lock::after { animation: card-lock 4.5s both; }
+.tagged.lock::before, .tagged.lock > .hud-read { animation: card-tag 4.5s both; }
 @media (hover: hover) {
     .tagged:hover::after { animation: card-snap .22s cubic-bezier(.2, .9, .3, 1.15) both; }
     .tagged:hover::before { animation: card-type .3s steps(var(--n, 8)) both; }
     .tagged:hover > .hud-read { opacity: 1; animation: none; }
 }
-@keyframes card-lock { 0% { opacity: 0; transform: scale(1.035); } 14% { opacity: 1; transform: scale(1); } 78% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes card-tag { 0%, 12% { opacity: 1; clip-path: inset(0 100% 0 0); animation-timing-function: steps(var(--n, 8)); } 36%, 78% { opacity: 1; clip-path: inset(0 0 0 0); } 100% { opacity: 0; clip-path: inset(0 0 0 0); } }
+@keyframes card-lock { 0% { opacity: 0; transform: scale(1.035); } 5% { opacity: 1; transform: scale(1); } 88% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes card-tag { 0%, 4% { opacity: 1; clip-path: inset(0 100% 0 0); animation-timing-function: steps(var(--n, 8)); } 13%, 88% { opacity: 1; clip-path: inset(0 0 0 0); } 100% { opacity: 0; clip-path: inset(0 0 0 0); } }
 @keyframes card-snap { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: scale(1); } }
 @keyframes card-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 
@@ -620,7 +620,7 @@ strong { color: var(--ink); font-weight: 600; }
 .hud-lab { --g: var(--b); }
 .det-tag, .tagged::before, .tagged > .hud-read { --g: var(--accent); }
 .hud-lab, .det-tag, .tagged::before, .tagged > .hud-read {
-    background: color-mix(in srgb, var(--g) 14%, transparent); color: var(--g);
+    background: color-mix(in srgb, var(--g) 16%, color-mix(in srgb, var(--bg) 74%, transparent)); color: var(--g);
     border: 1px solid color-mix(in srgb, var(--g) 50%, transparent); border-radius: 3px;
     -webkit-backdrop-filter: blur(8px) saturate(1.6); backdrop-filter: blur(8px) saturate(1.6);
     text-shadow: var(--glow);
