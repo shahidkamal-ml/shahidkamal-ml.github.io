@@ -62,6 +62,78 @@
         sizeFlow();
     }
 
+    /* ---------- HUD lock-on: boxes snap onto real elements; every readout is a real measurement.
+       All timing is CSS; JS only places the boxes. Skipped under reduced motion. ---------- */
+    var hero = document.getElementById('top');
+    var mk = function (cls, text) {
+        var e = document.createElement(cls === 'hud-box' || cls === 'hud' ? 'div' : 'span');
+        e.className = cls;
+        if (text) { e.textContent = text; e.style.setProperty('--n', text.length); }
+        return e;
+    };
+    var measure = function (r) {
+        return 'x' + Math.round(r.left + window.scrollX) + ' y' + Math.round(r.top + window.scrollY) + ' ' + Math.round(r.width) + '\u00d7' + Math.round(r.height);
+    };
+    if (hero && !reduce.matches && window.scrollY < 200 && hero.animate) {
+        hero.classList.add('hud-run');
+        var runHud = function () {
+            if (!hero.classList.contains('hud-run') || hero.querySelector('.hud')) return;
+            var hr = hero.getBoundingClientRect(), small = window.innerWidth <= 720;
+            var hud = mk('hud'), n = 0;
+            hud.setAttribute('aria-hidden', 'true');
+            hud.style.setProperty('--w', hr.width + 'px');
+            hud.appendChild(mk('hud-sweep'));
+            [['.det', 'person', 0.25, 0, ''], ['h1', 'name', 0.6, 5, ' r'], ['.cta', 'links', 0.95, 6, ' r b']].forEach(function (t, i) {
+                var el = hero.querySelector(t[0]);
+                if (!el || (small && i === 2)) return;
+                var r = el.getBoundingClientRect(), p = t[3], box = mk('hud-box' + t[4]);
+                box.style.cssText = 'left:' + (r.left - hr.left - p) + 'px;top:' + (r.top - hr.top - p) + 'px;width:' + (r.width + 2 * p) + 'px;height:' + (r.height + 2 * p) + 'px;--d:' + t[2] + 's';
+                box.appendChild(mk('hud-lab', t[1] + ' \u00b7 track 00' + (++n) + (small && i ? '' : ' \u00b7 ' + measure(r))));
+                if (i === 0) box.insertAdjacentHTML('beforeend', '<svg class="hud-ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke-dasharray="3 7 34 7"/><circle cx="50" cy="50" r="43" stroke-dasharray="1 5" opacity=".6"/></svg>');
+                hud.appendChild(box);
+            });
+            if (!small) {
+                var st = mk('hud-status', 'scan \u00b7 view ' + window.innerWidth + '\u00d7' + window.innerHeight + ' \u00b7 ' + n + ' targets');
+                var wr = hero.querySelector('.wrap').getBoundingClientRect();
+                st.style.right = (hr.right - wr.right + parseFloat(getComputedStyle(hero.querySelector('.wrap')).paddingRight)) + 'px';
+                hud.appendChild(st);
+            }
+            var done = function () { hud.remove(); hero.classList.remove('hud-run', 'hud-go'); window.removeEventListener('resize', done); };
+            hud.addEventListener('animationend', function (e) { if (e.target === hud) done(); });
+            window.addEventListener('resize', done);
+            hero.appendChild(hud);
+            hero.classList.add('hud-go');
+        };
+        var startHud = function () { requestAnimationFrame(runHud); };
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(startHud);
+        setTimeout(startHud, 1200);
+    }
+
+    /* cards: one lock-on as each scrolls into view; the readout is the card's own box */
+    var tagged = document.querySelectorAll('.tagged');
+    var fineHud = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    tagged.forEach(function (c) {
+        c.style.setProperty('--n', (c.getAttribute('data-tag') || '').length);
+        if (!fineHud) return;
+        var rd = mk('hud-read');
+        rd.setAttribute('aria-hidden', 'true');
+        c.appendChild(rd);
+        var fill = function () { rd.textContent = measure(c.getBoundingClientRect()); };
+        c.addEventListener('pointerenter', fill);
+        c.addEventListener('animationstart', function (e) { if (e.animationName === 'card-lock') fill(); });
+    });
+    if (!reduce.matches && 'IntersectionObserver' in window) {
+        var lockIO = new IntersectionObserver(function (es) {
+            es.forEach(function (en) {
+                if (!en.isIntersecting) return;
+                lockIO.unobserve(en.target);
+                en.target.classList.add('lock');
+                en.target.addEventListener('animationend', function (e) { if (e.animationName === 'card-lock') en.target.classList.remove('lock'); });
+            });
+        }, { threshold: 0.25 });
+        tagged.forEach(function (c) { lockIO.observe(c); });
+    }
+
     /* ---------- contrastive pair: same scene, different motion ---------- */
     var stage = document.getElementById('pairStage');
     if (stage) {

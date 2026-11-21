@@ -542,3 +542,69 @@ strong { color: var(--ink); font-weight: 600; }
     .det { padding: 5px; }
     .who { margin-top: 1.1rem; }
 }
+
+/* ================= HUD layer: lock-on animations (decorative, never blocks input) ================= */
+.hud { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden;
+    font: 500 0.75rem/1.2 var(--mono); letter-spacing: 0.04em; color: var(--b);
+    animation: hud-out .3s linear 1.95s forwards; }
+.hud-sweep { position: absolute; top: 0; bottom: 0; left: 0; width: 160px; border-right: 1px solid var(--b);
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--b) 14%, transparent));
+    transform: translateX(-160px); animation: hud-sweep .9s cubic-bezier(.45, 0, .25, 1) both; }
+.hud-box { position: absolute; filter: drop-shadow(0 0 3px color-mix(in srgb, var(--b) 55%, transparent));
+    animation: hud-in .3s cubic-bezier(.2, .9, .3, 1.15) var(--d) backwards;
+    background:
+        linear-gradient(var(--b) 0 0) left top / 14px 2px no-repeat, linear-gradient(var(--b) 0 0) left top / 2px 14px no-repeat,
+        linear-gradient(var(--b) 0 0) right top / 14px 2px no-repeat, linear-gradient(var(--b) 0 0) right top / 2px 14px no-repeat,
+        linear-gradient(var(--b) 0 0) left bottom / 14px 2px no-repeat, linear-gradient(var(--b) 0 0) left bottom / 2px 14px no-repeat,
+        linear-gradient(var(--b) 0 0) right bottom / 14px 2px no-repeat, linear-gradient(var(--b) 0 0) right bottom / 2px 14px no-repeat; }
+.hud-lab, .hud-read, .hud-status { position: absolute; white-space: nowrap; clip-path: inset(0 100% 0 0);
+    animation: hud-type .42s steps(var(--n, 12)) calc(var(--d) + .26s) forwards; }
+.hud-lab { left: 0; bottom: 100%; margin-bottom: 3px; padding: 2px 6px; border-radius: 2px; background: var(--b); color: var(--bg); }
+.hud-box.r .hud-lab { left: auto; right: 0; }
+.hud-box.b .hud-lab { bottom: auto; top: 100%; margin: 3px 0 0; }
+.hud-status { top: 12px; --d: .1s; color: var(--muted); }
+.hud-ring { position: absolute; left: 50%; top: 50%; width: calc(100% + 26px); height: calc(100% + 26px); margin: 0; overflow: visible;
+    transform: translate(-50%, -50%); animation: hud-spin 1.5s cubic-bezier(.15, .6, .2, 1) var(--d) both; }
+.hud-ring circle { fill: none; stroke: var(--b); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.hud-run .det::before, .hud-run .det-tag { opacity: 0; }
+.hud-go .det::before, .hud-go .det-tag { animation: hud-settle .3s 1.9s both; }
+@keyframes hud-sweep { 80% { opacity: 1; } to { transform: translateX(var(--w, 100vw)); opacity: 0; } }
+@keyframes hud-in { from { opacity: 0; transform: scale(1.4); } }
+@keyframes hud-type { to { clip-path: inset(0 0 0 0); } }
+@keyframes hud-spin { from { opacity: 0; transform: translate(-50%, -50%) rotate(-300deg) scale(1.5); } 25% { opacity: 1; } to { transform: translate(-50%, -50%) rotate(0) scale(1); } }
+@keyframes hud-out { to { opacity: 0; } }
+@keyframes hud-settle { from { opacity: 0; } to { opacity: 1; } }
+
+/* cards: lock-on when scrolled into view, snap on hover */
+.tagged > .hud-read { left: auto; right: 1rem; top: 0; margin: 0; transform: translateY(-50%); padding: 2px 6px; background: var(--bg); color: var(--accent);
+    font: 500 0.75rem/1.2 var(--mono); letter-spacing: 0.04em; clip-path: none; opacity: 0; animation: none; z-index: 2; pointer-events: none; }
+.tagged.lock::after { animation: card-lock 1.6s both; }
+.tagged.lock::before, .tagged.lock > .hud-read { animation: card-tag 1.6s both; }
+@media (hover: hover) {
+    .tagged:hover::after { animation: card-snap .22s cubic-bezier(.2, .9, .3, 1.15) both; }
+    .tagged:hover::before { animation: card-type .3s steps(var(--n, 8)) both; }
+    .tagged:hover > .hud-read { opacity: 1; animation: none; }
+}
+@keyframes card-lock { 0% { opacity: 0; transform: scale(1.035); } 14% { opacity: 1; transform: scale(1); } 78% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes card-tag { 0%, 12% { opacity: 1; clip-path: inset(0 100% 0 0); animation-timing-function: steps(var(--n, 8)); } 36%, 78% { opacity: 1; clip-path: inset(0 0 0 0); } 100% { opacity: 0; clip-path: inset(0 0 0 0); } }
+@keyframes card-snap { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: scale(1); } }
+@keyframes card-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* scroll readout tape (CSS only, wide screens): real scroll position as a percentage */
+.tape { display: none; }
+@property --hud-p { syntax: '<integer>'; initial-value: 0; inherits: false; }
+@media (min-width: 1280px) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+        .tape { display: block; position: fixed; right: 10px; top: 50%; width: 34px; height: 180px; margin-top: -90px; z-index: 50; pointer-events: none;
+            background: repeating-linear-gradient(180deg, var(--muted) 0 1px, transparent 1px 9px) right / 7px 100% no-repeat; opacity: .6; }
+        .tape::before { content: counter(p); counter-reset: p var(--hud-p); position: absolute; right: 16px; top: 0; margin-top: -0.55em;
+            font: 500 0.75rem/1 var(--mono); color: var(--b); animation: tape-p linear both; animation-timeline: scroll(root); }
+        .tape::after { content: ""; position: absolute; right: 0; top: 0; width: 13px; height: 2px; margin-top: -1px; background: var(--b); animation: tape-m linear both; animation-timeline: scroll(root); }
+        @keyframes tape-p { from { top: 0; --hud-p: 0; } to { top: 100%; --hud-p: 100; } }
+        @keyframes tape-m { from { top: 0; } to { top: 100%; } }
+    }
+}
+@media (max-width: 720px) {
+    .hud-box { filter: none; }
+}
+@media print { .hud, .tape { display: none; } }
