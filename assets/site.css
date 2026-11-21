@@ -608,3 +608,20 @@ strong { color: var(--ink); font-weight: 600; }
     .hud-box { filter: none; }
 }
 @media print { .hud, .tape { display: none; } }
+
+/* section scans need a positioned host */
+.sec { position: relative; }
+/* section labels sit on the box's top edge at the right, clear of the item's own text */
+.hud-box.e .hud-lab { left: auto; right: 14px; bottom: auto; top: 0; margin: 0; transform: translateY(-50%); }
+
+/* glass HUD labels: a tinted, see-through pane over a blurred backdrop, with glowing text in the dark theme */
+:root { --glow: none; }
+@media (prefers-color-scheme: dark) { :root { --glow: 0 0 7px color-mix(in srgb, currentColor 65%, transparent); } }
+.hud-lab { --g: var(--b); }
+.det-tag, .tagged::before, .tagged > .hud-read { --g: var(--accent); }
+.hud-lab, .det-tag, .tagged::before, .tagged > .hud-read {
+    background: color-mix(in srgb, var(--g) 14%, transparent); color: var(--g);
+    border: 1px solid color-mix(in srgb, var(--g) 50%, transparent); border-radius: 3px;
+    -webkit-backdrop-filter: blur(8px) saturate(1.6); backdrop-filter: blur(8px) saturate(1.6);
+    text-shadow: var(--glow);
+}

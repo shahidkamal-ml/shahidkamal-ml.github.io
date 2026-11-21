@@ -134,6 +134,64 @@
         tagged.forEach(function (c) { lockIO.observe(c); });
     }
 
+    /* section scans: as each section's heading comes into view, one sweep passes over it and boxes lock onto
+       its heading and the items on screen; items further down lock on one by one as they scroll in.
+       Track ids continue from the hero; every readout is the element's real box. */
+    if (!reduce.matches && 'IntersectionObserver' in window && document.body.animate) {
+        var trackId = 3;
+        var pad = function (k) { return ('00' + k).slice(-3); };
+        var labelFor = function (el) {
+            if (el.matches('.xp > li')) return 'role';
+            if (el.matches('.pubs > li')) return 'paper';
+            if (el.matches('.panel')) return ((el.querySelector('h2, h3') || {}).textContent || 'panel').trim().toLowerCase();
+            if (el.matches('.cta')) return 'links';
+            if (el.matches('img')) return 'frame';
+            return 'object';
+        };
+        var layer = function (host, targets, sweep) {
+            var hr = host.getBoundingClientRect(), small = window.innerWidth <= 720;
+            var hud = mk('hud');
+            hud.setAttribute('aria-hidden', 'true');
+            hud.style.setProperty('--w', hr.width + 'px');
+            if (sweep) hud.appendChild(mk('hud-sweep'));
+            targets.forEach(function (t, i) {
+                var r = t[0].getBoundingClientRect(), p = t[0].matches('img') ? 3 : 6, box = mk('hud-box e');
+                box.style.cssText = 'left:' + (r.left - hr.left - p) + 'px;top:' + (r.top - hr.top - p) + 'px;width:' + (r.width + 2 * p) + 'px;height:' + (r.height + 2 * p) + 'px;--d:' + (sweep ? 0.2 + i * 0.25 : 0) + 's';
+                box.appendChild(mk('hud-lab', t[1] + ' · track ' + pad(++trackId) + (small ? '' : ' · ' + measure(r))));
+                hud.appendChild(box);
+            });
+            hud.addEventListener('animationend', function (e) { if (e.target === hud) hud.remove(); });
+            host.appendChild(hud);
+        };
+        var onScreen = function (el) { var r = el.getBoundingClientRect(); return r.bottom > 56 && r.top < window.innerHeight - 40; };
+        var itemIO = new IntersectionObserver(function (es) {
+            es.forEach(function (en) {
+                if (!en.isIntersecting) return;
+                itemIO.unobserve(en.target);
+                layer(en.target.closest('.sec'), [[en.target, labelFor(en.target)]], false);
+            });
+        }, { threshold: 0.4, rootMargin: '-56px 0px -10% 0px' });
+        var secIO = new IntersectionObserver(function (es) {
+            es.forEach(function (en) {
+                if (!en.isIntersecting) return;
+                secIO.unobserve(en.target);
+                var sec = en.target.closest('.sec'), small = window.innerWidth <= 720, max = small ? 1 : 2;
+                var idx = sec.querySelector('.idx');
+                var targets = [[en.target, (idx && !small ? idx.textContent.trim() + ' · ' : '') + sec.id]];
+                /* items on screen now: up to `max` join this scan, the rest stay quiet; items below lock on as they scroll in */
+                sec.querySelectorAll('.xp > li, .panel, .pubs > li, .contact .cta, .card picture img').forEach(function (el) {
+                    if (!onScreen(el)) itemIO.observe(el);
+                    else if (targets.length <= max) targets.push([el, labelFor(el)]);
+                });
+                layer(sec, targets, true);
+            });
+        }, { threshold: 1, rootMargin: '0px 0px -12% 0px' });
+        document.querySelectorAll('.sec').forEach(function (sec) {
+            var head = sec.querySelector('.sec-head') || sec.querySelector('h2');
+            if (head) secIO.observe(head);
+        });
+    }
+
     /* ---------- contrastive pair: same scene, different motion ---------- */
     var stage = document.getElementById('pairStage');
     if (stage) {
