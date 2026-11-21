@@ -8,7 +8,8 @@
     var BASE = ENDPOINT ? ENDPOINT.replace(/\/chat$/, '') : '';
     var SITEKEY = script && script.getAttribute('data-turnstile');
     var EMAIL = 'contact@shahidkamal.dev';
-    var BOOKING = 'https://calendar.app.google/bwwTwATQHtTPxEeZ7';
+    // Without the chat server, booking falls back to an email with a ready subject line.
+    var MEET_MAIL = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Meeting with Shahid');
     var touch = window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     var history = [];
     var busy = false;
@@ -63,10 +64,9 @@
     head.appendChild(titles);
     head.appendChild(close);
 
-    // Always-visible booking bar: opens Shahid's Google Calendar booking page directly (no AI involved).
+    // Always-visible booking bar: shows Shahid's open times right in the chat (no AI involved).
     var bookBar = el('a', 'skm-book');
-    bookBar.href = BOOKING;
-    if (!touch) { bookBar.target = '_blank'; bookBar.rel = 'noopener'; }
+    bookBar.href = MEET_MAIL;
     bookBar.innerHTML = '<svg class="skm-book-i" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4.5" width="14" height="12" rx="2"/><path d="M3 8.5h14M7 2.5v4M13 2.5v4"/></svg>' +
         '<span class="skm-book-t"><b>Book a meeting with Shahid</b><small>30 min \u00b7 Google Meet</small></span>' +
         '<svg class="skm-book-a" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.5 12.5 10 7 15.5"/></svg>';
@@ -103,8 +103,8 @@
     note.appendChild(mail);
     note.appendChild(document.createTextNode(' or '));
     var book = el('a', '', 'book a meeting');
-    book.href = BOOKING;
-    if (!touch) { book.target = '_blank'; book.rel = 'noopener'; }
+    book.href = MEET_MAIL;
+    book.addEventListener('click', function (e) { if (!BASE) return; e.preventDefault(); showOpenTimes(); });
     note.appendChild(book);
     note.appendChild(document.createTextNode('.'));
 
@@ -276,10 +276,21 @@
             row.appendChild(times);
             box.appendChild(row);
         });
-        var alt = el('a', 'skm-alt', 'Other days? Open the booking page \u2197');
-        alt.href = BOOKING;
-        if (!touch) { alt.target = '_blank'; alt.rel = 'noopener'; }
-        box.appendChild(alt);
+        var more = el('button', 'skm-more', 'Show later dates');
+        more.type = 'button';
+        more.addEventListener('click', function () {
+            more.disabled = true;
+            more.textContent = 'Loading\u2026';
+            loadSlots({ after: slots[slots.length - 1].start }).then(function (later) {
+                more.parentNode.removeChild(more);
+                if (later.length) renderSlots(container, later);
+                else richText(addMsg('bot', ''), 'No more open times in the next 30 days. Please email ' + EMAIL + '.');
+            }).catch(function () {
+                more.disabled = false;
+                more.textContent = 'Show later dates';
+            });
+        });
+        box.appendChild(more);
         container.appendChild(box);
         log.scrollTop = log.scrollHeight;
     }
@@ -313,7 +324,7 @@
         bad_email: 'Please enter a valid email address.',
         slot_taken: 'That time was just taken. Please pick another one.',
         visitor_limit: 'You\u2019ve already booked a meeting today. To change it, use your invite or email ' + EMAIL + '.',
-        daily_limit: 'Today\u2019s chat bookings are full. Please use the booking page: ' + BOOKING,
+        daily_limit: 'Today\u2019s bookings are full. Please email ' + EMAIL + ' to find a time.',
         not_human: 'Please complete the quick check, then confirm again.',
         busy: 'Too many requests right now. Please wait a minute and try again.'
     };
@@ -388,7 +399,7 @@
                     log.querySelectorAll('.skm-slots').forEach(function (x) { x.parentNode.removeChild(x); });
                 } else {
                     var code = r.j && r.j.error;
-                    richText(status, BOOK_ERRORS[code] || ('I couldn\u2019t book that just now. Please use the booking page: ' + BOOKING));
+                    richText(status, BOOK_ERRORS[code] || ('I couldn\u2019t book that just now. Please try again, or email ' + EMAIL + '.'));
                     ok.disabled = false;
                     ok.textContent = 'Confirm booking';
                     if (SITEKEY && window.turnstile && widgetId !== null) window.turnstile.reset(widgetId);
@@ -396,7 +407,7 @@
                 }
                 log.scrollTop = log.scrollHeight;
             }).catch(function () {
-                richText(status, 'I couldn\u2019t reach the calendar. Please use the booking page: ' + BOOKING);
+                richText(status, 'I couldn\u2019t reach the calendar. Please try again, or email ' + EMAIL + '.');
                 ok.disabled = false;
                 ok.textContent = 'Confirm booking';
             });
@@ -409,32 +420,47 @@
         if (!touch) nameIn.focus({ preventScroll: true });
     }
 
-    // The booking bar shows open times right in the chat (no AI involved).
+    function loadSlots(range) {
+        return fetch(BASE + '/slots', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(range || {}) })
+            .then(function (res) { return res.json().then(function (j) { return { ok: res.ok, j: j }; }); })
+            .then(function (r) {
+                if (!r.ok || !Array.isArray(r.j.slots)) throw new Error('slots');
+                return r.j.slots;
+            });
+    }
+
+    // The booking bar (and the site's "Book a meeting" buttons) show open times right in the chat.
     function showOpenTimes() {
         chips.hidden = true;
         var body = addMsg('bot', '');
         body.classList.add('is-typing');
-        fetch(BASE + '/slots', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
-            .then(function (res) { return res.json().then(function (j) { return { ok: res.ok, j: j }; }); })
-            .then(function (r) {
+        loadSlots({})
+            .then(function (slots) {
                 body.classList.remove('is-typing');
-                if (!r.ok || !Array.isArray(r.j.slots)) throw new Error('slots');
-                if (!r.j.slots.length) {
-                    richText(body, 'No open times in the next week. For later dates, use the booking page: ' + BOOKING + ' or email ' + EMAIL + '.');
+                if (!slots.length) {
+                    richText(body, 'No open times in the next week. Ask me about later dates, or email ' + EMAIL + '.');
                     return;
                 }
                 richText(body, 'Here are Shahid\u2019s next open times. Pick one to book a 30-minute Google Meet.');
-                renderSlots(body.parentNode, r.j.slots);
+                renderSlots(body.parentNode, slots);
             })
             .catch(function () {
                 body.classList.remove('is-typing');
-                richText(body, 'I couldn\u2019t load his calendar just now. You can book here instead: ' + BOOKING);
+                richText(body, 'I couldn\u2019t load his calendar just now. Please email ' + EMAIL + ' to find a time.');
             });
     }
     bookBar.addEventListener('click', function (e) {
-        if (!BASE) return; // no server configured: the bar stays a plain link to the booking page
+        if (!BASE) return; // no server configured: the bar stays a plain email link
         e.preventDefault();
         showOpenTimes();
+    });
+    document.querySelectorAll('[data-skm-book]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            if (!BASE) return;
+            e.preventDefault();
+            if (panel.hidden) open();
+            showOpenTimes();
+        });
     });
 
     /* ---------- open / close ---------- */

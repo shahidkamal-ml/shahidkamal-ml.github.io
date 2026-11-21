@@ -819,3 +819,6 @@ a.skm-chip { text-decoration: none; display: inline-flex; align-items: center; g
 .skm-bf-title { display: grid; gap: 2px; }
 .skm-bf-title b { font: 600 0.95rem/1.3 var(--sans); }
 .skm-bf-title small { font: 500 0.7rem/1.2 var(--mono); letter-spacing: 0.04em; color: var(--muted); }
+.skm-more { justify-self: start; padding: 6px 12px; border-radius: 8px; border: 1px dashed color-mix(in srgb, var(--b) 60%, var(--line)); background: transparent; color: var(--ink); font: 500 0.78rem/1 var(--sans); cursor: pointer; }
+.skm-more:hover { border-style: solid; border-color: var(--b); }
+.skm-more:disabled { opacity: .6; cursor: default; }
