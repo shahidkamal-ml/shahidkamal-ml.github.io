@@ -9,10 +9,10 @@
     --text: #33363d;
     --muted: #5a5e66;
     --line: #d9d4c6;
-    --accent: #b5330e;
-    --accent-soft: #f3d9cd;
-    --a: #d6451f;
-    --b: #0b6b70;
+    --accent: #0b5fa8;
+    --accent-soft: #dce9f6;
+    --a: #1170c4;
+    --b: #066d8d;
     --code-bg: #1b1e24;
     --code-ink: #e9e6dd;
     --display: "Bricolage Grotesque", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -34,10 +34,10 @@
         --text: #cfd0d2;
         --muted: #a0a4ab;
         --line: #282c34;
-        --accent: #ff8a66;
-        --accent-soft: #3a211a;
-        --a: #ff7a52;
-        --b: #5fd0c8;
+        --accent: #6cc8ff;
+        --accent-soft: #0f2638;
+        --a: #4a9dff;
+        --b: #5fe0ff;
         --code-bg: #0b0c0f;
         --code-ink: #e9e6dd;
     }
