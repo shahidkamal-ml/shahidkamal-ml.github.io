@@ -6,6 +6,7 @@
     var script = document.currentScript;
     var ENDPOINT = script && script.getAttribute('data-endpoint');
     var EMAIL = 'contact@shahidkamal.dev';
+    var BOOKING = 'https://calendar.app.google/bwwTwATQHtTPxEeZ7';
     var touch = window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     var history = [];
     var busy = false;
@@ -71,6 +72,10 @@
         b.addEventListener('click', function () { ask(s); });
         chips.appendChild(b);
     });
+    var bookChip = el('a', 'skm-chip', 'Book a call with Shahid \u2197');
+    bookChip.href = BOOKING;
+    if (!touch) { bookChip.target = '_blank'; bookChip.rel = 'noopener'; }
+    chips.appendChild(bookChip);
 
     var form = el('form', 'skm-form');
     var input = el('textarea', 'skm-in');
@@ -90,6 +95,11 @@
     var mail = el('a', '', EMAIL);
     mail.href = 'mailto:' + EMAIL;
     note.appendChild(mail);
+    note.appendChild(document.createTextNode(' or '));
+    var book = el('a', '', 'book a call');
+    book.href = BOOKING;
+    if (!touch) { book.target = '_blank'; book.rel = 'noopener'; }
+    note.appendChild(book);
     note.appendChild(document.createTextNode('.'));
 
     panel.appendChild(head);

@@ -773,3 +773,8 @@ body::before {
     }
 }
 @media print { .skm, .skm-launch { display: none; } }
+/* Book a call: Google Calendar appointment page */
+.btn-book { border-color: color-mix(in srgb, var(--b) 55%, var(--line)); }
+.btn-book svg { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.btn-book:hover { border-color: var(--b); }
+a.skm-chip { text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-color: var(--b); }
