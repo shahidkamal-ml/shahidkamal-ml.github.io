@@ -182,7 +182,7 @@
         fetch(ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question: question, history: history.slice(-6) }),
+            body: JSON.stringify({ question: question, history: history.slice(-6), features: BASE ? ['slots'] : [] }),
             signal: controller ? controller.signal : undefined
         }).then(function (res) {
             var type = res.headers.get('content-type') || '';
